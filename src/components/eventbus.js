@@ -115,31 +115,72 @@ export const monthlyCalendar = (year, month, startWeek) => {
 const tryParse = obj => (typeof obj === 'string' ? new Date(obj) : obj)
 
 /**
- * Проверка, изменился ли день
+ * Проверка даты события и даты ячейки
  * @param {*} one
  * @param {*} two
  */
 export const isSameDay = (one, two) => {
   const oneDate = tryParse(one)
   const twoDate = tryParse(two)
-  return (
+  if (
+    oneDate.getHours() === twoDate.getHours() &&
     oneDate.getDate() === twoDate.getDate() &&
     oneDate.getMonth() === twoDate.getMonth() &&
     oneDate.getFullYear() === twoDate.getFullYear()
-  )
+  ) {
+    // console.log(oneDate, twoDate, 'true in isSameDay')
+    return true
+  } else {
+    // console.log('false dates not the same')
+    return false
+  }
+  // return (
+  //   oneDate.getHours() === twoDate.getHours() &&
+  //   oneDate.getDate() === twoDate.getDate() &&
+  //   oneDate.getMonth() === twoDate.getMonth() &&
+  //   oneDate.getFullYear() === twoDate.getFullYear()
+  // )
+}
+
+/**
+ * Создаем массив дней в зависимости от принятых дат
+ * @param {object} dates
+ */
+export const createDays = (dates) => {
+  let datesArray = []
+  let currentDate = dates.start
+  let addDays = function (days) {
+    let date = new Date(this.valueOf())
+    date.setDate(date.getDate() + days)
+    return date
+  }
+  while (currentDate <= dates.end) {
+    if (currentDate instanceof Date) {
+      datesArray.push(currentDate)
+    }
+    currentDate = addDays.call(currentDate, 1)
+  }
+
+  return datesArray
 }
 
 /**
  * Генерируем часы
+ * @param{obj} day or null
  */
-export const generateHours = () => {
+export const generateHours = (day) => {
   const timePeriod = { start: 7, end: 24 }
-
   let hours = []
-  for (let i = timePeriod.start; i <= timePeriod.end; i++) {
-    hours.push(i + ':00')
-  }
 
+  if (day) {
+    for (let i = timePeriod.start; i <= timePeriod.end; i++) {
+      hours.push(new Date(day.setHours(i)))
+    }
+  } else {
+    for (let i = timePeriod.start; i <= timePeriod.end; i++) {
+      hours.push(i + ':00')
+    }
+  }
   return hours
 }
 

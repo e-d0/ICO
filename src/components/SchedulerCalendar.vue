@@ -1,39 +1,47 @@
 <template>
-  <v-calendar :attributes='attrs'>
-  </v-calendar>
+  <!--<v-calendar :attributes='attrs'>-->
+  <!--</v-calendar>-->
+  <v-date-picker
+    mode='range'
+    v-model='selectedDate'
+    show-caps
+    @input="datesEmit"
+    is-inline>
+  </v-date-picker>
 </template>
 
 <script>
 import moment from 'moment'
-import { EventBus } from './eventbus'
-
+import { EventBus, createDays } from './eventbus'
+/*
+* Отключил предупреждение. Слишком уж консоль засоряет.
+**/
+moment.suppressDeprecationWarnings = true
 export default {
   name: 'calendar',
   props: {
-    dates: null
   },
   data () {
     return {
-      selectedDates: null,
-      attrs: [
-        {
-          key: 'today',
-          dates: { start: moment().startOf('week').toDate(), end: moment().endOf('week').toDate() },
-          highlight: {
-            backgroundColor: '#ff8080'
-          },
-          // Just use a normal style
-          contentStyle: {
-            color: '#fafafa'
-          }
-        }
-      ]
+      selectedDate: {
+        start: moment().startOf('week').toDate(), end: moment().endOf('week').toDate()
+      }
     }
   },
-  methods: {},
+  methods: {
+    datesEmit (e) {
+      let daysArr = createDays(e)
+      EventBus.$emit('dates', daysArr)
+      console.log(daysArr, 'schedular caletndar emitted dates array')
+    }
+  },
   created () {
-    // var weeknumber = moment().week()
-    EventBus.$emit('dates', this.attrs)
+    /**
+     * Создаем массив дней в зависимости от принятых дат
+     * и передаем в глобальное событие
+     */
+    console.log('el calendar is created')
+    this.datesEmit(this.selectedDate)
   }
 }
 </script>

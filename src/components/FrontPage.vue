@@ -8,7 +8,7 @@
             <div class="row">
               <div class="col-md-12">
                 calendar
-                <scheduler-calendar :dates="dates"></scheduler-calendar>
+                <scheduler-calendar></scheduler-calendar>
               </div>
             </div>
             <div class="col-md-12">
@@ -22,8 +22,7 @@
             control btns
           </div>
           <div class="col-md-12 scheduler__main">
-
-            <scheduler-main :dates="dates"></scheduler-main>
+            <scheduler-main :dates.sync="dates"></scheduler-main>
           </div>
         </div>
       </div>
@@ -37,7 +36,8 @@ import { EventBus } from './eventbus'
 export default {
 
   name: 'FrontPage',
-
+  props: {
+  },
   data () {
     return {
       dates: null
@@ -54,12 +54,18 @@ export default {
       // ).then(alert(1))
     },
     sendDates (item) {
-      this.dates = item['0'].dates
-      console.log(item)
+      // this.$emit('update:dates', item)
+      this.dates = item
+      console.log('front page dates', item)
     }
   },
   created () {
+    /**
+     * Обработчик глобального события
+     */
     EventBus.$on('dates', this.sendDates)
+  },
+  computed: {
   }
 }
 </script>

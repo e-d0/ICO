@@ -3,13 +3,25 @@
   <div class="week">
     <h2>Week component</h2>
 
-    <itemDay :day="''"></itemDay>
+    <div class="events-group">
+      <div class="day">
+        <div class="top-info"><span></span></div>
+        <div class="hours">
+          <div v-for="hour in hoursArray" :key="hour" >
+            <div class="hour">
+              {{ hour }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
       <itemDay :events="events"
                :itemRender="itemRender"
-               v-for="item in weekArray"
+               v-for="(item, index) in dates"
                :day="item"
-               :key="item"
+               :dayIndex="index"
+               :key="index"
                  ></itemDay>
 
   </div>
@@ -18,13 +30,15 @@
 <script>
 import moment from 'moment'
 import itemDay from './itemDay'
+import { EventBus, generateHours } from './eventbus'
 
 export default {
   name: 'itemWeek',
   components: { itemDay },
   props: {
     events: null,
-    itemRender: Function
+    itemRender: Function,
+    dates: null
   },
   data () {
     return {
@@ -33,14 +47,17 @@ export default {
     }
   },
   methods: {
-    generateWeekDays () {
-      this.weekArray = moment.weekdays()
+    getDates (items) {
+      this.$emit('update:dates', items)
+      console.log('dates at schedulerMain', items)
     }
   },
   created () {
-    this.generateWeekDays()
-    var weeknumber = moment().week()
-    console.log(weeknumber)
+    this.hoursArray = generateHours()
+    // var weeknumber = moment().week()\
+    console.log('week dates here')
+    console.log(this.dates)
+    EventBus.$on('dates', this.getDates)
   }
 
 }

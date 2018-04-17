@@ -1,10 +1,10 @@
 <template>
   <div class="events-group">
     <div class="day">
-      <div class="top-info"><span>{{ day }}</span></div>
+      <div class="top-info"><span>{{ convertedDay }}</span></div>
       <div class="hours">
-        <div v-for="hour in hoursArray" :key="hour" >
-          <itemHour :hour="hour" :events="events" :itemRender="itemRender" ></itemHour>
+        <div v-for="(hour,index) in hoursArray" :key="index" >
+          <itemHour :hour="hour" :events="events" :itemRender="itemRender" :date="updatedDayCell(hour)"></itemHour>
         </div>
       </div>
     </div>
@@ -22,7 +22,8 @@ export default {
   props: {
     events: null,
     itemRender: Function,
-    day: String
+    day: Date,
+    dayIndex: Number
   },
   components: { itemHour },
   data () {
@@ -33,14 +34,30 @@ export default {
     }
   },
   methods: {
+    /**
+     * Обновляем текущее время
+     * */
     updateCurrentTime () {
       this.currentTime = moment().format('LTS')
+    },
+    /**
+     * Обновляем часы в текущей дате ячейки
+     * */
+    updatedDayCell (hour) {
+      // console.log('setHourForCurrentDayCel', this.day.setHours(hour))
+      return new Date(hour)
     }
   },
   created () {
     this.currentTime = moment().format('LTS')
     setInterval(() => this.updateCurrentTime(), 1 * 1000)
-    this.hoursArray = generateHours()
+    this.hoursArray = generateHours(this.day)
+    console.log(this.hoursArray)
+  },
+  computed: {
+    convertedDay: function () {
+      return moment(this.day).format('dddd')
+    }
   }
 }
 </script>

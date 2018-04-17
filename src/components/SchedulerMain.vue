@@ -3,54 +3,10 @@
 
   <div class="month">
     <itemWeek :events="events"
-              :itemRender="itemRender"></itemWeek>
+              :itemRender="itemRender"
+              :dates="dates"></itemWeek>
   </div>
-    <!--<div class="timeline">-->
-      <!--<ul>-->
-        <!--<li> <span>{{ currentTime }}</span></li>-->
-        <!--<li v-for="hour in hoursArray" :key="hour">-->
-          <!--<span>{{ hour }}</span>-->
-        <!--</li>-->
-        <!--&lt;!&ndash; additional elements here &ndash;&gt;-->
-      <!--</ul>-->
-    <!--</div>-->
 
-    <!--<div class="events">-->
-      <!--<ul>-->
-        <!--<li class="events-group" v-for="day in weekArray" :key="day" >-->
-          <!--<div class="top-info"><span>{{ day }}</span></div>-->
-
-          <!--<ul>-->
-            <!--<li class="single-event" data-start="09:30" data-end="10:30" data-content="event-abs-circuit" data-event="event-1">-->
-              <!--<a href="#0">-->
-                <!--<em class="event-name">Abs Circuit</em>-->
-              <!--</a>-->
-            <!--</li>-->
-
-            <!--&lt;!&ndash; other events here &ndash;&gt;-->
-          <!--</ul>-->
-        <!--</li>-->
-        <!--&lt;!&ndash; additional li.events-group here &ndash;&gt;-->
-      <!--</ul>-->
-    <!--</div>-->
-
-    <!--<div class="event-modal">-->
-      <!--<header class="header">-->
-        <!--<div class="content">-->
-          <!--<span class="event-date"></span>-->
-          <!--<h3 class="event-name"></h3>-->
-        <!--</div>-->
-
-        <!--<div class="header-bg"></div>-->
-      <!--</header>-->
-
-      <!--<div class="body">-->
-        <!--<div class="event-info"></div>-->
-        <!--<div class="body-bg"></div>-->
-      <!--</div>-->
-
-      <!--<a href="#0" class="close">Close</a>-->
-    <!--</div>-->
   </div>
 </template>
 
@@ -80,7 +36,7 @@ export default {
       },
       itemRender (item) {
         const h = this.$createElement
-        return h('span', 'CustomRender：' + item.text)
+        return h('span', 'CustomRender：' + item.name)
       }
     }
   },
@@ -105,9 +61,9 @@ export default {
       console.log('[date-click]:', date)
       this.$emit('date-click', e, date)
     },
-    getDates (item) {
-      this.dates = item
-      console.log('dates at schedulerMain', item)
+    getDates (items) {
+      this.$emit('update:dates', items)
+      console.log('dates at schedulerMain', items)
     }
   },
   created () {
@@ -116,18 +72,30 @@ export default {
     EventBus.$on('item-drop', this.itemDrop)
     EventBus.$on('item-click', this.itemClick)
     EventBus.$on('date-click', this.dateClick)
-    EventBus.$on('dates', this.getDates)
+    // EventBus.$on('dates', this.getDates)
+    console.log('dates at scheduler main', this.dates)
   },
   mounted () {
+    /**
+     * Получаем события с сервера
+     * */
     return this.$http.get('http://localhost:3000/events').then(response => {
       this.events = response.body
+      /**
+       * Создаем поле начала события в каждом объекте события и приводим к формату Date
+       * */
       this.events = this.events.map(item => {
-        item.date = moment(item.ends).format('YYYY-MM-DD')
+        item.date = new Date(item.starts)
         return item
       })
     }, error => {
       console.error(error)
     })
+  },
+  watch: {
+    acceptedDates: function () {
+      return this.dates
+    }
   },
   destoryed () {
     EventBus.$off()

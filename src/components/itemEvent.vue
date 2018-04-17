@@ -1,6 +1,6 @@
 <script>
 export default {
-  name: 'Event',
+  name: 'event',
   data () {
     return {
       text: 'event'
@@ -27,6 +27,9 @@ export default {
         click: this.onClick
       }
     }, this.itemRender ? [this.itemRender(this.item)] : [h('span', this.text)])
+  },
+  created () {
+    console.log('event created', this.item)
   }
 }
 </script>
