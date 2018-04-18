@@ -4,7 +4,7 @@
       <div class="top-info"><span>{{ convertedDay }}</span></div>
       <div class="hours">
         <div v-for="(hour,index) in hoursArray" :key="index" >
-          <itemHour :hour="hour" :events="events" :itemRender="itemRender" :date="updatedDayCell(hour)"></itemHour>
+          <itemHour :hour="hour" :index="updatedIndex(dayIndex, index)" :events="events" :itemRender="itemRender" :date="updatedDayCell(hour)"></itemHour>
         </div>
       </div>
     </div>
@@ -46,13 +46,18 @@ export default {
     updatedDayCell (hour) {
       // console.log('setHourForCurrentDayCel', this.day.setHours(hour))
       return new Date(hour)
+    },
+    /**
+     * Создаем уникальный индекс для ячейки часа
+     * */
+    updatedIndex: function (dayIndex, index) {
+      return Number(dayIndex.toString() + index.toString())
     }
   },
   created () {
     this.currentTime = moment().format('LTS')
     setInterval(() => this.updateCurrentTime(), 1 * 1000)
     this.hoursArray = generateHours(this.day)
-    console.log(this.hoursArray)
   },
   computed: {
     convertedDay: function () {

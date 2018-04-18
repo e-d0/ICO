@@ -1,5 +1,7 @@
 <template>
-  <div class="hour">
+  <div class="hour" @dragover.prevent=""
+                    @dragenter.prevent="dragenter"
+                    @drop="onDrop">
     <span v-if="checkForDateObj(hour)">{{ dateFormat(hour) }}</span>
     <span v-else>{{ hour }}</span>
 
@@ -8,6 +10,7 @@
            :key="item.id"
            :item="item"
            :itemRender="itemRender"
+           @item-dragstart="dragItem"
            :date="date"></event>
   </div>
 
@@ -16,7 +19,7 @@
 <script>
 import event from './itemEvent'
 import moment from 'moment'
-import { isSameDay } from './eventbus'
+import { EventBus, isSameDay } from './eventbus'
 
 export default {
   name: 'Hour',
@@ -31,6 +34,7 @@ export default {
     date: Date,
     hour: Date,
     events: null,
+    index: Number,
     itemRender: Function
   },
   methods: {
@@ -42,6 +46,24 @@ export default {
     },
     dateFormat (date) {
       return moment(date).format('H:mm')
+    },
+    dragenter (e) {
+      if (this.$el.contains(e.target)) {
+        this.$emit('highlight', this.index)
+
+        if (this.$el === e.target) {
+          EventBus.$emit('cell-dragenter', e, this.date, this.type, this.index)
+        }
+      }
+    },
+    dragItem (e, item, date, type) {
+      this.$emit('highlight', this.index)
+      EventBus.$emit('item-dragstart', e, item, date, type)
+    },
+    onDrop (e) {
+      this.$emit('highlight', -1)
+      EventBus.$emit('item-drop', e, this.date, this.type, this.index)
+      console.log('item dropped')
     }
   },
   computed: {

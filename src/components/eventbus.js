@@ -196,6 +196,8 @@ export const format = (date, exp = 'yyyy-MM-dd') => {
     .replace('dd', fillZero(d))
 }
 
+export const updateDate = () => {}
+
 export const Store = {
   hasExpand: false
 }

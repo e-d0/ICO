@@ -1,6 +1,12 @@
 <script>
 export default {
   name: 'event',
+  props: {
+    item: Object,
+    date: Date,
+    type: String,
+    itemRender: Function
+  },
   data () {
     return {
       text: 'event'
@@ -8,6 +14,7 @@ export default {
   },
   methods: {
     onDrag (e) {
+      console.log('start item-dragstart')
       this.$emit('item-dragstart', e, this.item, this.date, this.type)
     },
     onClick (e) {
@@ -29,7 +36,6 @@ export default {
     }, this.itemRender ? [this.itemRender(this.item)] : [h('span', this.text)])
   },
   created () {
-    console.log('event created', this.item)
   }
 }
 </script>
