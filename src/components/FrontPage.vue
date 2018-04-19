@@ -17,15 +17,8 @@
 
         </div>
         <div class="col-md-12">
-        <div class="row scheduler">
-          <div class="col-md-12 scheduler__controller">
-            control btns
-          </div>
-          <div class="col-md-12 scheduler__main">
             <scheduler-main :dates.sync="dates"></scheduler-main>
-          </div>
         </div>
-      </div>
     </div>
   </div>
 </template>

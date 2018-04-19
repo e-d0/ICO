@@ -1,19 +1,39 @@
 <template>
-  <div class="cd-schedule">
-    <modalAddEvent></modalAddEvent>
-    <modal v-if="showModal">
-      <div slot="body">
-        Вы хотите перенсти дату события?
+  <div class="row scheduler">
+    <div class="col-md-12 scheduler__controller">
+      <button type="button" class="btn btn-primary" @click="showModalAddForm = true">Создать ICO</button>
+    </div>
+    <div class="col-md-12 scheduler__main">
+      <div class="cd-schedule">
+        <modal v-if="showModalConfirm">
+          <div slot="body">
+            Вы хотите перенсти дату события?
+          </div>
+          <div slot="footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="confirmRequest()" >Отмена</button>
+            <button type="button" class="btn btn-primary" @click="confirmRequest('confirm')">Изменить дату</button>
+          </div>
+        </modal>
+        <modal v-if="showModalAddForm">
+          <div slot="body">
+            <div class="modal-header">
+              <h5 class="modal-title"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showModalAddForm = false">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+          <div slot="body">
+            <modalAddEvent></modalAddEvent>
+            <div ></div>
+          </div>
+        </modal>
+        <div class="month">
+          <itemWeek :events="events"
+                    :itemRender="itemRender"
+                    :dates="dates"></itemWeek>
+        </div>
       </div>
-      <div slot="footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="confirmRequest()" >Отмена</button>
-        <button type="button" class="btn btn-primary" @click="confirmRequest('confirm')">Изменить дату</button>
-      </div>
-    </modal>
-    <div class="month">
-      <itemWeek :events="events"
-                :itemRender="itemRender"
-                :dates="dates"></itemWeek>
     </div>
   </div>
 </template>
@@ -39,7 +59,8 @@ export default {
     return {
       eventTempStorage: null,
       dateTempStorage: null,
-      showModal: false,
+      showModalConfirm: false,
+      showModalAddForm: false,
       moment: moment,
       dragItem: null,
       events: {
@@ -55,10 +76,10 @@ export default {
   },
   methods: {
     openModal () {
-      this.showModal = true
+      this.showModalConfirm = true
     },
     closeModal () {
-      this.showModal = false
+      this.showModalConfirm = false
     },
     cellDragenter (e, date, type, index) {
       console.log('cellDragenter', this.dragItem)
