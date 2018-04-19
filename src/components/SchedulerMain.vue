@@ -1,5 +1,6 @@
 <template>
   <div class="cd-schedule">
+    <modalAddEvent></modalAddEvent>
     <modal v-if="showModal">
       <div slot="body">
         Вы хотите перенсти дату события?
@@ -24,12 +25,13 @@
 <script>
 import moment from 'moment'
 import itemWeek from './itemWeek'
-import { EventBus } from './eventbus'
+import { EventBus, countDiffBetweenDates } from './eventbus'
 import modal from './modalConfirm'
+import modalAddEvent from './modalAddEvent'
 
 export default {
   name: 'Schedule',
-  components: { itemWeek, modal },
+  components: { itemWeek, modal, modalAddEvent },
   props: {
     dates: null
   },
@@ -78,6 +80,9 @@ export default {
       }
     },
     confirmDialog (e, date) {
+      /**
+       * Триггерим запуск формы и сохраняем данные из события.
+       * */
       this.openModal()
       this.eventTempStorage = e
       this.dateTempStorage = date
@@ -101,15 +106,24 @@ export default {
       this.$emit('update:dates', items)
     },
     changeDate (e, item, date) {
-      // const updateIndex = this.events.findIndex(ele => ele.id === item.id)
-      // const range = moment().range(item.starts, item.ends)
+      /**
+       * Находим индекс элемента в текущем массиве событий
+      * */
+      const updateIndex = this.events.findIndex(ele => ele.id === item.id)
+      /**
+       * Считаем разницу
+       * */
+      const diff = countDiffBetweenDates(this.events[updateIndex].starts, this.events[updateIndex].ends)
+      /**
+       * Формируем json объект для отправки на сервер
+       * */
       let body = {
         'id': item.id,
         'name': item.name,
         'created_at': item.created_at,
         'updated_at': moment().format('YYYY-MM-DD HH:mm Z'),
         'starts': moment(date.setMinutes(item.date.getMinutes())).format('YYYY-MM-DD HH:mm Z'),
-        'ends': '2018-04-17 12:53:17.892 +00:00',
+        'ends': moment(date.setMinutes(item.date.getMinutes())).add(diff).format('YYYY-MM-DD HH:mm Z'),
         'type': item.type
       }
       console.log('date changed', body)

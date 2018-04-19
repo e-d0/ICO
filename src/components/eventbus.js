@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import moment from 'moment'
 
 /**
  * Основной объект для хранения событий
@@ -196,7 +197,16 @@ export const format = (date, exp = 'yyyy-MM-dd') => {
     .replace('dd', fillZero(d))
 }
 
-export const updateDate = () => {}
+/**
+ * Считает разницу между датами
+ * @param {obj} one
+ * @param {obj} two
+ * return object Duration
+ * */
+export const countDiffBetweenDates = (start, end) => {
+  let ms = moment(end, 'YYYY-MM-DD HH:mm:ss Z').diff(moment(start, 'YYYY-MM-DD HH:mm:ss Z'))
+  return moment.duration(ms)
+}
 
 export const Store = {
   hasExpand: false
