@@ -1,12 +1,19 @@
 <template>
   <div class="cd-schedule">
-
-  <div class="month">
-    <itemWeek :events="events"
-              :itemRender="itemRender"
-              :dates="dates"></itemWeek>
-  </div>
-
+    <modal v-if="showModal">
+      <div slot="body">
+        Вы хотите перенсти дату события?
+      </div>
+      <div slot="footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="confirmRequest()" >Отмена</button>
+        <button type="button" class="btn btn-primary" @click="confirmRequest('confirm')">Изменить дату</button>
+      </div>
+    </modal>
+    <div class="month">
+      <itemWeek :events="events"
+                :itemRender="itemRender"
+                :dates="dates"></itemWeek>
+    </div>
   </div>
 </template>
 
@@ -18,15 +25,19 @@
 import moment from 'moment'
 import itemWeek from './itemWeek'
 import { EventBus } from './eventbus'
+import modal from './modalConfirm'
 
 export default {
   name: 'Schedule',
-  components: { itemWeek },
+  components: { itemWeek, modal },
   props: {
     dates: null
   },
   data () {
     return {
+      eventTempStorage: null,
+      dateTempStorage: null,
+      showModal: false,
       moment: moment,
       dragItem: null,
       events: {
@@ -41,6 +52,12 @@ export default {
     }
   },
   methods: {
+    openModal () {
+      this.showModal = true
+    },
+    closeModal () {
+      this.showModal = false
+    },
     cellDragenter (e, date, type, index) {
       console.log('cellDragenter', this.dragItem)
       this.$emit('event-dragenter', e, this.dragItem, date)
@@ -51,8 +68,21 @@ export default {
       console.log('itemdragstart Func', this.dragItem)
       this.$emit('event-dragstart', e, item, date)
     },
-    itemDrop (e, date, type, index) {
-      console.log(this.dragItem)
+    confirmRequest (message) {
+      this.closeModal()
+      if (message) {
+        this.itemDrop(this.eventTempStorage, this.dateTempStorage)
+      } else {
+        this.eventTempStorage = null
+        this.dateTempStorage = null
+      }
+    },
+    confirmDialog (e, date) {
+      this.openModal()
+      this.eventTempStorage = e
+      this.dateTempStorage = date
+    },
+    itemDrop (e, date) {
       if (!this.dragItem) return
       console.log('[event-dragend]:', this.dragItem, date)
       // this.$emit('event-dragend', e, this.dragItem, date)
@@ -88,11 +118,6 @@ export default {
       }, error => {
         console.error(error)
       })
-      // const updateIndex = this.events.findIndex(ele => ele.id === item.id)
-      // this.$set(this.events, updateIndex, {
-      //   ...this.events[updateIndex],
-      //   date
-      // })
     },
     getEvents () {
       /**
@@ -115,7 +140,7 @@ export default {
   created () {
     EventBus.$on('item-dragstart', this.itemDragstart)
     EventBus.$on('cell-dragenter', this.cellDragenter)
-    EventBus.$on('item-drop', this.itemDrop)
+    EventBus.$on('item-drop', this.confirmDialog)
     EventBus.$on('item-click', this.itemClick)
     EventBus.$on('date-click', this.dateClick)
     // EventBus.$on('dates', this.getDates)
