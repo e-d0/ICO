@@ -1,8 +1,6 @@
 <template>
 
   <div class="week">
-    <h2>Week component</h2>
-
     <div class="events-group">
       <div class="day">
         <div class="top-info"><span></span></div>
@@ -43,7 +41,8 @@ export default {
   data () {
     return {
       moment: moment,
-      weekArray: null
+      weekArray: null,
+      hoursArray: generateHours()
     }
   },
   methods: {
@@ -53,8 +52,6 @@ export default {
     }
   },
   created () {
-    this.hoursArray = generateHours()
-    // var weeknumber = moment().week()\
     console.log('week dates here')
     console.log(this.dates)
     EventBus.$on('dates', this.getDates)

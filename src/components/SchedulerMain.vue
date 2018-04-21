@@ -45,7 +45,7 @@
 <script>
 import moment from 'moment'
 import itemWeek from './itemWeek'
-import { EventBus, countDiffBetweenDates } from './eventbus'
+import { EventBus } from './eventbus'
 import modal from './modalConfirm'
 import modalAddEvent from './modalAddEvent'
 
@@ -53,21 +53,17 @@ export default {
   name: 'Schedule',
   components: { itemWeek, modal, modalAddEvent },
   props: {
-    dates: null
+    dates: null,
+    events: null
   },
   data () {
     return {
       eventTempStorage: null,
       dateTempStorage: null,
       showModalConfirm: false,
-      showModalAddForm: false,
+      showModalAddForm: false, /** //TODO Закрывать форму на сабмите */
       moment: moment,
       dragItem: null,
-      events: {
-        type: Array,
-        // eslint-disable-next-line vue/require-valid-default-prop
-        default: []
-      },
       itemRender (item) {
         const h = this.$createElement
         return h('span', 'CustomRender：' + item.name)
@@ -111,8 +107,7 @@ export default {
     itemDrop (e, date) {
       if (!this.dragItem) return
       console.log('[event-dragend]:', this.dragItem, date)
-      // this.$emit('event-dragend', e, this.dragItem, date)
-      this.changeDate(e, this.dragItem, date)
+      EventBus.$emit('event-dragend', e, this.dragItem, date)
       console.log('item drop func')
     },
     itemClick (e, item) {
@@ -125,51 +120,6 @@ export default {
     },
     getDates (items) {
       this.$emit('update:dates', items)
-    },
-    changeDate (e, item, date) {
-      /**
-       * Находим индекс элемента в текущем массиве событий
-      * */
-      const updateIndex = this.events.findIndex(ele => ele.id === item.id)
-      /**
-       * Считаем разницу
-       * */
-      const diff = countDiffBetweenDates(this.events[updateIndex].starts, this.events[updateIndex].ends)
-      /**
-       * Формируем json объект для отправки на сервер
-       * */
-      let body = {
-        'id': item.id,
-        'name': item.name,
-        'created_at': item.created_at,
-        'updated_at': moment().format('YYYY-MM-DD HH:mm Z'),
-        'starts': moment(date.setMinutes(item.date.getMinutes())).format('YYYY-MM-DD HH:mm Z'),
-        'ends': moment(date.setMinutes(item.date.getMinutes())).add(diff).format('YYYY-MM-DD HH:mm Z'),
-        'type': item.type
-      }
-      console.log('date changed', body)
-      return this.$http.patch(`http://localhost:3000/events/${item.id}`, body).then(response => {
-        this.getEvents()
-      }, error => {
-        console.error(error)
-      })
-    },
-    getEvents () {
-      /**
-       * Получаем события с сервера
-       * */
-      return this.$http.get('http://localhost:3000/events').then(response => {
-        this.events = response.body
-        /**
-         * Создаем поле начала события в каждом объекте события и приводим к формату Date
-         * */
-        this.events = this.events.map(item => {
-          item.date = new Date(item.starts)
-          return item
-        })
-      }, error => {
-        console.error(error)
-      })
     }
   },
   created () {
@@ -178,17 +128,7 @@ export default {
     EventBus.$on('item-drop', this.confirmDialog)
     EventBus.$on('item-click', this.itemClick)
     EventBus.$on('date-click', this.dateClick)
-    // EventBus.$on('dates', this.getDates)
-    EventBus.$on('event-dragend', this.changeDate)
     console.log('dates at scheduler main', this.dates)
-  },
-  mounted () {
-    this.getEvents()
-  },
-  watch: {
-    acceptedDates: function () {
-      return this.dates
-    }
   },
   destoryed () {
     EventBus.$off()

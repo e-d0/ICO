@@ -44,7 +44,6 @@ export default {
      * Обновляем часы в текущей дате ячейки
      * */
     updatedDayCell (hour) {
-      // console.log('setHourForCurrentDayCel', this.day.setHours(hour))
       return new Date(hour)
     },
     /**

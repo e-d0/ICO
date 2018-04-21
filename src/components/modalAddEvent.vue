@@ -40,6 +40,7 @@
 
 <script>
 import moment from 'moment'
+import { EventBus } from './eventbus'
 
 export default {
   name: 'modalAddEvent',
@@ -47,8 +48,8 @@ export default {
     return {
       form: {
         name: null,
-        starts: moment().format('YYYY-MM-DDTkk:mm'),
-        ends: moment().format('YYYY-MM-DDTkk:mm'),
+        starts: moment().format('YYYY-MM-DDThh:mm'),
+        ends: moment().format('YYYY-MM-DDThh:mm'),
         type: null
       },
       types: null
@@ -69,7 +70,6 @@ export default {
       /**
        * //TODO Add Validation process
        * */
-
       let body = this.form
       body.created_at = moment().format('YYYY-MM-DD HH:mm Z')
       body.updated_at = moment().format('YYYY-MM-DD HH:mm Z')
@@ -79,6 +79,7 @@ export default {
       console.log('event created', body)
       return this.$http.post(`http://localhost:3000/events`, body).then(response => {
         console.log(response)
+        EventBus.$emit('update-events')
       }, error => {
         console.error(error)
       })
