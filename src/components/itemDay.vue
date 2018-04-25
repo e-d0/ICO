@@ -1,10 +1,31 @@
 <template>
-  <div class="events-group">
-    <div class="day">
-      <div class="top-info"><span>{{ convertedDay }}</span></div>
-      <div class="hours">
-        <div v-for="(hour,index) in hoursArray" :key="index" >
-          <itemHour :hour="hour" :index="updatedIndex(dayIndex, index)" :events="events" :itemRender="itemRender" :date="updatedDayCell(hour)"></itemHour>
+  <div class="body">
+    <div class="events-group">
+      <div class="day">
+        <div class="top-info"><span></span></div>
+        <div class="hours">
+          <div v-for="hour in emptyHoursArray" :key="hour" >
+            <div class="hour">
+              {{ hour }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="events-group" v-if="dates"
+                              v-for="(dayItem, dayInd) in dates"
+                              :key="dayInd">
+      <div class="day">
+        <div class="top-info"><span v-if="dayItem">{{ dayItem | weekDayName }}</span></div>
+        <div class="hours">
+          <div v-if="dayItem"
+               v-for="(hour,ind) in generateHours(dayItem)"
+               :key="ind" >
+                <itemHour :hour="hour"
+                          :index="updatedIndex(dayInd, ind)"
+                          :itemRender.sync="itemRender"
+                          :date="updatedDayCell(hour)"></itemHour>
+          </div>
         </div>
       </div>
     </div>
@@ -16,13 +37,17 @@
 import moment from 'moment'
 import itemHour from './itemHour'
 import { generateHours } from './eventbus'
+/**
+ * Приводим дату в соотетствие с форматом в браузере пользователя
+ * */
+const locale = window.navigator.userLanguage || window.navigator.language
+moment.locale(locale)
 
 export default {
   name: 'Day',
   props: {
-    events: null,
     itemRender: Function,
-    day: Date,
+    dates: Array,
     dayIndex: Number
   },
   components: { itemHour },
@@ -30,7 +55,14 @@ export default {
     return {
       moment: moment,
       currentTime: null,
-      hoursArray: []
+      emptyHoursArray: generateHours(),
+      newDates: []
+    }
+  },
+  filters: {
+    weekDayName: function (value) {
+      if (!value) return ''
+      return moment(value).format('dddd')
     }
   },
   methods: {
@@ -41,10 +73,18 @@ export default {
       this.currentTime = moment().format('LTS')
     },
     /**
+     * Генерируем часы с датой для каждой ячейки
+     * */
+    generateHours (day) {
+      // this.hoursArray = generateHours(this.day)
+      return generateHours(day)
+    },
+    /**
      * Обновляем часы в текущей дате ячейки
      * */
     updatedDayCell (hour) {
-      return new Date(hour)
+      const h = new Date(hour)
+      return h
     },
     /**
      * Создаем уникальный индекс для ячейки часа
@@ -56,12 +96,6 @@ export default {
   created () {
     this.currentTime = moment().format('LTS')
     setInterval(() => this.updateCurrentTime(), 1 * 1000)
-    this.hoursArray = generateHours(this.day)
-  },
-  computed: {
-    convertedDay: function () {
-      return moment(this.day).format('dddd')
-    }
   }
 }
 </script>

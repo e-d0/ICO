@@ -7,16 +7,18 @@
         <div class="col-md-4">
             <div class="row">
               <div class="col-md-12">
-                <scheduler-calendar></scheduler-calendar>
+                <scheduler-calendar @dates="sendDates"></scheduler-calendar>
               </div>
               <div class="col-md-12 mt-4">
-                <schedulerFilter :events="events" @change="filterEvents"></schedulerFilter>
+                <schedulerFilter></schedulerFilter>
               </div>
             </div>
         </div>
         <div class="col-md-12">
-            <scheduler-main :dates.sync="dates"
-                            :events="filteredEventsStorage"></scheduler-main>
+            <scheduler-main v-if="filteredEvents"
+                            :itemRender.sync="itemRender"
+                            :dates="dates"
+                            :events="filteredEvents"></scheduler-main>
         </div>
     </div>
   </div>
@@ -26,54 +28,46 @@
 import { EventBus, countDiffBetweenDates } from './eventbus'
 import moment from 'moment'
 import schedulerFilter from './schedulerFilter'
+import SchedulerMain from './SchedulerMain'
+import SchedulerCalendar from './SchedulerCalendar'
+import Vuex from 'vuex'
+const storeEvent = Vuex.createNamespacedHelpers('event')
+
+/**
+ * Приводим дату в соотетствие с форматом в браузере пользователя
+ * */
+const locale = window.navigator.userLanguage || window.navigator.language
+moment.locale(locale)
 
 export default {
   name: 'FrontPage',
-  components: { schedulerFilter },
+  components: { schedulerFilter, SchedulerMain, SchedulerCalendar },
   data () {
     return {
-      dates: null,
-      events: [],
-      filteredEventsStorage: []
+      itemRender (item) {
+        const h = this.$createElement
+        return h('span', 'CustomRender：' + item.name)
+      }
+      // dates: []
     }
   },
+  computed: {
+    ...storeEvent.mapGetters({
+      events: 'events',
+      filteredEvents: 'filteredEvents',
+      dates: 'dates'
+    })
+  },
   methods: {
-    /**
-     * //TODO Корректный алгоритм Фильтрации событий по данным из schedulerFilter
-     * */
-    filterEvents (types, name) {
-      let arr = this.events.filter((event) => {
-        if ((name !== ('' || null)) === event.name) {
-          return true
-        }
-
-        if (types.includes(event.type)) {
-          return true
-        }
-      })
-      this.filteredEventsStorage = arr
-    },
     sendDates (item) {
-      // this.$emit('update:dates', item)
-      this.dates = item
-      console.log('front page dates', item)
+      console.log('emitted item', item)
+      // this.dates = item
     },
+    /**
+     * Получаем события с сервера через хранилище store
+     * */
     getEvents () {
-      /**
-       * Получаем события с сервера
-       * */
-      return this.$http.get('http://localhost:3000/events').then(response => {
-        this.events = response.body
-        /**
-         * Создаем поле начала события в каждом объекте события и приводим к формату Date
-         * */
-        this.events = this.events.map(item => {
-          item.date = new Date(item.starts)
-          return item
-        })
-      }, error => {
-        console.error(error)
-      })
+      this.$store.dispatch('event/getEvents')
     },
     changeDate (e, item, date) {
       /**
@@ -85,58 +79,47 @@ export default {
        * */
       const diff = countDiffBetweenDates(this.events[updateIndex].starts, this.events[updateIndex].ends)
       /**
-       * Формируем json объект для отправки на сервер
+       * Формируем json объект для отправки на сервер. Все даты в ISO 8601. (https://en.wikipedia.org/wiki/ISO_8601)
        * */
       let body = {
         'id': item.id,
         'name': item.name,
-        'created_at': item.created_at,
-        'updated_at': moment().format('YYYY-MM-DD HH:mm Z'),
-        'starts': moment(date.setMinutes(item.date.getMinutes())).format('YYYY-MM-DD HH:mm Z'),
-        'ends': moment(date.setMinutes(item.date.getMinutes())).add(diff).format('YYYY-MM-DD HH:mm Z'),
+        'created_at': moment(item.created_at).toISOString(),
+        'updated_at': moment().toISOString(),
+        'starts': moment(date.setMinutes(item.date.getMinutes())).toISOString(),
+        'ends': moment(date.setMinutes(item.date.getMinutes())).add(diff).toISOString(),
         'type': item.type
       }
       console.log('date changed', body)
-      return this.$http.patch(`http://localhost:3000/events/${item.id}`, body).then(response => {
-        this.getEvents()
-      }, error => {
-        console.error(error)
+
+      return this.$store.dispatch({
+        type: 'event/changeEvent',
+        value: body
       })
+      // return this.$http.patch(`http://localhost:3000/events/${item.id}`, body).then(response => {
+      //   this.getEvents()
+      // }, error => {
+      //   console.error(error)
+      // })
     }
   },
   created () {
     /**
      * Обработчик глобального события
      */
-    EventBus.$on('dates', this.sendDates)
     EventBus.$on('update-events', this.getEvents)
+    // EventBus.$on('filter:change', this.filterEvents)
     EventBus.$on('event-dragend', this.changeDate)
+    this.getEvents()
   },
   mounted () {
-    this.getEvents()
   },
   destoryed () {
     EventBus.$off()
-  },
-  computed: {
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
-  font-weight: normal;
-}
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-a {
-  color: #42b983;
-}
 </style>

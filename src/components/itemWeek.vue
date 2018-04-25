@@ -1,60 +1,44 @@
 <template>
 
   <div class="week">
-    <div class="events-group">
-      <div class="day">
-        <div class="top-info"><span></span></div>
-        <div class="hours">
-          <div v-for="hour in hoursArray" :key="hour" >
-            <div class="hour">
-              {{ hour }}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
       <itemDay :events="events"
-               :itemRender="itemRender"
-               v-for="(item, index) in dates"
-               :day="item"
-               :dayIndex="index"
-               :key="index"
+               :itemRender.sync="itemRender"
+               :dates="dates"
                  ></itemDay>
-
   </div>
 </template>
 
 <script>
 import moment from 'moment'
 import itemDay from './itemDay'
-import { EventBus, generateHours } from './eventbus'
+/**
+ * Приводим дату в соотетствие с форматом в браузере пользователя
+ * */
+const locale = window.navigator.userLanguage || window.navigator.language
+moment.locale(locale)
 
 export default {
   name: 'itemWeek',
   components: { itemDay },
   props: {
-    events: null,
+    events: Array,
     itemRender: Function,
-    dates: null
+    dates: Array
   },
   data () {
     return {
       moment: moment,
       weekArray: null,
-      hoursArray: generateHours()
+      datesArray: []
     }
   },
   methods: {
-    getDates (items) {
-      this.$emit('update:dates', items)
-      console.log('dates at schedulerMain', items)
-    }
   },
   created () {
-    console.log('week dates here')
-    console.log(this.dates)
-    EventBus.$on('dates', this.getDates)
+  },
+  mounted () {
+  },
+  computed: {
   }
 
 }

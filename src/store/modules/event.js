@@ -1,0 +1,227 @@
+import axios from 'axios'
+
+const state = {
+  events: [],
+  types: [],
+  filters: {
+    'types': [],
+    'names': []
+  },
+  dates: []
+}
+
+const getters = {
+  events: state => state.events,
+  types: state => state.types,
+  filters: state => state.filters,
+  dates: state => {
+    let arr = []
+    state.dates.forEach(el => { arr.push(new Date(el)) })
+    return arr
+  },
+  getFiltersByType: (state) => state.filters.types,
+  /**
+   * Фильтрация по собранным данным. Оптимизировал под минимум операций, как мог.
+   * */
+  filteredEvents: (state) => {
+    if ((state.filters.types.length || state.filters.names.length) !== 0) {
+      return state.events.filter(event => {
+        /**
+         * фильтр по имени
+         * */
+        if (
+          state.filters.names.length > 0 &&
+          state.filters.types instanceof Array && state.filters.types.includes(event.type)
+        ) {
+          for (let item = 0; item < state.filters.names.length; item++) {
+            if (state.filters.names[item].name === (event.name)) { return event }
+          }
+        } else {
+          /**
+           * фильтр по типу
+           * */
+          if (state.filters.types instanceof Array && state.filters.types.includes(event.type)) {
+            return event
+          }
+        }
+      })
+    }
+  }
+}
+
+const actions = {
+  setDates (context, payload) {
+    console.log('set date to storage')
+    context.commit('setDates', payload.data)
+  },
+  setFiltersNames (context, payload) {
+    context.commit('setFiltersNames', payload)
+  },
+  setFiltersTypes (context, payload) {
+    context.commit('setFiltersTypes', payload.val)
+  },
+  setFilters (context, payload) {
+    console.log('setFilters value at storage ', payload)
+    context.commit('setFilters', payload)
+  },
+  /**
+   * Получаем типы событий , используя промис
+   * */
+  getTypes (context) {
+    return new Promise((resolve, reject) => {
+      axios.get(context.rootGetters.api_url + '/types').then((response) => {
+        console.log('promise at events action DONE')
+        context.commit('getTypes', response.data)
+        resolve(response)
+      }, error => {
+        handleXHRerrors(error)
+        reject(error)
+      })
+    })
+  },
+  addEvent (context, payload) {
+    context.commit('addEvent', payload)
+  },
+  deleteEvent (context, payload) {
+    axios.delete(context.rootGetters.api_url + '/events', {data: {id: payload.id}}).then((oResponse) => {
+      context.commit('deleteEvent', payload)
+    }).catch(handleXHRerrors)
+  },
+  changeEvent (context, payload) {
+    console.log(payload)
+    axios.patch(context.rootGetters.api_url + `/events/${payload.value.id}`, payload.value).then((response) => {
+      console.log(response)
+      response['id'] = payload.id
+      response.data['date'] = response.data.starts
+      context.commit('createOrUpdateEvent', response.data)
+    }).catch(handleXHRerrors)
+  },
+  createEvent (context, payload) {
+    axios.post(context.rootGetters.api_url + '/events', payload.value).then((response) => {
+      context.commit('createOrUpdateEvent', response.data)
+    }).catch(handleXHRerrors)
+    // return this.$http.patch(`http://localhost:3000/events/${item.id}`, body).then(response => {
+    //   this.getEvents()
+    // }, error => {
+    //   console.error(error)
+    // })
+  },
+  // createOrUpdateEvent (context, payload) {
+  //   // Hack to force content-type on x-www-form-urlencoded rather than JSON
+  //   let sUrl = context.rootGetters.api_url + '/events'
+  //   let params = new URLSearchParams()
+  //   let oHeaders = { headers: { 'Content-type': 'application/x-www-form-urlencoded' } }
+  //   console.log('<<<<<<>>>>>>>>>>', payload)
+  //   params.append('content', payload.content)
+  //   if (payload.id) {
+  //     params.append('id', payload.id)
+  //     axios.put(sUrl, params, oHeaders).then((oResponse) => {
+  //       context.commit('createOrUpdateEvent', oResponse.data)
+  //     }).catch(handleXHRerrors)
+  //   } else {
+  //     axios.post(sUrl, params, oHeaders).then((oResponse) => {
+  //       context.commit('createOrUpdateEvent', oResponse.data)
+  //     }).catch(handleXHRerrors)
+  //   }
+  // },
+  getEvents (context, payload) {
+    axios.get(context.rootGetters.api_url + '/events').then((oResponse) => {
+      /**
+       * Создаем поле начала события в каждом объекте события и приводим к объекту Date с форматом браузера
+       * */
+      let events = oResponse.data.map(item => {
+        item.date = new Date(item.starts)
+        return item
+      })
+      context.commit('getEvents', events)
+      console.log('events get at action getEvents', events)
+    }).catch(handleXHRerrors)
+  },
+  getEventById: (context, payload) => {
+    console.log(payload.id)
+    axios.get(context.rootGetters.api_url + '/events?id=' + payload.id).then((oResponse) => {
+      return new Promise((resolve, reject) => {
+        context.commit('setEditedEvent', oResponse.data)
+        resolve()
+      })
+    }).catch(handleXHRerrors)
+  }
+}
+
+let handleXHRerrors = function (error) {
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.log(error.response.data)
+    console.log(error.response.status)
+    console.log(error.response.headers)
+  } else if (error.request) {
+    // The request was made but no response was received
+    // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    // http.ClientRequest in node.js
+    console.log(error.request)
+  } else {
+    // Something happened in setting up the request that triggered an Error
+    console.log('Error', error.message)
+  }
+  console.log(error.config)
+}
+
+const mutations = {
+  setDates: (state, objEvent) => {
+    state.dates = objEvent
+  },
+  setFiltersTypes: (state, objEvent) => {
+    state.filters.types = objEvent
+  },
+  setFiltersNames: (state, objEvent) => {
+    state.filters.names = objEvent
+  },
+  setFilters: (state, objEvent) => {
+    state.filters = objEvent
+  },
+  getTypes: (state, objEvent) => {
+    state.types = objEvent
+    console.log('write object types to State', objEvent)
+  },
+  createOrUpdateEvent: (state, objEvent) => {
+    console.log('createOrUpdateEvent objEvent', objEvent)
+    if (state.events) {
+      let foundEvent = state.events.filter(event => event.id === objEvent.id)
+      if (foundEvent) {
+        // Deduplicate
+        for (let i in foundEvent) {
+          mutations.deleteEvent(state, foundEvent[i])
+        }
+      }
+      if (typeof objEvent.id !== 'undefined') {
+        mutations.updateEvent(state, objEvent)
+      } else {
+        mutations.addEvent(state, objEvent)
+      }
+    }
+  },
+  addEvent: (state, objEvent) => {
+    state.events = [...state.events, objEvent]
+  },
+  updateEvent: (state, objEvent) => {
+    mutations.deleteEvent(state, objEvent.id)
+    state.events = [...state.events, objEvent]
+  },
+  deleteEvent: (state, objEvent) => {
+    state.events = state.events.filter(event => event.id !== objEvent.id)
+    console.log('filtered', state.events)
+  },
+  getEvents: (state, objEvent) => {
+    state.events = objEvent
+    console.log('write object event to State', objEvent)
+  }
+}
+
+export default {
+  namespaced: true,
+  state,
+  getters,
+  actions,
+  mutations
+}

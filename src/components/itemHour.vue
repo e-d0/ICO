@@ -9,6 +9,7 @@
            v-for="(item) in details"
            :key="item.id"
            :item="item"
+           :type="item.type"
            :itemRender="itemRender"
            @item-dragstart="dragItem"
            :date="date"></event>
@@ -20,6 +21,14 @@
 import event from './itemEvent'
 import moment from 'moment'
 import { EventBus, isSameDay } from './eventbus'
+import Vuex from 'vuex'
+const storeEvent = Vuex.createNamespacedHelpers('event')
+
+/**
+ * Приводим дату в соотетствие с форматом в браузере пользователя
+ * */
+const locale = window.navigator.userLanguage || window.navigator.language
+moment.locale(locale)
 
 export default {
   name: 'Hour',
@@ -33,7 +42,6 @@ export default {
   props: {
     date: Date,
     hour: Date,
-    events: null,
     index: Number,
     itemRender: Function
   },
@@ -67,29 +75,23 @@ export default {
     }
   },
   computed: {
+    ...storeEvent.mapGetters({
+      filteredEvents: 'filteredEvents'
+    }),
     details () {
       /**
-       * проверка, совпадает ли дата события и дата объекта ячейки */
+       * проверка, совпадает ли дата события и дата объекта ячейки
+       * //TODO Раскоментировать краткое выражение перед сдачей
+       * */
       // return this.events.length ? this.events.filter(item => isSameDay(item.date, this.date)) : []
-      if (this.events.length) {
+      if (this.filteredEvents.length) {
         // console.log('dateail length true', this.events.filter(item => isSameDay(item.date, this.date)))
         // console.log('dateal length true')
-        return this.events.filter(item => isSameDay(item.date, this.date))
+        return this.filteredEvents.filter(item => isSameDay(item.date, this.date))
       } else {
         return []
       }
-    },
-    displayDetails () {
-      // return this.expanded ? this.details : this.details.slice(0, this.volume)
-      if (this.expanded) {
-        console.log('disDetails TRUE', this.details())
-        return this.details()
-      } else {
-        console.log('disDetails FALSE', this.details.slice(0, this.volume))
-        return this.details.slice(0, this.volume)
-      }
     }
-
   }
 }
 </script>

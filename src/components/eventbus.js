@@ -123,45 +123,44 @@ const tryParse = obj => (typeof obj === 'string' ? new Date(obj) : obj)
 export const isSameDay = (one, two) => {
   const oneDate = tryParse(one)
   const twoDate = tryParse(two)
-  if (
-    oneDate.getHours() === twoDate.getHours() &&
-    oneDate.getDate() === twoDate.getDate() &&
-    oneDate.getMonth() === twoDate.getMonth() &&
-    oneDate.getFullYear() === twoDate.getFullYear()
-  ) {
-    // console.log(oneDate, twoDate, 'true in isSameDay')
-    return true
-  } else {
-    // console.log('false dates not the same')
-    return false
+  if ((oneDate || twoDate) !== undefined) {
+    if (
+      oneDate.getHours() === twoDate.getHours() &&
+        oneDate.getDate() === twoDate.getDate() &&
+        oneDate.getMonth() === twoDate.getMonth() &&
+        oneDate.getFullYear() === twoDate.getFullYear()
+    ) {
+      // console.log(oneDate, twoDate, 'true in isSameDay')
+      return true
+    } else {
+      // console.log('false dates not the same')
+      return false
+    }
+    /**
+       * //TODO Вернуть краткое выражение перед сдачей
+       * */
+    // return (
+    //   oneDate.getHours() === twoDate.getHours() &&
+    //   oneDate.getDate() === twoDate.getDate() &&
+    //   oneDate.getMonth() === twoDate.getMonth() &&
+    //   oneDate.getFullYear() === twoDate.getFullYear()
+    // )
   }
-  // return (
-  //   oneDate.getHours() === twoDate.getHours() &&
-  //   oneDate.getDate() === twoDate.getDate() &&
-  //   oneDate.getMonth() === twoDate.getMonth() &&
-  //   oneDate.getFullYear() === twoDate.getFullYear()
-  // )
 }
 
 /**
  * Создаем массив дней в зависимости от принятых дат
  * @param {object} dates
  */
-export const createDays = (dates) => {
+export const createDays = (start, end) => {
+  let currentDate = start
   let datesArray = []
-  let currentDate = dates.start
-  let addDays = function (days) {
-    let date = new Date(this.valueOf())
-    date.setDate(date.getDate() + days)
-    return date
+  while (currentDate <= end) {
+    const currentISO = currentDate.toISOString()
+    datesArray.push(currentISO)
+    let nextDay = moment(currentDate).add(1, 'days').toDate()
+    currentDate = nextDay
   }
-  while (currentDate <= dates.end) {
-    if (currentDate instanceof Date) {
-      datesArray.push(currentDate)
-    }
-    currentDate = addDays.call(currentDate, 1)
-  }
-
   return datesArray
 }
 
@@ -179,7 +178,8 @@ export const generateHours = (day) => {
     }
   } else {
     for (let i = timePeriod.start; i <= timePeriod.end; i++) {
-      hours.push(i + ':00')
+      if (i === 24) hours.push('0:00')
+      else hours.push(i + ':00')
     }
   }
   return hours

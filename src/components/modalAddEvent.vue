@@ -41,6 +41,11 @@
 <script>
 import moment from 'moment'
 import { EventBus } from './eventbus'
+/**
+ * Приводим дату в соотетствие с форматом в браузере пользователя
+ * */
+const locale = window.navigator.userLanguage || window.navigator.language
+moment.locale(locale)
 
 export default {
   name: 'modalAddEvent',
@@ -60,7 +65,7 @@ export default {
       /**
        * Получаем типы событий с сервера
        * */
-      return this.$http.get('http://localhost:3000/type').then(response => {
+      return this.$http.get('http://localhost:3000/types').then(response => {
         this.types = response.body
       }, error => {
         console.error(error)
@@ -70,11 +75,14 @@ export default {
       /**
        * //TODO Add Validation process
        * */
+      /**
+       * Формируем json объект для отправки на сервер. Все даты в ISO 8601. (https://en.wikipedia.org/wiki/ISO_8601)
+       * */
       let body = this.form
-      body.created_at = moment().format('YYYY-MM-DD HH:mm Z')
-      body.updated_at = moment().format('YYYY-MM-DD HH:mm Z')
-      body.starts = moment(this.form.starts).format('YYYY-MM-DD HH:mm Z')
-      body.ends = moment(this.form.ends).format('YYYY-MM-DD HH:mm Z')
+      body.created_at = moment().toISOString()
+      body.updated_at = moment().toISOString()
+      body.starts = moment(this.form.starts).toISOString()
+      body.ends = moment(this.form.ends).toISOString()
 
       console.log('event created', body)
       return this.$http.post(`http://localhost:3000/events`, body).then(response => {

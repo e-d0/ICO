@@ -29,9 +29,9 @@
           </div>
         </modal>
         <div class="month">
-          <itemWeek :events="events"
-                    :itemRender="itemRender"
-                    :dates="dates"></itemWeek>
+          <itemWeek :events.sync="events"
+                    :itemRender.sync="itemRender"
+                    :dates.sync="dates"></itemWeek>
         </div>
       </div>
     </div>
@@ -48,13 +48,19 @@ import itemWeek from './itemWeek'
 import { EventBus } from './eventbus'
 import modal from './modalConfirm'
 import modalAddEvent from './modalAddEvent'
+/**
+ * Приводим дату в соотетствие с форматом в браузере пользователя
+ * */
+const locale = window.navigator.userLanguage || window.navigator.language
+moment.locale(locale)
 
 export default {
   name: 'Schedule',
   components: { itemWeek, modal, modalAddEvent },
   props: {
-    dates: null,
-    events: null
+    itemRender: Function,
+    dates: Array,
+    events: Array
   },
   data () {
     return {
@@ -63,11 +69,7 @@ export default {
       showModalConfirm: false,
       showModalAddForm: false, /** //TODO Закрывать форму на сабмите */
       moment: moment,
-      dragItem: null,
-      itemRender (item) {
-        const h = this.$createElement
-        return h('span', 'CustomRender：' + item.name)
-      }
+      dragItem: null
     }
   },
   methods: {

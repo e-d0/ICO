@@ -1,6 +1,4 @@
 <template>
-  <!--<v-calendar :attributes='attrs'>-->
-  <!--</v-calendar>-->
   <v-date-picker
     mode='range'
     v-model='selectedDate'
@@ -12,9 +10,15 @@
 
 <script>
 import moment from 'moment'
-import { EventBus, createDays } from './eventbus'
+import { createDays } from './eventbus'
+
+/**
+ * Приводим дату в соотетствие с форматом в браузере пользователя
+ * */
+const locale = window.navigator.userLanguage || window.navigator.language
+moment.locale(locale)
 /*
-* Отключил предупреждение. Слишком уж консоль засоряет.
+* //TODO Отключил предупреждение. Слишком уж консоль засоряет.
 **/
 moment.suppressDeprecationWarnings = true
 export default {
@@ -24,24 +28,34 @@ export default {
   data () {
     return {
       selectedDate: {
-        start: moment().startOf('week').toDate(), end: moment().endOf('week').toDate()
+        start: moment().startOf('day').toDate(), end: moment().endOf('week').toDate()
       }
     }
   },
   methods: {
     datesEmit (e) {
-      let daysArr = createDays(e)
-      EventBus.$emit('dates', daysArr)
-      console.log(daysArr, 'schedular caletndar emitted dates array')
+      /**
+       * Готовим и отправляем  событие массив выбранных дней
+       * */
+      const generatedDays = createDays(e.start, e.end)
+      this.$store.dispatch({
+        type: 'event/setDates',
+        data: generatedDays
+      })
+      console.log(generatedDays, 'schedular caletndar emitted dates array')
     }
   },
   created () {
+  },
+  mounted () {
     /**
      * Создаем массив дней в зависимости от принятых дат
      * и передаем в глобальное событие
      */
     console.log('el calendar is created')
     this.datesEmit(this.selectedDate)
+  },
+  computed: {
   }
 }
 </script>

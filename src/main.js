@@ -7,24 +7,21 @@ import './assets/less/app.less'
 import VueResource from 'vue-resource'
 import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
-import SchedulerCalendar from './components/SchedulerCalendar'
-import SchedulerMain from './components/SchedulerMain'
+
+import store from './store'
 
 Vue.use(VueResource)
-Vue.http.options.root = 'http://localhost:3000'
 Vue.config.productionTip = false
 
 Vue.use(VCalendar, {
   firstDayOfWeek: 2 // Monday
 })
 
-Vue.component('scheduler-calendar', SchedulerCalendar)
-Vue.component('scheduler-main', SchedulerMain)
-
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   components: { App },
+  store,
   template: '<App/>'
 })
