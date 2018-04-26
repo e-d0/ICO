@@ -5,8 +5,10 @@
   "author": "e-d0 <e-do@inbox.ru>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "concurrently --kill-others \"npm run start:server\" \"npm run dev:wp\" ",
+    "dev:wp": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
     "start": "npm run dev",
+    "start:server": "json-server --watch db.json",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",
@@ -14,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "concurrently": "^3.5.1",
     "moment": "^2.22.0",
     "v-calendar": "^0.9.4",
     "vue": "^2.5.2",
