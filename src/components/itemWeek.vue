@@ -1,11 +1,8 @@
 <template>
-
-  <div class="week">
       <itemDay :events="events"
                :itemRender.sync="itemRender"
                :dates="dates"
                  ></itemDay>
-  </div>
 </template>
 
 <script>

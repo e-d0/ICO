@@ -1,7 +1,7 @@
 <template>
-  <div class="hour" @dragover.prevent=""
-                    @dragenter.prevent="dragenter"
-                    @drop="onDrop">
+  <div    @dragover.prevent=""
+          @dragenter.prevent="dragenter"
+          @drop="onDrop">
     <span v-if="checkForDateObj(hour)">{{ dateFormat(hour) }}</span>
     <span v-else>{{ hour }}</span>
 
@@ -97,5 +97,4 @@ export default {
 </script>
 
 <style lang="less" >
-
 </style>

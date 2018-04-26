@@ -1,30 +1,33 @@
 <template>
-  <div class="container">
-    <div class="header">
-      <span>header</span>
-    </div>
-    <div class="row">
-        <div class="col-md-4">
-            <div class="row">
-              <div class="col-md-12">
-                <scheduler-calendar @dates="sendDates"></scheduler-calendar>
-              </div>
-              <div class="col-md-12 mt-4">
-                <schedulerFilter></schedulerFilter>
-              </div>
-            </div>
+  <div id="app">
+    <tplHeader></tplHeader>
+      <div class="container-fluid">
+        <div class="row">
+
+                <div class="col-3">
+                    <div class="events">
+                         <schedulerFilter></schedulerFilter>
+                         <scheduler-calendar></scheduler-calendar>
+
+                    </div>
+                </div>
+                <div class="col-9">
+                    <scheduler-main v-if="filteredEvents"
+                                    :itemRender.sync="itemRender"
+                                    :dates="dates"
+                                    :events="filteredEvents"></scheduler-main>
+                </div>
+
         </div>
-        <div class="col-md-12">
-            <scheduler-main v-if="filteredEvents"
-                            :itemRender.sync="itemRender"
-                            :dates="dates"
-                            :events="filteredEvents"></scheduler-main>
-        </div>
     </div>
+    <tplFooter></tplFooter>
   </div>
 </template>
 
 <script>
+import tplHeader from './TheHeader'
+import tplFooter from './TheFooter'
+import theEvent from './TheEvent'
 import { EventBus, countDiffBetweenDates } from './eventbus'
 import moment from 'moment'
 import schedulerFilter from './schedulerFilter'
@@ -41,12 +44,14 @@ moment.locale(locale)
 
 export default {
   name: 'FrontPage',
-  components: { schedulerFilter, SchedulerMain, SchedulerCalendar },
+  components: { schedulerFilter, SchedulerMain, SchedulerCalendar, tplHeader, tplFooter, theEvent },
   data () {
     return {
       itemRender (item) {
         const h = this.$createElement
-        return h('span', 'CustomRender：' + item.name)
+        return h(theEvent, { props: {
+          item
+        } })
       }
       // dates: []
     }
@@ -59,10 +64,6 @@ export default {
     })
   },
   methods: {
-    sendDates (item) {
-      console.log('emitted item', item)
-      // this.dates = item
-    },
     /**
      * Получаем события с сервера через хранилище store
      * */
@@ -96,11 +97,6 @@ export default {
         type: 'event/changeEvent',
         value: body
       })
-      // return this.$http.patch(`http://localhost:3000/events/${item.id}`, body).then(response => {
-      //   this.getEvents()
-      // }, error => {
-      //   console.error(error)
-      // })
     }
   },
   created () {

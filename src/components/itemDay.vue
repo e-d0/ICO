@@ -1,24 +1,34 @@
 <template>
-  <div class="body">
+  <div class="calendar--body">
+
     <div class="events-group">
-      <div class="day">
-        <div class="top-info"><span></span></div>
-        <div class="hours">
-          <div v-for="hour in emptyHoursArray" :key="hour" >
-            <div class="hour">
-              {{ hour }}
+      <div class="timeline_item-data">
+        <span class="timeline_item-date" style="color: transparent;">empty</span>
+        <span class="timeline_item-day" style="color: transparent;">text</span>
+      </div>
+      <div class="hours">
+          <div class="timeline_item-scale timeline_item-scale--calendar timeline_item-scale--calendar-today">
+            <div class="timeline_item-time" v-for="hour in emptyHoursArray" :key="hour" >
+
+            <span>{{ hour }}</span>
+
             </div>
           </div>
-        </div>
       </div>
     </div>
+
     <div class="events-group" v-if="dates"
                               v-for="(dayItem, dayInd) in dates"
                               :key="dayInd">
-      <div class="day">
-        <div class="top-info"><span v-if="dayItem">{{ dayItem | weekDayName }}</span></div>
+
+        <div class="timeline_item-data">
+          <span class="timeline_item-date">{{ moment(dayItem).format('dd') }}</span>
+          <span class="timeline_item-day">{{ dayItem | weekDayName }}</span>
+        </div>
+
         <div class="hours">
-          <div v-if="dayItem"
+          <div :class="['timeline_item-scale' ,'timeline_item-scale--calendar']"
+               v-if="dayItem"
                v-for="(hour,ind) in generateHours(dayItem)"
                :key="ind" >
                 <itemHour :hour="hour"
@@ -27,7 +37,7 @@
                           :date="updatedDayCell(hour)"></itemHour>
           </div>
         </div>
-      </div>
+
     </div>
   </div>
 

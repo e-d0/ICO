@@ -1,4 +1,5 @@
 <script>
+
 export default {
   name: 'event',
   props: {
@@ -25,7 +26,7 @@ export default {
   },
   render (h) {
     return h('div', {
-      class: ['schedule-calendar-detail-item', `schedule-calendar-status`],
+      class: ['timeline_event', `timeline_event--KYC`],
       attrs: {
         draggable: true
       },
