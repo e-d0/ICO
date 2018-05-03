@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "bootstrap-vue": "^2.0.0-rc.9",
     "concurrently": "^3.5.1",
     "json-server": "^0.12.1",
     "moment": "^2.22.0",

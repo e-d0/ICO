@@ -1,6 +1,5 @@
 <template>
   <form id="addEvent" @submit="submitForm()">
-
     <div class="form-group row">
       <label for="name" class="col-2 col-form-label">Название</label>
       <div class="col-10">
@@ -48,13 +47,16 @@ const locale = window.navigator.userLanguage || window.navigator.language
 moment.locale(locale)
 
 export default {
-  name: 'modalAddEvent',
+  name: 'FormAddEvent',
+  props: {
+    acceptedDate: Date
+  },
   data () {
     return {
       form: {
         name: null,
-        starts: moment().format('YYYY-MM-DDThh:mm'),
-        ends: moment().format('YYYY-MM-DDThh:mm'),
+        starts: this.acceptedDate !== null ? moment(this.acceptedDate).format('YYYY-MM-DDThh:mm') : moment().format('YYYY-MM-DDThh:mm'),
+        ends: this.acceptedDate !== null ? moment(this.acceptedDate).format('YYYY-MM-DDThh:mm') : moment().format('YYYY-MM-DDThh:mm'),
         type: null
       },
       types: null
@@ -72,6 +74,7 @@ export default {
       })
     },
     submitForm () {
+      this.$emit('close')
       /**
        * //TODO Add Validation process
        * */
@@ -95,6 +98,8 @@ export default {
   },
   created () {
     this.getTypes()
+    this.form.starts = moment(this.acceptedDate).format('YYYY-MM-DDThh:mm')
+    this.form.ends = moment(this.acceptedDate).format('YYYY-MM-DDThh:mm')
   }
 }
 </script>

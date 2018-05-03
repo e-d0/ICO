@@ -29,18 +29,17 @@
           <li v-for="(item,index) in types" :key="index">
             <label class="checkbox" :for="'name-'+index">
               <input type="checkbox"
-                     :value="item.name"
+                     :value="item.code"
                      :id="'name-'+index"
                      :checked="isChecked(item.name)"
                      v-model="checkedTypesStorage">
-              <span class="white-list">{{item.name}}</span>
+              <span :class=[item.code]>{{item.name}}</span>
             </label>
             <span>{{itemCount(item)}}</span>
           </li>
         </ul>
       </div>
       </fieldset>
-      <!-- /.fieldset -->
     </form>
   </div>
 </template>
@@ -54,9 +53,6 @@ export default {
   name: 'schedulerFilter',
   components: { multiselect },
   props: {
-    // value: {
-    //   type: String
-    // }
   },
   data () {
     return {
@@ -76,6 +72,9 @@ export default {
     ...storeEvent.mapState(['filters', 'events'])
   },
   methods: {
+    /**
+     * Привязываем значения input имени к хранилищу vuex.
+     * */
     ...storeEvent.mapActions(['setFiltersNames']),
     /**
      * Получаем типы событий с сервера через store, используя промис.
@@ -88,7 +87,7 @@ export default {
          * */
         if (this.checkedByDefault) {
           for (let i = 0; i < response.data.length; i++) {
-            this.checkedTypesStorage.push(response.data[i].name)
+            this.checkedTypesStorage.push(response.data[i].code)
           }
         }
         return response
@@ -109,7 +108,7 @@ export default {
       if (this.filteredEvents !== undefined) {
         let count = 0
         this.filteredEvents.filter((event) => {
-          if (!event.type.match(type.name)) {
+          if (!event.type.match(type.code)) {
             return
           }
           count++
@@ -122,7 +121,6 @@ export default {
   },
   mounted: function () {
     this.getTypes()
-    console.log('mounted')
   },
   watch: {
     checkedTypesStorage: function (newVal, oldVal) {

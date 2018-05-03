@@ -36,12 +36,6 @@ import SchedulerCalendar from './SchedulerCalendar'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 
-/**
- * Приводим дату в соотетствие с форматом в браузере пользователя
- * */
-const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
-
 export default {
   name: 'FrontPage',
   components: { schedulerFilter, SchedulerMain, SchedulerCalendar, tplHeader, tplFooter, theEvent },
@@ -53,7 +47,6 @@ export default {
           item
         } })
       }
-      // dates: []
     }
   },
   computed: {
@@ -71,6 +64,7 @@ export default {
       this.$store.dispatch('event/getEvents')
     },
     changeDate (e, item, date) {
+      console.log('item to cHANGE <<<<<<', item)
       /**
        * Находим индекс элемента в текущем массиве событий
        * */

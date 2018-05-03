@@ -4,31 +4,36 @@
     v-model='selectedDate'
     show-caps
     @input="datesEmit"
+    :select-attribute='attrs'
+    :formats='formats'
     is-inline>
   </v-date-picker>
 </template>
 
 <script>
-import moment from 'moment'
 import { createDays } from './eventbus'
 
-/**
- * Приводим дату в соотетствие с форматом в браузере пользователя
- * */
-const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
-/*
-* //TODO Отключил предупреждение. Слишком уж консоль засоряет.
-**/
-moment.suppressDeprecationWarnings = true
 export default {
   name: 'calendar',
   props: {
   },
   data () {
     return {
+      attrs:
+        {
+          highlight: {
+            backgroundColor: '#e8edf1'
+          },
+          contentStyle: {
+            color: '#393d46'
+          }
+        },
+      formats: {
+        title: 'MMMM YYYY'
+      },
       selectedDate: {
-        start: moment().startOf('day').toDate(), end: moment().endOf('week').toDate()
+        start: this.$moment().startOf('day').toDate(),
+        end: this.$moment().endOf('week').toDate()
       }
     }
   },
@@ -59,3 +64,11 @@ export default {
   }
 }
 </script>
+<style lang="less">
+  .c-title{
+    text-transform: capitalize;
+  }
+  .c-day{
+
+  }
+</style>

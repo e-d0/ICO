@@ -1,19 +1,13 @@
 <template>
   <div class="calendar--body">
 
-    <div class="events-group">
-      <div class="timeline_item-data">
-        <span class="timeline_item-date" style="color: transparent;">empty</span>
-        <span class="timeline_item-day" style="color: transparent;">text</span>
+    <div class="time-group">
+      <div class="empty-slot">
       </div>
-      <div class="hours">
-          <div class="timeline_item-scale timeline_item-scale--calendar timeline_item-scale--calendar-today">
-            <div class="timeline_item-time" v-for="hour in emptyHoursArray" :key="hour" >
+      <div class="timeline_item timeline_item-time" v-for="hour in emptyHoursArray" :key="hour" >
 
-            <span>{{ hour }}</span>
+        <span>{{ hour }}</span>
 
-            </div>
-          </div>
       </div>
     </div>
 
@@ -22,12 +16,12 @@
                               :key="dayInd">
 
         <div class="timeline_item-data">
-          <span class="timeline_item-date">{{ moment(dayItem).format('dd') }}</span>
+          <span class="timeline_item-date">{{ moment(dayItem).format('D') }}</span>
           <span class="timeline_item-day">{{ dayItem | weekDayName }}</span>
         </div>
 
         <div class="hours">
-          <div :class="['timeline_item-scale' ,'timeline_item-scale--calendar']"
+          <div :class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']"
                v-if="dayItem"
                v-for="(hour,ind) in generateHours(dayItem)"
                :key="ind" >
@@ -47,6 +41,8 @@
 import moment from 'moment'
 import itemHour from './itemHour'
 import { generateHours } from './eventbus'
+import Vuex from 'vuex'
+const storeEvent = Vuex.createNamespacedHelpers('event')
 /**
  * Приводим дату в соотетствие с форматом в браузере пользователя
  * */
@@ -57,7 +53,6 @@ export default {
   name: 'Day',
   props: {
     itemRender: Function,
-    dates: Array,
     dayIndex: Number
   },
   components: { itemHour },
@@ -65,9 +60,15 @@ export default {
     return {
       moment: moment,
       currentTime: null,
-      emptyHoursArray: generateHours(),
-      newDates: []
+      emptyHoursArray: generateHours()
     }
+  },
+  computed: {
+    ...storeEvent.mapGetters({
+      events: 'events',
+      filteredEvents: 'filteredEvents',
+      dates: 'dates'
+    })
   },
   filters: {
     weekDayName: function (value) {
@@ -111,5 +112,7 @@ export default {
 </script>
 
 <style scoped>
-
+.empty-slot{
+   height: 62px;
+  }
 </style>

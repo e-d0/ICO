@@ -3,11 +3,17 @@
 
     <div class="timeline_top-line">
       <div class="timeline_date">
-        <span class="timeline_date-month">10—16 февраля</span>
-        <span class="timeline_date-day">Сегодня <b>10 февраля</b>, воскресенье</span>
+        <span class="timeline_date-month">{{headerDates()}}</span>
+        <span class="timeline_date-day">Сегодня <b>{{ moment().format('D MMMM')}}</b>, {{ moment().format('dddd')}}</span>
       </div>
       <div class="radio-buttons">
-        <a href="#" class="btn" @click="showModalAddForm = true">Добавить ICOO</a>
+        <a href="#" class="btn">Неделя</a>
+      </div>
+      <div class="radio-buttons">
+        <a href="#" class="btn">Месяц</a>
+      </div>
+      <div class="radio-buttons">
+        <a href="#" class="btn" @click="openAddFormModal()">Добавить ICO</a>
       </div>
     </div>
 
@@ -16,52 +22,46 @@
                     :dates.sync="dates"></itemWeek>
 
     <div class="col-md-12 scheduler__main">
+
+      <modal v-if="showModalAddForm" >
+      <div slot="header">
+        <div class="modal-header">
+          <h5 class="modal-title"></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showModalAddForm = false">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+      </div>
+      <div slot="body">
+        <FormAddEvent :acceptedDate="acceptedDate" @close="closeAddFormModal()"></FormAddEvent>
+      </div>
+    </modal>
       <modal v-if="showModalConfirm">
         <div slot="body">
-          Вы хотите перенсти дату события?
-        </div>
-        <div slot="footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" @click="confirmRequest()" >Отмена</button>
-          <button type="button" class="btn btn-primary" @click="confirmRequest('confirm')">Изменить дату</button>
+          <formConfirm @onConfirm="confirmRequest('confirm')"
+                       @onCancel="confirmRequest()"></formConfirm>
         </div>
       </modal>
-      <modal v-if="showModalAddForm">
-        <div slot="body">
-          <div class="modal-header">
-            <h5 class="modal-title"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showModalAddForm = false">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-        </div>
-        <div slot="body">
-          <modalAddEvent></modalAddEvent>
-          <div ></div>
-        </div>
-      </modal>
+
     </div>
   </div>
 </template>
 
 <script>
-import moment from 'moment'
 import itemWeek from './itemWeek'
 import { EventBus } from './eventbus'
-import modal from './modalConfirm'
-import modalAddEvent from './modalAddEvent'
-/**
- * Приводим дату в соотетствие с форматом в браузере пользователя
- * */
-const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
+import modal from './modalBody'
+import formConfirm from './formConfirm'
+import FormAddEvent from './formAddEvent'
+import popover from './popover'
+import Vuex from 'vuex'
+const storeEvent = Vuex.createNamespacedHelpers('event')
 
 export default {
   name: 'Schedule',
-  components: { itemWeek, modal, modalAddEvent },
+  components: { itemWeek, popover, FormAddEvent, modal, formConfirm },
   props: {
-    itemRender: Function,
-    dates: Array,
-    events: Array
+    itemRender: Function
   },
   data () {
     return {
@@ -69,11 +69,32 @@ export default {
       dateTempStorage: null,
       showModalConfirm: false,
       showModalAddForm: false, /** //TODO Закрывать форму на сабмите */
-      moment: moment,
-      dragItem: null
+      moment: this.$moment,
+      dragItem: null,
+      acceptedDate: null,
+      clickedEvent: null
     }
   },
+  computed: {
+    ...storeEvent.mapGetters({
+      events: 'events',
+      filteredEvents: 'filteredEvents',
+      dates: 'dates'
+    })
+  },
   methods: {
+    openPopup () {
+    },
+    headerDates () {
+      return `${this.$moment(this.dates[0]).format('D')} - ${this.$moment(this.dates[this.dates.length - 1]).format('D MMMM')}`
+    },
+    openAddFormModal (date) {
+      this.acceptedDate = date || new Date()
+      this.showModalAddForm = true
+    },
+    closeAddFormModal () {
+      this.showModalAddForm = false
+    },
     openModal () {
       this.showModalConfirm = true
     },
@@ -85,7 +106,7 @@ export default {
       this.$emit('event-dragenter', e, this.dragItem, date)
     },
     itemDragstart (e, item, date, type) {
-      console.log('scheduler main itemdragstart')
+      console.log('scheduler main itemdragstart', item)
       this.dragItem = item
       console.log('itemdragstart Func', this.dragItem)
       this.$emit('event-dragstart', e, item, date)
@@ -113,8 +134,10 @@ export default {
       EventBus.$emit('event-dragend', e, this.dragItem, date)
       console.log('item drop func')
     },
-    itemClick (e, item) {
-      console.log('[event-click]:', item)
+    itemClick (e, item, eventId) {
+      // this.popoverShow = true
+      // this.clickedEvent = {item: item, eventId}
+      console.log('[event-click]:', item, eventId)
       this.$emit('event-click', e, item)
     },
     dateClick (e, date) {
@@ -131,7 +154,7 @@ export default {
     EventBus.$on('item-drop', this.confirmDialog)
     EventBus.$on('item-click', this.itemClick)
     EventBus.$on('date-click', this.dateClick)
-    console.log('dates at scheduler main', this.dates)
+    EventBus.$on('call:addEventForm', this.openAddFormModal)
   },
   destoryed () {
     EventBus.$off()
@@ -237,7 +260,7 @@ export default {
     }
     &_item {
       position: relative;
-      display: flex;
+      /*display: flex;*/
       height: 48px;
       border-bottom: 1px solid #e0e6ed;
       //overflow: hidden;
@@ -297,6 +320,7 @@ export default {
       align-items: center;
       align-content: stretch;
       height: 100%;
+      width: 100%;
       &--KYC {
         position: relative;
         background-color: rgba(99, 203, 198, 0.75);
@@ -376,6 +400,7 @@ export default {
         display: flex;
         flex-direction: column;
         margin-left: 12px;
+        text-align: left;
       }
       &-time {
         margin-bottom: 2px;

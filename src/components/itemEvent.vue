@@ -14,6 +14,25 @@ export default {
     }
   },
   methods: {
+    /**
+     * Считаем отступ сверху в зависимости от
+     * времени начала события в соответствии с заданным
+     * интервалом
+     * */
+    timeOffset () {
+      const intervals = [0, 15, 30, 45, 60]
+      const startsDate = this.$moment(this.item.starts).format('m')
+      const start = Number.parseInt(startsDate)
+
+      let offsetTop = 0
+      for (let i = intervals.length; i >= 0; --i) {
+        if (intervals[i] <= start) {
+          offsetTop = intervals[i]
+          break
+        }
+      }
+      return (100 / 60) * offsetTop
+    },
     onDrag (e) {
       console.log('start item-dragstart')
       this.$emit('item-dragstart', e, this.item, this.date, this.type)
@@ -21,14 +40,23 @@ export default {
     onClick (e) {
       e.stopPropagation()
       e.preventDefault()
-      // EventBus.$emit('item-click', e, this.item)
+      /**
+       * При клике на event срабатыавет событие и отправляет id элемента
+       * */
+      // EventBus.$emit('item-click', e, this.item, {eventId: `event-${this.item.id}`})
     }
   },
   render (h) {
     return h('div', {
-      class: ['timeline_event', `timeline_event--KYC`],
+      class: ['event', 'timeline_event'],
       attrs: {
-        draggable: true
+        draggable: true,
+        id: this.item ? `event-${this.item.id}` : null
+      },
+      style: {
+        position: 'relative',
+        zIndex: '1',
+        top: `${this.timeOffset()}%`
       },
       on: {
         dragstart: this.onDrag,
@@ -37,10 +65,10 @@ export default {
     }, this.itemRender ? [this.itemRender(this.item)] : [h('span', this.text)])
   },
   created () {
+    this.timeOffset()
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
 </style>

@@ -231,7 +231,7 @@ label {
     position: relative;
     display: block;
     padding-left: 22px;
-    white-space: wrap;
+    white-space: nowrap;
     color: #333f52;
     font-family: @main-font;
     font-size: 14px;
@@ -264,19 +264,19 @@ label.checkbox input[type=checkbox]:checked + span::after {
   background-position: center;
   z-index: 33;
 }
-label.checkbox input[type=checkbox]:checked + .white-list::after {
+label.checkbox input[type=checkbox]:checked + .white_list::after {
   background-image: @img-pink-checkbox;
 }
 label.checkbox input[type=checkbox]:checked + .KYC::after {
   background-image: @img-blue-checkbox;
 }
-label.checkbox input[type=checkbox]:checked + .pre-ico::after {
+label.checkbox input[type=checkbox]:checked + .pre_ico::after {
   background-image: @img-orange-checkbox;
 }
-label.checkbox input[type=checkbox]:checked + .start-ico::after {
+label.checkbox input[type=checkbox]:checked + .start_ico::after {
   background-image: @img-checkbox;
 }
-label.checkbox input[type=checkbox]:checked + .ending-ico::after {
+label.checkbox input[type=checkbox]:checked + .ending_ico::after {
   background-image: @img-purple-checkbox;
 }
 
@@ -662,7 +662,7 @@ label.checkbox input[type=checkbox]:checked + .ending-ico::after {
       padding: 14px 10px 16px 12px;
     }
     &-time {
-      min-width: 48px;
+      width: 48px;
       span {
         color: #707986;
         font-family: @main-font;
@@ -721,7 +721,7 @@ label.checkbox input[type=checkbox]:checked + .ending-ico::after {
         z-index: 11;
       }
     }
-    &--white-list {
+    &--white_list {
       position: relative;
       background-color: rgba(255, 129, 158, 0.75);
       border-top: 4px solid @white-list;
@@ -736,7 +736,7 @@ label.checkbox input[type=checkbox]:checked + .ending-ico::after {
         z-index: 11;
       }
     }
-    &--ending-ico {
+    &--ending_ico {
       position: relative;
       background-color: rgba(143, 114, 199, 0.75);
       border-top: 4px solid @ending-ico;
@@ -751,7 +751,7 @@ label.checkbox input[type=checkbox]:checked + .ending-ico::after {
         z-index: 11;
       }
     }
-    &--pre-ico {
+    &--pre_ico {
       position: relative;
       background-color: rgba(247, 152, 27, 0.75);
       border-top: 4px solid @pre-ico ;
@@ -766,7 +766,7 @@ label.checkbox input[type=checkbox]:checked + .ending-ico::after {
         z-index: 11;
       }
     }
-    &--start-ico {
+    &--start_ico {
       position: relative;
       background-color: rgba(69, 175, 54, 0.75);
       border-top: 4px solid @start-ico ;
@@ -872,13 +872,50 @@ label.checkbox input[type=checkbox]:checked + .ending-ico::after {
     }
   }
 }
+
+/*===============POPOVER================*/
+.popover {
+  max-width: 350px !important;
+  border: none!important;
+  & .arrow{
+    z-index: 1;
+  }
+}
+
+.popover-body {
+  padding: 0!important;
+}
+
+.mypopover_header{
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+.mypopover{
+  border-radius: 4px;
+}
+
+.bs-popover-right .arrow,
+.bs-popover-left .arrow,
+.bs-popover-top .arrow,
+.bs-popover-bottom .arrow{
+  //top: calc((0.5rem + 1px) * -1)!important;
+  z-index: 10;
+}
 /*===== VREMENNO =======*/
+
 .calendar--body{
   display: flex;
   flex-direction: row;
+  overflow-y: scroll;
 }
 
 .events-group{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.time-group{
   display: flex;
   flex-direction: column;
 }
@@ -896,7 +933,6 @@ label.checkbox input[type=checkbox]:checked + .ending-ico::after {
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 0;
-    text-align: center;
     text-align: center;
 }
 

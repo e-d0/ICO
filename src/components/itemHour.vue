@@ -1,8 +1,11 @@
 <template>
   <div    @dragover.prevent=""
           @dragenter.prevent="dragenter"
-          @drop="onDrop">
-    <span v-if="checkForDateObj(hour)">{{ dateFormat(hour) }}</span>
+          @drop="onDrop"
+          @click="showAddForm()"
+          class="prevent-drag timeline_event"
+          :draggable="false">
+    <span v-if="checkForDateObj(hour)"></span>
     <span v-else>{{ hour }}</span>
 
     <event v-if="details.length"
@@ -22,6 +25,9 @@ import event from './itemEvent'
 import moment from 'moment'
 import { EventBus, isSameDay } from './eventbus'
 import Vuex from 'vuex'
+import FormAddEvent from './formAddEvent'
+import modal from './modalBody'
+
 const storeEvent = Vuex.createNamespacedHelpers('event')
 
 /**
@@ -35,10 +41,11 @@ export default {
   data () {
     return {
       volume: 0,
-      expanded: false
+      expanded: false,
+      showModalForm: false
     }
   },
-  components: { event },
+  components: { event, formAdd: FormAddEvent, modalForm: modal },
   props: {
     date: Date,
     hour: Date,
@@ -46,6 +53,13 @@ export default {
     itemRender: Function
   },
   methods: {
+    showAddForm (e) {
+      EventBus.$emit('call:addEventForm', this.date)
+    },
+    closeForm (e) {
+      console.log(e)
+      console.log('click HOUR')
+    },
     checkForDateObj (hour) {
       /**
        * Проверяем входящий формат времени: объект или строка.
@@ -83,9 +97,9 @@ export default {
        * проверка, совпадает ли дата события и дата объекта ячейки
        * //TODO Раскоментировать краткое выражение перед сдачей
        * */
-      // return this.events.length ? this.events.filter(item => isSameDay(item.date, this.date)) : []
+      // return this.filteredEvents.length ? this.filteredEvents.filter(item => isSameDay(item.date, this.date)) : []
       if (this.filteredEvents.length) {
-        // console.log('dateail length true', this.events.filter(item => isSameDay(item.date, this.date)))
+        // console.log('dateail length true', this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
         // console.log('dateal length true')
         return this.filteredEvents.filter(item => isSameDay(item.date, this.date))
       } else {
@@ -97,4 +111,5 @@ export default {
 </script>
 
 <style lang="less" >
+
 </style>

@@ -19,7 +19,20 @@ const getters = {
     state.dates.forEach(el => { arr.push(new Date(el)) })
     return arr
   },
-  getFiltersByType: (state) => state.filters.types,
+  /**
+   * Ищем имя типа события по кодовому идентификатору.
+   * Используем геттер, так как результат кэшируется
+   * и это дает самую быстрый результат.
+   * */
+  getTypeNameByCode: (state, getters) => (code) => {
+    /**
+     * find оказался самым быстрым, среди переборщиков(for, findIndex)
+     * */
+    let obj = getters.types.find(item => {
+      if (item.code === code) return item
+    })
+    return obj.name
+  },
   /**
    * Фильтрация по собранным данным. Оптимизировал под минимум операций, как мог.
    * */
@@ -34,7 +47,9 @@ const getters = {
           state.filters.types instanceof Array && state.filters.types.includes(event.type)
         ) {
           for (let item = 0; item < state.filters.names.length; item++) {
-            if (state.filters.names[item].name === (event.name)) { return event }
+            if (state.filters.names[item].name === (event.name)) {
+              return event
+            }
           }
         } else {
           /**
@@ -92,7 +107,10 @@ const actions = {
     axios.patch(context.rootGetters.api_url + `/events/${payload.value.id}`, payload.value).then((response) => {
       console.log(response)
       response['id'] = payload.id
-      response.data['date'] = response.data.starts
+      /**
+       * Приводим к формату приложения дату, принятую с сервера
+       * */
+      response.data['date'] = new Date(response.data.starts)
       context.commit('createOrUpdateEvent', response.data)
     }).catch(handleXHRerrors)
   },
@@ -100,30 +118,7 @@ const actions = {
     axios.post(context.rootGetters.api_url + '/events', payload.value).then((response) => {
       context.commit('createOrUpdateEvent', response.data)
     }).catch(handleXHRerrors)
-    // return this.$http.patch(`http://localhost:3000/events/${item.id}`, body).then(response => {
-    //   this.getEvents()
-    // }, error => {
-    //   console.error(error)
-    // })
   },
-  // createOrUpdateEvent (context, payload) {
-  //   // Hack to force content-type on x-www-form-urlencoded rather than JSON
-  //   let sUrl = context.rootGetters.api_url + '/events'
-  //   let params = new URLSearchParams()
-  //   let oHeaders = { headers: { 'Content-type': 'application/x-www-form-urlencoded' } }
-  //   console.log('<<<<<<>>>>>>>>>>', payload)
-  //   params.append('content', payload.content)
-  //   if (payload.id) {
-  //     params.append('id', payload.id)
-  //     axios.put(sUrl, params, oHeaders).then((oResponse) => {
-  //       context.commit('createOrUpdateEvent', oResponse.data)
-  //     }).catch(handleXHRerrors)
-  //   } else {
-  //     axios.post(sUrl, params, oHeaders).then((oResponse) => {
-  //       context.commit('createOrUpdateEvent', oResponse.data)
-  //     }).catch(handleXHRerrors)
-  //   }
-  // },
   getEvents (context, payload) {
     axios.get(context.rootGetters.api_url + '/events').then((oResponse) => {
       /**

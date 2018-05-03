@@ -1,7 +1,5 @@
 <template>
-      <itemDay :events="events"
-               :itemRender.sync="itemRender"
-               :dates="dates"
+      <itemDay  :itemRender.sync="itemRender"
                  ></itemDay>
 </template>
 
@@ -18,9 +16,7 @@ export default {
   name: 'itemWeek',
   components: { itemDay },
   props: {
-    events: Array,
-    itemRender: Function,
-    dates: Array
+    itemRender: Function
   },
   data () {
     return {

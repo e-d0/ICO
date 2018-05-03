@@ -3,12 +3,32 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import store from './store'
 import './assets/less/app.less'
 import VueResource from 'vue-resource'
 import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
+import BootstrapVue from 'bootstrap-vue'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import moment from 'moment'
 
-import store from './store'
+/*
+* //TODO Отключил предупреждение. Слишком уж консоль засоряет.
+* календарь отсюда https://github.com/nathanreyes/v-calendar
+**/
+moment.suppressDeprecationWarnings = true
+/**
+ * Приводим дату в соотетствие с форматом в браузере пользователя
+ * */
+const locale = window.navigator.userLanguage || window.navigator.language
+moment.locale(locale)
+/**
+ * Импортируем глобально moment.js
+ * теперь он доступен во всех компонентах через this.$moment
+ * */
+Vue.prototype.$moment = moment
+
+Vue.use(BootstrapVue)
 
 Vue.use(VueResource)
 Vue.config.productionTip = false

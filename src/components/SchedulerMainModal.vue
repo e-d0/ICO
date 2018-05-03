@@ -90,41 +90,41 @@
 </style>
 
 <script>
-  export default {
-    name: 'Modal',
-    data(){
-      return {
-        modalShow: false
+export default {
+  name: 'Modal',
+  data () {
+    return {
+      modalShow: false
+    }
+  },
+  props: {
+    show: {
+      type: Boolean,
+      default: false
+    },
+    showModalDetail: {
+      type: Object,
+      default () {}
+    }
+  },
+  watch: {
+    show (value) {
+      console.log('value=', value)
+      this.modalShow = true
+    }
+  },
+  created () {
+    this.modalShow = this.show
+  },
+  methods: {
+    close (e) {
+      if (e.target.className === 'modal-wrapper') {
+        this.modalShow = false
+        // this.show = false;
       }
-    },
-    props: {
-      show: {
-        type: Boolean,
-        default: false
-      },
-      showModalDetail: {
-        type: Object,
-        default(){}
-      },
-    },
-    watch: {
-      show(value){
-        console.log('value=',value);
-        this.modalShow = true;
-      }
-    },
-    created(){
-      this.modalShow = this.show;
-    },
-    methods: {
-      close(e) {
-        if(e.target.className == "modal-wrapper") {
-          this.modalShow = false;
-          // this.show = false;
-        }
-        // console.log(e);
-        // console.log(e.target.className)
-      }
+      // console.log(e);
+      // console.log(e.target.className)
     }
   }
+}
 </script>
