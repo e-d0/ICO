@@ -5,10 +5,9 @@
         <div class="row">
 
                 <div class="col-3">
-                    <div class="events">
-                         <schedulerFilter></schedulerFilter>
-                         <scheduler-calendar></scheduler-calendar>
-
+                    <div class="filter">
+                      <scheduler-calendar></scheduler-calendar>
+                      <schedulerFilter></schedulerFilter>
                     </div>
                 </div>
                 <div class="col-9">
@@ -29,7 +28,6 @@ import tplHeader from './TheHeader'
 import tplFooter from './TheFooter'
 import theEvent from './TheEvent'
 import { EventBus, countDiffBetweenDates } from './eventbus'
-import moment from 'moment'
 import schedulerFilter from './schedulerFilter'
 import SchedulerMain from './SchedulerMain'
 import SchedulerCalendar from './SchedulerCalendar'
@@ -79,10 +77,10 @@ export default {
       let body = {
         'id': item.id,
         'name': item.name,
-        'created_at': moment(item.created_at).toISOString(),
-        'updated_at': moment().toISOString(),
-        'starts': moment(date.setMinutes(item.date.getMinutes())).toISOString(),
-        'ends': moment(date.setMinutes(item.date.getMinutes())).add(diff).toISOString(),
+        'created_at': this.$moment(item.created_at).toISOString(),
+        'updated_at': this.$moment().toISOString(),
+        'starts': this.$moment(date.setMinutes(item.date.getMinutes())).toISOString(),
+        'ends': this.$moment(date.setMinutes(item.date.getMinutes())).add(diff).toISOString(),
         'type': item.type
       }
       console.log('date changed', body)

@@ -10,12 +10,12 @@
 
       </div>
     </div>
-
+    <div class="events">
     <div class="events-group" v-if="dates"
                               v-for="(dayItem, dayInd) in dates"
                               :key="dayInd">
 
-        <div class="timeline_item-data">
+        <div class="timeline_item-data timeline_item-scale--calendar timeline_item-head">
           <span class="timeline_item-date">{{ moment(dayItem).format('D') }}</span>
           <span class="timeline_item-day">{{ dayItem | weekDayName }}</span>
         </div>
@@ -32,6 +32,7 @@
           </div>
         </div>
 
+    </div>
     </div>
   </div>
 
@@ -113,6 +114,7 @@ export default {
 
 <style scoped>
 .empty-slot{
-   height: 62px;
+    height: 62px;
+    border-bottom: 1px solid #e0e6ed;
   }
 </style>

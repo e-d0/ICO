@@ -61,22 +61,6 @@ fieldset {
   margin: 0;
 }
 
-.dropdown {
-  cursor: pointer;
-  //position: relative;
-  &::before {
-    content: "";
-    position: absolute;
-    width: 8px;
-    height: 4px;
-    //left: 140px;
-    //top: 9px;
-    background-image: @img-arrow-top;
-    background-position: center;
-    background-repeat: no-repeat;
-    z-index: 11;
-  }
-}
 .hidden {
   display: none;
 }
@@ -220,7 +204,7 @@ fieldset {
 
 
 
-//===================checkboks=======================
+//===================checkbox=======================
 label {
   input[type=checkbox] {
     display: none;
@@ -902,37 +886,6 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
   //top: calc((0.5rem + 1px) * -1)!important;
   z-index: 10;
 }
-/*===== VREMENNO =======*/
+/*===== SCHEDULER BODY =======*/
 
-.calendar--body{
-  display: flex;
-  flex-direction: row;
-  overflow-y: scroll;
-}
-
-.events-group{
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-.time-group{
-  display: flex;
-  flex-direction: column;
-}
-
-.timeline_item-scale{
-  border-bottom: 1px solid #e0e6ed;
-}
-
-.hours {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-.timeline_item-scale{
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 0;
-    text-align: center;
-}
 

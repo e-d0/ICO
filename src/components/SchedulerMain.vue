@@ -164,6 +164,40 @@ export default {
 
 <style lang="less" >
   @import "../assets/less/vars";
+  .calendar--body{
+    display: flex;
+    flex-direction: row;
+  }
+  .events {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: row;
+    flex-direction: row;
+    -webkit-box-shadow: 0 4px 8px rgba(184, 194, 201, 0.69);
+    box-shadow: 0 4px 8px rgba(184, 194, 201, 0.69);
+    border-radius: 4px;
+  }
+  .events::-webkit-scrollbar {
+  }
+  .events-group{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+  .time-group{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hours {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
 
   .timeline {
     margin-top: 32px;
@@ -259,6 +293,12 @@ export default {
       }
     }
     &_item {
+      &-head{
+        border-bottom: 1px solid #e0e6ed;
+        -webkit-box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
+        box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
+        z-index: 1;
+      }
       position: relative;
       /*display: flex;*/
       height: 48px;
@@ -301,12 +341,17 @@ export default {
         line-height: 12px;
       }
       &-scale {
-        flex-grow: 2;
         //box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
         background-color: #ffffff;
+        border-bottom: 1px solid #e0e6ed;
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 0;
+        text-align: center;
         &--calendar {
           background-color: #fafbfc;
-          min-width: 168px;
+          /*min-width: 168px;*/
+          min-width: 125px;
           border-right: 1px solid #e0e6ed;
         }
         &--calendar-today {

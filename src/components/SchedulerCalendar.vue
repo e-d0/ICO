@@ -1,13 +1,18 @@
-<template>
-  <v-date-picker
-    mode='range'
-    v-model='selectedDate'
-    show-caps
-    @input="datesEmit"
-    :select-attribute='attrs'
-    :formats='formats'
-    is-inline>
-  </v-date-picker>
+<template >
+  <div class="datepicker">
+    <v-date-picker
+      mode='range'
+      v-model='selectedDate'
+      tint-color="#7dc773"
+      show-caps
+      @input="datesEmit"
+      titlePosition="left"
+      :select-attribute='attrs'
+      :theme-styles="themeStyles"
+      :formats='formats'
+      is-inline>
+    </v-date-picker>
+  </div>
 </template>
 
 <script>
@@ -19,6 +24,38 @@ export default {
   },
   data () {
     return {
+      themeStyles: {
+        wrapper: {
+          width: '100%'
+        },
+        headerTitle: {
+          fontWeight: 'bold',
+          textTransform: 'capitalize',
+          fontSize: '16px'
+        },
+        headerArrows: {
+          color: '#b5bbc2',
+          fontSize: '18px'
+        },
+        header: {
+          borderColor: '#404c59',
+          borderWidth: '0 0 1px 0',
+          padding: '12px 16px 12px 20px'
+        },
+        headerHorizontalDivider: {
+          borderTop: '1px solid #e0e6ed',
+          width: '100%'
+        },
+        weekdays: {
+          borderWidth: '0 1px',
+          padding: '14px 10px 0 10px'
+        },
+        weeks: {
+          backgroundColor: '#ffffff',
+          borderRadius: '4px',
+          padding: '8px 12px 12px 12px'
+        }
+      },
       attrs:
         {
           highlight: {
@@ -64,11 +101,13 @@ export default {
   }
 }
 </script>
-<style lang="less">
-  .c-title{
-    text-transform: capitalize;
-  }
-  .c-day{
-
+<style lang="less" scoped>
+  .datepicker{
+    border-top: 4px solid #c5d0de;
+    -webkit-box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
+    box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
+    border-radius: 4px;
+    background-color: #ffffff;
+    margin-bottom: 32px;
   }
 </style>

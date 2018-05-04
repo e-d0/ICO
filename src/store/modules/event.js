@@ -14,6 +14,7 @@ const getters = {
   events: state => state.events,
   types: state => state.types,
   filters: state => state.filters,
+  getFiltersNames: state => state.filters.names,
   dates: state => {
     let arr = []
     state.dates.forEach(el => { arr.push(new Date(el)) })
@@ -66,11 +67,15 @@ const getters = {
 
 const actions = {
   setDates (context, payload) {
-    console.log('set date to storage')
+    console.log('set date to storage', payload)
     context.commit('setDates', payload.data)
   },
   setFiltersNames (context, payload) {
     context.commit('setFiltersNames', payload)
+  },
+  removeFiltersNames (context, payload) {
+    console.log('removeFiltersNames', payload)
+    context.commit('removeFiltersNames', payload.item)
   },
   setFiltersTypes (context, payload) {
     context.commit('setFiltersTypes', payload.val)
@@ -171,6 +176,10 @@ const mutations = {
   },
   setFiltersNames: (state, objEvent) => {
     state.filters.names = objEvent
+  },
+  removeFiltersNames: (state, objEvent) => {
+    state.filters.names = state.filters.names.filter(event => event.id !== objEvent.id)
+    console.log('filtered', state.events)
   },
   setFilters: (state, objEvent) => {
     state.filters = objEvent
