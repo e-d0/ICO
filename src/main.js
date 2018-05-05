@@ -11,8 +11,14 @@ import 'v-calendar/lib/v-calendar.min.css'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import moment from 'moment'
+import VueTouch from 'vue-touch'
 
-/*
+/**
+ * Подключаем Hummer.js для vue. https://github.com/vuejs/vue-touch/tree/next
+ * **/
+Vue.use(VueTouch, {name: 'v-touch'})
+
+/**
 * //TODO Отключил предупреждение. Слишком уж консоль засоряет.
 * календарь отсюда https://github.com/nathanreyes/v-calendar
 **/

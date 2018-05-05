@@ -180,9 +180,10 @@ export default {
     -webkit-box-shadow: 0 4px 8px rgba(184, 194, 201, 0.69);
     box-shadow: 0 4px 8px rgba(184, 194, 201, 0.69);
     border-radius: 4px;
+    overflow-x: hidden;
   }
-  .events::-webkit-scrollbar {
-  }
+  /*.events::-webkit-scrollbar {*/
+  /*}*/
   .events-group{
     display: flex;
     flex-direction: column;

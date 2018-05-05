@@ -2,7 +2,6 @@
   <div    @dragover.prevent=""
           @dragenter.prevent="dragenter"
           @drop="onDrop"
-          @click="showAddForm()"
           class="prevent-drag timeline_event"
           :draggable="false">
     <span v-if="checkForDateObj(hour)"></span>
@@ -53,6 +52,9 @@ export default {
     itemRender: Function
   },
   methods: {
+    /**
+     * @click="showAddForm()" Вызываем форму "добавить событие" кликом.Пока отключено за ненадобностью.
+     */
     showAddForm (e) {
       EventBus.$emit('call:addEventForm', this.date)
     },
@@ -60,10 +62,10 @@ export default {
       console.log(e)
       console.log('click HOUR')
     },
+    /**
+     * Проверяем входящий формат времени: объект или строка.
+     */
     checkForDateObj (hour) {
-      /**
-       * Проверяем входящий формат времени: объект или строка.
-       */
       return typeof hour !== 'string'
     },
     dateFormat (date) {

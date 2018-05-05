@@ -48,7 +48,7 @@ export default {
   },
   render (h) {
     return h('div', {
-      class: ['event', 'timeline_event'],
+      class: ['event', 'timeline_event', 'timeline_event--item'],
       attrs: {
         draggable: true,
         id: this.item ? `event-${this.item.id}` : null

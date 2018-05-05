@@ -10,7 +10,13 @@
 
       </div>
     </div>
-    <div class="events">
+    <v-touch v-on:swipeleft="onSwipeLeft"
+             v-on:swiperight="onSwipeRight($el)"
+             :swipe-options="{ threshold: 100 }"
+             class="events"
+             id="events"
+
+             transition = "fade" >
     <div class="events-group" v-if="dates"
                               v-for="(dayItem, dayInd) in dates"
                               :key="dayInd">
@@ -21,10 +27,10 @@
         </div>
 
         <div class="hours">
-          <div :class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']"
-               v-if="dayItem"
+          <div v-if="dayItem"
                v-for="(hour,ind) in generateHours(dayItem)"
-               :key="ind" >
+               :key="ind"
+               v-bind:class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']">
                 <itemHour :hour="hour"
                           :index="updatedIndex(dayInd, ind)"
                           :itemRender.sync="itemRender"
@@ -33,7 +39,7 @@
         </div>
 
     </div>
-    </div>
+    </v-touch>
   </div>
 
 </template>
@@ -43,6 +49,7 @@ import moment from 'moment'
 import itemHour from './itemHour'
 import { generateHours } from './eventbus'
 import Vuex from 'vuex'
+import TWEEN from '@tweenjs/tween.js'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 /**
  * Приводим дату в соотетствие с форматом в браузере пользователя
@@ -78,6 +85,44 @@ export default {
     }
   },
   methods: {
+    onSwipeLeft (el) {
+      let elem = this.$el.querySelector('#events')
+      let width = this.$el.querySelector('.timeline_item-scale--calendar').offsetWidth
+      let newVal = elem.scrollLeft + width
+
+      function animate () {
+        if (TWEEN.update()) {
+          requestAnimationFrame(animate)
+        }
+      }
+
+      new TWEEN.Tween(elem)
+        .to({scrollLeft: newVal}, 110)
+        .start()
+
+      animate()
+
+      console.log('<><><><><><>SWIPE LEFT', width)
+    },
+    onSwipeRight (el) {
+      let elem = this.$el.querySelector('#events')
+      let width = this.$el.querySelector('.timeline_item-scale--calendar').offsetWidth
+      let newVal = elem.scrollLeft - width
+
+      function animate () {
+        if (TWEEN.update()) {
+          requestAnimationFrame(animate)
+        }
+      }
+
+      new TWEEN.Tween(elem)
+        .to({scrollLeft: newVal}, 110)
+        .start()
+
+      animate()
+
+      console.log('<><><><><><>SWIPE RightT', elem.scrollLeft)
+    },
     /**
      * Обновляем текущее время
      * */
@@ -113,6 +158,14 @@ export default {
 </script>
 
 <style scoped>
+  .timeline_item {
+    cursor: -webkit-grab;
+  }
+
+  .grabbing.timeline_item{
+    cursor: grabbing;
+  }
+  #events{}
 .empty-slot{
     height: 62px;
     border-bottom: 1px solid #e0e6ed;

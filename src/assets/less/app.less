@@ -634,6 +634,10 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
     height: 48px;
     border-bottom: 1px solid #e0e6ed;
     //overflow: hidden;
+    &-time{
+      cursor: none;
+      pointer-events: none;
+    }
     &:last-child {
       border-bottom: none;
     }
@@ -690,6 +694,9 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
     align-items: center;
     align-content: stretch;
     height: 100%;
+    &--item{
+      cursor: pointer;
+    }
     &--KYC {
       position: relative;
       background-color: rgba(99, 203, 198, 0.75);
