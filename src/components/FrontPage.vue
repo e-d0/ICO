@@ -4,13 +4,13 @@
       <div class="container-fluid">
         <div class="row">
 
-                <div class="col-3">
+                <div class="col-md-12 col-lg-3">
                     <div class="filter">
                       <scheduler-calendar></scheduler-calendar>
                       <schedulerFilter></schedulerFilter>
                     </div>
                 </div>
-                <div class="col-9">
+                <div class="col-md-12 col-lg-9">
                     <scheduler-main v-if="filteredEvents"
                                     :itemRender.sync="itemRender"
                                     :dates="dates"
@@ -39,10 +39,10 @@ export default {
   components: { schedulerFilter, SchedulerMain, SchedulerCalendar, tplHeader, tplFooter, theEvent },
   data () {
     return {
-      itemRender (item) {
+      itemRender (item, index) {
         const h = this.$createElement
         return h(theEvent, { props: {
-          item
+          item, index
         } })
       }
     }
@@ -101,6 +101,12 @@ export default {
     this.getEvents()
   },
   mounted () {
+  },
+  beforeCreate () {
+    /**
+     * На всякий случай ,очищаем фильтр по именам
+     * */
+    // this.$store.dispatch('event/setFiltersNames', Array(0))
   },
   destoryed () {
     EventBus.$off()

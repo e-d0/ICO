@@ -1,177 +1,120 @@
 <template>
-  <div class="timeline timeline--calendar">
+<div id="app">
+  <tplHeader></tplHeader>
+  <div class="container-fluid">
+    <div class="row">
 
-    <div class="timeline_top-line">
-      <div class="timeline_date">
-        <span class="timeline_date-month">{{headerDates()}}</span>
-        <span class="timeline_date-day">Сегодня <b>{{ moment().format('D MMMM')}}</b>, {{ moment().format('dddd')}}</span>
-      </div>
-
-      <div class="radio-buttons">
-
-          <a href="#" :class="['switch_btn','btn_left',{ active: showWeek === true }]" @click="showWeek = true">Неделя</a>
-
-          <a href="#" :class="['switch_btn','switch','btn_right',{ active: showWeek === false }]" @click="showWeek = false">Месяц</a>
-
-        <a href="#" class="btn" @click="openAddFormModal()">+ Добавить ICO</a>
-      </div>
-    </div>
-
-    <keep-alive>
-      <component :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent"></component>
-    </keep-alive>
-
-    <div class="col-md-12 scheduler__main">
-
-      <modal v-if="showModalAddForm" >
-      <div slot="header">
-        <div class="modal-header">
-          <h5 class="modal-title"></h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="showModalAddForm = false">
-            <span aria-hidden="true">&times;</span>
-          </button>
+      <div class="col-md-12 col-lg-3">
+        <div class="filter">
+          <schedulerFilter></schedulerFilter>
+          <CurrentEvents></CurrentEvents>
         </div>
       </div>
-      <div slot="body">
-        <FormAddEvent :acceptedDate="acceptedDate" @close="closeAddFormModal()"></FormAddEvent>
-      </div>
-    </modal>
-      <modal v-if="showModalConfirm">
-        <div slot="body">
-          <formConfirm @onConfirm="confirmRequest('confirm')"
-                       @onCancel="confirmRequest()"></formConfirm>
+      <div class="col-md-12 col-lg-9">
+        <div class="timeline timeline--calendar calendar__today">
+
+          <div class="timeline_top-line">
+            <div class="timeline_date">
+              <span class="timeline_date-month">Сегодня <b>{{ moment().format('D MMMM')}}</b></span>
+              <span class="timeline_date-day">{{ moment().format('dddd')}} ,{{ moment().format('H:mm')}},({{moment.utc().format('z')}})</span>
+            </div>
+
+            <div class="radio-buttons">
+
+              <a href="#" :class="['switch_btn','btn_left',{ active: showOnlyMy === true }]" @click="showOnlyMy = true">Только мои ICO</a>
+
+              <a href="#" :class="['switch_btn','switch','btn_right',{ active: showOnlyMy === false }]" @click="showOnlyMy = false">Все ICO</a>
+
+            </div>
+          </div>
+
+          <keep-alive>
+            <component :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent"></component>
+          </keep-alive>
+
+          <div class="col-md-12 scheduler__main">
+          </div>
         </div>
-      </modal>
+      </div>
 
     </div>
   </div>
+  <tplFooter></tplFooter>
+</div>
 </template>
 
 <script>
-import itemWeek from './itemWeek'
-import itemMonth from './itemMonth'
-import { EventBus } from './eventbus'
-import modal from './modalBody'
-import formConfirm from './formConfirm'
-import FormAddEvent from './formAddEvent'
-import popover from './popover'
+import tplHeader from './TheHeader'
+import tplFooter from './TheFooter'
+import itemIcoAll from './itemIcoAll'
+import schedulerFilter from './schedulerFilter'
+import theEvent from './TheEvent'
+import itemDay from './itemDay'
+import CurrentEvents from './CurrentEvents'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
-
 export default {
-  name: 'Schedule',
-  components: { itemWeek, itemMonth, popover, FormAddEvent, modal, formConfirm },
-  props: {
-    itemRender: Function
-  },
+  name: 'BusinessForToday',
+  components: { tplHeader, tplFooter, schedulerFilter, CurrentEvents, itemIcoAll, theEvent, itemDay },
   data () {
     return {
-      eventTempStorage: null,
-      dateTempStorage: null,
-      showModalConfirm: false,
-      showModalAddForm: false, /** //TODO Закрывать форму на сабмите */
-      moment: this.$moment,
-      dragItem: null,
-      acceptedDate: null,
-      clickedEvent: null,
-      showWeek: true
+      itemRender (item, index) {
+        const h = this.$createElement
+        return h(theEvent, { props: {
+          item, index
+        } })
+      },
+      dates: this.moment().utc(),
+      showOnlyMy: true
     }
   },
   computed: {
     ...storeEvent.mapGetters({
       events: 'events',
-      filteredEvents: 'filteredEvents',
-      dates: 'dates'
+      filteredEvents: 'filteredEvents'
     }),
     currentTabComponent: function () {
-      if (this.showWeek === true) {
-        return 'itemWeek'
+      if (this.showOnlyMy === true) {
+        return 'itemDay'
       } else {
-        return 'itemMonth'
+        return 'itemIcoAll'
       }
     }
   },
   methods: {
-    openPopup () {
+    /**
+     * Получаем события с сервера через хранилище store
+     * */
+    getEvents () {
+      this.$store.dispatch('event/getEvents')
     },
     headerDates () {
       return `${this.$moment(this.dates[0]).format('D')} - ${this.$moment(this.dates[this.dates.length - 1]).format('D MMMM')}`
-    },
-    openAddFormModal (date) {
-      this.acceptedDate = date || new Date()
-      this.showModalAddForm = true
-    },
-    closeAddFormModal () {
-      this.showModalAddForm = false
-    },
-    openModal () {
-      this.showModalConfirm = true
-    },
-    closeModal () {
-      this.showModalConfirm = false
-    },
-    cellDragenter (e, date, type, index) {
-      console.log('cellDragenter', this.dragItem)
-      this.$emit('event-dragenter', e, this.dragItem, date)
-    },
-    itemDragstart (e, item, date, type) {
-      console.log('scheduler main itemdragstart', item)
-      this.dragItem = item
-      console.log('itemdragstart Func', this.dragItem)
-      this.$emit('event-dragstart', e, item, date)
-    },
-    confirmRequest (message) {
-      this.closeModal()
-      if (message) {
-        this.itemDrop(this.eventTempStorage, this.dateTempStorage)
-      } else {
-        this.eventTempStorage = null
-        this.dateTempStorage = null
-      }
-    },
-    confirmDialog (e, date) {
-      /**
-       * Триггерим запуск формы и сохраняем данные из события.
-       * */
-      this.openModal()
-      this.eventTempStorage = e
-      this.dateTempStorage = date
-    },
-    itemDrop (e, date) {
-      if (!this.dragItem) return
-      console.log('[event-dragend]:', this.dragItem, date)
-      EventBus.$emit('event-dragend', e, this.dragItem, date)
-      console.log('item drop func')
-    },
-    itemClick (e, item, eventId) {
-      // this.popoverShow = true
-      // this.clickedEvent = {item: item, eventId}
-      console.log('[event-click]:', item, eventId)
-      this.$emit('event-click', e, item)
-    },
-    dateClick (e, date) {
-      console.log('[date-click]:', date)
-      this.$emit('date-click', e, date)
-    },
-    getDates (items) {
-      this.$emit('update:dates', items)
     }
   },
-  created () {
-    EventBus.$on('item-dragstart', this.itemDragstart)
-    EventBus.$on('cell-dragenter', this.cellDragenter)
-    EventBus.$on('item-drop', this.confirmDialog)
-    EventBus.$on('item-click', this.itemClick)
-    EventBus.$on('date-click', this.dateClick)
-    EventBus.$on('call:addEventForm', this.openAddFormModal)
+  mounted () {
+    console.log('mounted')
   },
-  destoryed () {
-    EventBus.$off()
+  beforeCreate () {
+    /**
+     * Устанавливаем текущую дату в storage
+     * */
+    this.$store.dispatch({
+      type: 'event/setDates',
+      data: [this.moment().toISOString()]
+    })
+    /**
+     * На всякий случай ,очищаем фильтр по именам
+     * */
+    // this.$store.dispatch('event/setFiltersNames', Array(0))
+  },
+  created () {
+    this.getEvents()
   }
 }
 </script>
 
-<style lang="less" >
+<style lang="less">
   @import "../assets/less/vars";
   .calendar--body{
     display: flex;
@@ -193,6 +136,77 @@ export default {
   }
   /*.events::-webkit-scrollbar {*/
   /*}*/
+  .switch{
+    margin-right: 40px;
+    &_btn{
+      padding: 10px 17px 9px;
+      -webkit-box-shadow: 0 2px 0 #8f96a1;
+      box-shadow: 0 2px 0 #8f96a1;
+      border-radius: 4px;
+      /*background-color: #44af36;*/
+      background-color: #fff;
+      /*color: #fff;*/
+      color: #8f96a1;
+      position: relative;
+      right: 0;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 14px;
+    }
+    &_btn.btn_left{
+      border-bottom-right-radius: 0;
+      border-top-right-radius: 0;
+    }
+    &_btn.btn_right{
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+    }
+    &_btn.active,
+    &_btn:focus{
+      position: relative;
+      top: 2px;
+      text-decoration: none;
+      background-color: #44af36;
+      color: #fff;
+      box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
+      -webkit-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
+      -moz-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
+      -o-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
+    }
+    &_btn:hover{
+      position: relative;
+      top: 0px;
+      text-decoration: none;
+      background-color: #44af36;
+      color: #fff;
+      -webkit-box-shadow: 0 2px 0 #35882a;
+      box-shadow: 0 2px 0 #35882a;
+    }
+  }
+  .radio-buttons {
+    margin-left: auto;
+    label {
+      b {
+        display: block;
+        padding: 10px 12px;
+        color: #525c6c;
+        font-family: @main-font;
+        font-size: 13px;
+        font-weight: 500;
+        line-height: 13px;
+      }
+    }
+    .btn {
+      margin-bottom: 20px;
+      padding: 10px 17px 9px;
+      box-shadow: 0 2px 0 darken(@accent-color, 10%);
+      border-radius: 4px;
+      background-color: @accent-color;
+      color: #fff;
+    }
+  }
+
   .events-group{
     display: flex;
     flex-direction: column;
@@ -208,8 +222,8 @@ export default {
     flex-direction: column;
     height: 100%;
   }
-
-  .timeline {
+  .calendar__today{
+   .timeline {
     margin-top: 32px;
     margin-bottom: 32px;
     padding-bottom: 12px;
@@ -278,76 +292,6 @@ export default {
         font-size: 12px;
         font-weight: 400;
         line-height: 14px;
-      }
-    }
-    .switch{
-      margin-right: 40px;
-      &_btn{
-        padding: 10px 17px 9px;
-        -webkit-box-shadow: 0 2px 0 #8f96a1;
-        box-shadow: 0 2px 0 #8f96a1;
-        border-radius: 4px;
-        /*background-color: #44af36;*/
-        background-color: #fff;
-        /*color: #fff;*/
-        color: #8f96a1;
-        position: relative;
-        right: 0;
-        margin-bottom: 20px;
-        font-size: 14px;
-        font-weight: 500;
-        line-height: 14px;
-      }
-      &_btn.btn_left{
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
-      }
-      &_btn.btn_right{
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
-      }
-      &_btn.active,
-      &_btn:focus{
-        position: relative;
-        top: 2px;
-        text-decoration: none;
-        background-color: #44af36;
-        color: #fff;
-        box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-        -webkit-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-        -moz-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-        -o-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-      }
-      &_btn:hover{
-        position: relative;
-        top: 0px;
-        text-decoration: none;
-        background-color: #44af36;
-        color: #fff;
-        -webkit-box-shadow: 0 2px 0 #35882a;
-        box-shadow: 0 2px 0 #35882a;
-      }
-    }
-    .radio-buttons {
-      margin-left: auto;
-      label {
-        b {
-          display: block;
-          padding: 10px 12px;
-          color: #525c6c;
-          font-family: @main-font;
-          font-size: 13px;
-          font-weight: 500;
-          line-height: 13px;
-        }
-      }
-      .btn {
-        margin-bottom: 20px;
-        padding: 10px 17px 9px;
-        box-shadow: 0 2px 0 darken(@accent-color, 10%);
-        border-radius: 4px;
-        background-color: @accent-color;
-        color: #fff;
       }
     }
     &_item {
@@ -578,7 +522,7 @@ export default {
     }
     &_event.multistack {
       .timeline_event--item {
-        position: absolute;
+        position: relative;
       }
     }
     &_next24 {
@@ -596,5 +540,6 @@ export default {
         }
       }
     }
+  }
   }
 </style>

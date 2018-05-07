@@ -14,7 +14,11 @@
     <div class="timeline_event-type">
       <span></span>
     </div>
-    <popover  :popoverShow="popoverShow" :clickedEvent="item" ></popover>
+    <div v-if="index"
+         :class="['event_nav']"
+         @click.stop.prevent="nextEvent()" >{{ (parseInt(index)+1) }}
+    </div>
+    <popover :popoverShow="popoverShow" :clickedEvent="item" ></popover>
 
   </div>
 </template>
@@ -26,7 +30,8 @@ export default {
   name: 'TheEvent',
   components: { popover },
   props: {
-    item: Object
+    item: Object,
+    index: String
   },
   data () {
     return {
@@ -36,6 +41,9 @@ export default {
   computed: {
   },
   methods: {
+    nextEvent () {
+      this.$parent.$emit('update:current')
+    },
     returnDate: function (el) {
       return this.$moment(el.starts).format('HH:mm')
     },
@@ -60,6 +68,28 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="less" scoped>
+  .event_nav {
+    padding: 0px 10px 0px 6px;
+    border-radius: 10px;
+    position: absolute;
+    background: #fff;
+    right: 10px;
+    bottom: -7px;
+    color: #8f96a1;
+    z-index: 20;
+    font-size: 10px;
+    -webkit-box-shadow: 0 5px 5px rgba(51, 51, 51, 0.09);
+    box-shadow: 0 5px 5px rgba(51, 51, 51, 0.09);
+     &:after{
+       position: absolute;
+       right: 4px;
+       top: 28%;
+       color: #999;
+       border-style: solid;
+       border-width: 3px 0 3px 4px;
+       border-color: transparent transparent transparent #3f3f3f9c;
+       content: "";
+     }
+  }
 </style>

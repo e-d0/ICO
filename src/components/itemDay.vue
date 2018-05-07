@@ -86,10 +86,11 @@ export default {
   },
   methods: {
     onSwipeLeft (el) {
+      // получаем элемент из DOM
       let elem = this.$el.querySelector('#events')
       let width = this.$el.querySelector('.timeline_item-scale--calendar').offsetWidth
       let newVal = elem.scrollLeft + width
-
+      // анимируем с tween.js
       function animate () {
         if (TWEEN.update()) {
           requestAnimationFrame(animate)
@@ -101,14 +102,13 @@ export default {
         .start()
 
       animate()
-
-      console.log('<><><><><><>SWIPE LEFT', width)
     },
     onSwipeRight (el) {
+      // получаем элемент из DOM
       let elem = this.$el.querySelector('#events')
       let width = this.$el.querySelector('.timeline_item-scale--calendar').offsetWidth
       let newVal = elem.scrollLeft - width
-
+      // анимируем с tween.js
       function animate () {
         if (TWEEN.update()) {
           requestAnimationFrame(animate)
@@ -120,8 +120,6 @@ export default {
         .start()
 
       animate()
-
-      console.log('<><><><><><>SWIPE RightT', elem.scrollLeft)
     },
     /**
      * Обновляем текущее время

@@ -95,8 +95,8 @@
           <div class="col">
             <ul class="cabinet-nav_menu">
               <li class="cabinet-nav_item"><a>Кабинет инвестора</a></li>
-              <li class="cabinet-nav_item cabinet-nav_item--cases"><a href="#">Дела на сегодня</a></li>
-              <li class="cabinet-nav_item cabinet-nav_item--calendar cabinet-nav_item--active"><a href="#">Календарь ICO</a></li>
+              <li class="cabinet-nav_item cabinet-nav_item--cases"> <router-link to="/today">Дела на сегодня</router-link></li>
+              <li class="cabinet-nav_item cabinet-nav_item--calendar cabinet-nav_item--active"><router-link to="/">Календарь ICO</router-link></li>
               <li class="cabinet-nav_item cabinet-nav_item--investment"><a href="#">Мои инвестиции</a></li>
               <li class="cabinet-nav_item cabinet-nav_item--statistic"><a href="#">Статистика</a></li>
               <li class="cabinet-nav_item cabinet-nav_item--marked-ico"><a href="#">Отмеченные ICO</a></li>
@@ -123,6 +123,18 @@ export default {
   @import "../assets/less/vars";
 
   .header {
+    .router-link-exact-active.router-link-active {
+      display: block;
+      padding: 18px 20px 18px 52px;
+      background-color: @body-bg;
+      color: #525c6c;
+      font-family: @main-font;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 20px;
+      white-space: nowrap;
+      text-decoration: none;
+    }
     background-color: #fff;
     .main-nav {
       display: flex;
@@ -466,20 +478,6 @@ export default {
               background-color: #525c6c;
               color: #c5d0de;
             }
-          }
-        }
-        &--active {
-          a {
-            display: block;
-            padding: 18px 20px 18px 52px;
-            background-color: @body-bg;
-            color: #525c6c;
-            font-family: @main-font;
-            font-size: 14px;
-            font-weight: 500;
-            line-height: 20px;
-            white-space: nowrap;
-            text-decoration: none;
           }
         }
       }

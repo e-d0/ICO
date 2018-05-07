@@ -29,16 +29,18 @@ const getters = {
     /**
      * find оказался самым быстрым, среди переборщиков(for, findIndex)
      * */
-    let obj = getters.types.find(item => {
-      if (item.code === code) return item
-    })
-    return obj.name
+    if (code !== undefined && getters.types.length > 0) {
+      let obj = getters.types.find(item => {
+        if (item.code === code) return item
+      })
+      return obj.name
+    }
   },
   /**
    * Фильтрация по собранным данным. Оптимизировал под минимум операций, как мог.
    * */
   filteredEvents: (state) => {
-    if ((state.filters.types.length || state.filters.names.length) !== 0) {
+    if (state.filters.types.length !== 0) {
       return state.events.filter(event => {
         /**
          * фильтр по имени
@@ -70,6 +72,9 @@ const actions = {
     console.log('set date to storage', payload)
     context.commit('setDates', payload.data)
   },
+  /**
+   * //TODO Протестировать
+   * */
   setFiltersNames (context, payload) {
     context.commit('setFiltersNames', payload)
   },

@@ -30,9 +30,10 @@ const locale = window.navigator.userLanguage || window.navigator.language
 moment.locale(locale)
 /**
  * Импортируем глобально moment.js
- * теперь он доступен во всех компонентах через this.$moment
+ * теперь он доступен во всех компонентах через this.$moment && this.moment
  * */
 Vue.prototype.$moment = moment
+Vue.prototype.moment = moment
 
 Vue.use(BootstrapVue)
 

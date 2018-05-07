@@ -152,7 +152,6 @@ export default {
       })
     },
     chosenNamesStorage: function (newVal, oldVal) {
-      console.log('<><><><><><><><', newVal, oldVal)
     }
   }
 }
@@ -247,99 +246,6 @@ export default {
               line-height: 19px;
             }
           }
-        }
-      }
-    }
-    .current-events {
-      margin-top: 28px;
-      margin-bottom: 36px;
-      padding: 20px 24px;
-      border-top: 4px solid #5bb0d5;
-      box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
-      border-radius: 4px;
-      background-color: #fafbfc;
-      h3 {
-        margin-bottom: 18px;
-        color: #525c6c;
-        font-size: 14px;
-        font-weight: 700;
-        line-height: 18px;
-        letter-spacing: 1.3px;
-        text-transform: uppercase;
-      }
-      .radio-buttons {
-        margin-bottom: 18px;
-      }
-      &_item {
-        margin-top: 20px;
-        &-data {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-bottom: 3px;
-          border: 1px solid #e0e6ed;
-          a {
-            margin-top: 2px;
-            color: #1991eb;
-            font-family: @main-font;
-            font-size: 12px;
-            font-weight: 400;
-            line-height: 12px;
-            text-decoration: underline;
-            &:hover {
-              text-decoration: none;
-            }
-          }
-        }
-        &-name {
-          color: #333f52;
-          font-family: @main-font;
-          font-size: 14px;
-          font-weight: 500;
-          line-height: 16px;
-          white-space: nowrap;
-        }
-        &-event {
-          padding: 3px 4px 2px;
-          color: #ffffff;
-          font-family: @main-font;
-          font-size: 11px;
-          font-weight: 700;
-          line-height: 11px;
-          text-transform: uppercase;
-          letter-spacing: 0.28px;
-          white-space: nowrap;
-          &--pre-ico {
-            background-color: @pre-ico;
-          }
-          &--KYC {
-            background-color: @KYC;
-          }
-          &--ending-ico {
-            background-color: @ending-ico;
-          }
-          &--white-list {
-            background-color: @white-list;
-          }
-          &--start-ico {
-            background-color: @start-ico;
-          }
-        }
-        &-time {
-          color: #525c6c;
-          font-family: @main-font;
-          font-size: 12px;
-          font-weight: 400;
-          line-height: 12px;
-          white-space: nowrap;
-        }
-        &-time-remain {
-          color: #707986;
-          font-family: @main-font;
-          font-size: 11px;
-          font-weight: 400;
-          line-height: 11px;
-          white-space: nowrap;
         }
       }
     }

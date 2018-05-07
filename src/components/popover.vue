@@ -47,10 +47,10 @@
       </div>
 
       <div class="mypopover_add">
-        <div class="col-md-6 mypopover_add-remind" >
+        <div class="col-sm-6 mypopover_add-remind" >
           <a href="#" @click="openAddAlert()">Добавить напоминание</a>
         </div>
-        <div class="col-md-6 mypopover_add-comment">
+        <div class="col-sm-6 mypopover_add-comment">
           <a v-if="!commentForm && comment != null" href="#" @click="removeComment()">Удалить комментарий</a>
           <a v-else href="#" @click="openAddComment()">Добавить комментарий</a>
         </div>

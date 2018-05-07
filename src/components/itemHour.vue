@@ -2,19 +2,32 @@
   <div    @dragover.prevent=""
           @dragenter.prevent="dragenter"
           @drop="onDrop"
-          class="prevent-drag timeline_event"
+          v-bind:class="['prevent-drag','timeline_event', {'multistack': isMulti }]"
           :draggable="false">
-    <span v-if="checkForDateObj(hour)"></span>
-    <span v-else>{{ hour }}</span>
+    <span v-if="!checkForDateObj(hour)">{{ hour }}</span>
+    <!--<span v-else>{{ hour }}</span>-->
 
-    <event v-if="details.length"
+    <event v-if="details.length && $route.path === '/today'"
            v-for="(item) in details"
+           :style="{ zIndex: 1 }"
            :key="item.id"
            :item="item"
            :type="item.type"
            :itemRender="itemRender"
            @item-dragstart="dragItem"
            :date="date"></event>
+
+      <event v-if="isMulti && details[currentEvent.toString()] && $route.path !== '/today'"
+             :style="{ zIndex: 1 }"
+             :key="details[currentEvent.toString()].id"
+             :item="details[currentEvent.toString()]"
+             :type="details[currentEvent.toString()].type"
+             :itemRender="itemRender"
+             :index="currentEvent.toString()"
+             @item-dragstart="dragItem"
+             v-on:update:current="nextEvent()"
+             :date="date"></event>
+
   </div>
 
 </template>
@@ -41,7 +54,8 @@ export default {
     return {
       volume: 0,
       expanded: false,
-      showModalForm: false
+      showModalForm: false,
+      currentEvent: 0
     }
   },
   components: { event, formAdd: FormAddEvent, modalForm: modal },
@@ -52,6 +66,23 @@ export default {
     itemRender: Function
   },
   methods: {
+    nextEvent () {
+      if (this.currentEvent < this.details.length - 1) {
+        this.currentEvent++
+      } else {
+        this.currentEvent = 0
+      }
+    },
+    /**
+     * Сортировка массива дат
+     * */
+    sortedDates (arrEvents) {
+      return arrEvents.sort((obj1, obj2) => {
+        if (obj1.date > obj2.date) return 1
+        if (obj1.date < obj2.date) return -1
+        return 0
+      })
+    },
     /**
      * @click="showAddForm()" Вызываем форму "добавить событие" кликом.Пока отключено за ненадобностью.
      */
@@ -94,24 +125,27 @@ export default {
     ...storeEvent.mapGetters({
       filteredEvents: 'filteredEvents'
     }),
+    isMulti: function () {
+      if (this.details !== undefined && this.details.length) return this.details.length > 1
+    },
     details () {
       /**
        * проверка, совпадает ли дата события и дата объекта ячейки
        * //TODO Раскоментировать краткое выражение перед сдачей
        * */
       // return this.filteredEvents.length ? this.filteredEvents.filter(item => isSameDay(item.date, this.date)) : []
-      if (this.filteredEvents.length) {
+      if ((this.filteredEvents !== undefined && this.filteredEvents.length) && this.filteredEvents.length) {
         // console.log('dateail length true', this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
         // console.log('dateal length true')
-        return this.filteredEvents.filter(item => isSameDay(item.date, this.date))
+        return this.sortedDates(this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
       } else {
         return []
       }
     }
-  }
+  },
+  created () {}
 }
 </script>
 
 <style lang="less" >
-
 </style>

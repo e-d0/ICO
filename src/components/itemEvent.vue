@@ -3,6 +3,7 @@
 export default {
   name: 'event',
   props: {
+    index: String,
     item: Object,
     date: Date,
     type: String,
@@ -54,15 +55,13 @@ export default {
         id: this.item ? `event-${this.item.id}` : null
       },
       style: {
-        position: 'relative',
-        zIndex: '1',
         top: `${this.timeOffset()}%`
       },
       on: {
         dragstart: this.onDrag,
         click: this.onClick
       }
-    }, this.itemRender ? [this.itemRender(this.item)] : [h('span', this.text)])
+    }, this.itemRender ? [this.itemRender(this.item, this.index)] : [h('span', this.text)])
   },
   created () {
     this.timeOffset()
