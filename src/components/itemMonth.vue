@@ -9,12 +9,15 @@
 
       <div class="calendar">
         <div v-for="(week, index) in generateMonth()" :key="index" class="calendar__week">
-          <!--not-current-month past today-->
+
           <div v-for="(day, ind) in week.days" :key="ind" class="calendar__day ">
             <div :class="checkDate(moment(day.date))">{{ moment(day.date).format('D') }}</div>
-            <ul class="event-list">
-              <li v-for="(event,count) in day.events" :key="count" :class="`calendar__day__event--${[event.type]}`"> {{event.name}}</li>
-            </ul>
+
+            <template v-if="day.events.length">
+              <itemMonthEvent :events="day.events">
+              </itemMonthEvent>
+            </template>
+
           </div>
         </div>
       </div>
@@ -26,12 +29,15 @@
 </template>
 
 <script>
+import itemMonthEvent from './itemMonthEvent'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
   name: 'itemMonth',
+  components: { itemMonthEvent },
   data () {
     return {
+      itemsPerGroup: 3
     }
   },
   computed: {
@@ -69,9 +75,23 @@ export default {
       })
     },
     /**
+     * Разбиваем события на группы
+     * */
+    splitByGroup (arr) {
+      let group = []
+      let n = this.itemsPerGroup
+
+      for (let i = 0, j = 0; i < arr.length; i++) {
+        if (i >= n && i % n === 0) { j++ }
+        group[j] = group[j] || []
+        group[j].push(arr[i])
+      }
+      return group
+    },
+    /**
      * Фильтрация события по дате
      * */
-    filteredEventsByday (date) {
+    filteredEventsByDay (date) {
       return this.sortedDates(
         this.events.filter(event => {
           if (this.moment(date).isSame(event.date, 'day')) {
@@ -101,11 +121,12 @@ export default {
             let itemDate = date.add(1, 'day').clone()
             return {
               date: itemDate,
-              events: this.filteredEventsByday(itemDate)
+              events: this.splitByGroup(this.filteredEventsByDay(itemDate))
             }
           })
         })
       }
+      console.log('><><><><><><>', calendar)
       return calendar
     }
   },
@@ -119,11 +140,11 @@ export default {
   .events__month{
     width: 100%;
     flex-basis: 100%;
-    -webkit-box-shadow: -4px 6px 8px rgba(184, 194, 201, 0.69);
-    box-shadow: -4px 6px 8px rgba(184, 194, 201, 0.69);
+    box-shadow: 0 4px 4px rgba(51, 51, 51, 0.1);
     border-radius: 8px;
     margin: 0px 10px;
     background-color: #ffffff;
+    overflow-x: auto;
     &--header-days{
       display: flex;
       justify-content: flex-start;
@@ -143,8 +164,9 @@ export default {
         box-sizing: border-box;
         background: #fafbfc;
         position: relative;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
+        min-width: 128px;
+        /*border-top-left-radius: 8px;*/
+        /*border-top-right-radius: 8px;*/
         &:after{
           content: '';
           position: absolute;
@@ -179,8 +201,9 @@ export default {
         overflow: hidden;
         font-weight: 700;
         width: 100%;
+        height: 132px;
+        min-width: 128px;
         padding: .5rem 0;
-        min-height: 150px;
         user-select: none;
         cursor: default;
         border-left: 1px solid #E0E6ED;
@@ -216,38 +239,6 @@ export default {
       }
       &__day .active{
           background-color: rgba(255, 238, 173, .4);
-      }
-      &__day .event-list {
-        font-size: .8rem;
-        color: #42b983;
-        font-weight: 700;
-        list-style: none;
-        padding: 0;
-        margin: .5rem 0;
-          li{
-            color: #fff;
-            padding: 4px 12px;
-            text-align: left;
-          &.calendar__day__event {
-          white-space: nowrap;
-          width: 100%;
-            &--pre_ico {
-              background-color: @pre-ico;
-            }
-            &--start_ico {
-              background-color: @start-ico;
-            }
-            &--ending_ico {
-              background-color: @ending-ico;
-            }
-            &--white_list {
-              background-color: @white-list;
-            }
-            &--KYC {
-              background-color: @KYC;
-            }
-          }
-        }
       }
 
     }

@@ -7,7 +7,8 @@ export default {
     item: Object,
     date: Date,
     type: String,
-    itemRender: Function
+    itemRender: Function,
+    multi: Boolean
   },
   data () {
     return {
@@ -61,7 +62,7 @@ export default {
         dragstart: this.onDrag,
         click: this.onClick
       }
-    }, this.itemRender ? [this.itemRender(this.item, this.index)] : [h('span', this.text)])
+    }, this.itemRender ? [this.itemRender(this.item, this.index, this.multi)] : [h('span', this.text)])
   },
   created () {
     this.timeOffset()

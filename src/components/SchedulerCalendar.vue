@@ -6,6 +6,7 @@
       tint-color="#7dc773"
       show-caps
       @input="datesEmit"
+      :show-day-popover='false'
       titlePosition="left"
       :select-attribute='attrs'
       :theme-styles="themeStyles"
@@ -17,7 +18,9 @@
 
 <script>
 import { createDays } from './eventbus'
-
+/**
+ * DOCS https://vcalendardocs.netlify.com/#calendar
+ * */
 export default {
   name: 'calendar',
   props: {
@@ -50,6 +53,12 @@ export default {
           borderWidth: '0 1px',
           padding: '14px 10px 0 10px'
         },
+        dayContent: params => ({
+          ...(params.isHovered && {
+            backgroundColor: '#7dc773',
+            color: '#fff'
+          })
+        }),
         weeks: {
           backgroundColor: '#ffffff',
           borderRadius: '4px',
@@ -61,8 +70,16 @@ export default {
           highlight: {
             backgroundColor: '#e8edf1'
           },
-          contentStyle: {
-            color: '#393d46'
+          contentStyle: params => ({
+            ...(params.day && {
+              color: '#000'
+            }),
+            ...(!params.inBetween && {
+              color: '#fff'
+            })
+          }),
+          highlightCaps: {
+            backgroundColor: '#7dc773'
           }
         },
       formats: {

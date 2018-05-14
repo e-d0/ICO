@@ -54,7 +54,6 @@ export default {
 
       return this.sortedDates(arr.filter(event => {
         if (this.actual === 'true') {
-          console.log('actual')
           if (this.moment(event.ends) > currTime) return event
         } else {
           if (this.moment(event.ends) < currTime) return event

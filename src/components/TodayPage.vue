@@ -21,19 +21,33 @@
 
             <div class="radio-buttons">
 
-              <a href="#" :class="['switch_btn','btn_left',{ active: showOnlyMy === true }]" @click="showOnlyMy = true">Только мои ICO</a>
+              <a :class="['switch_btn','btn_left',{ active: currentTabComponent === 'TodayDay' }]" @click="currentTabComponent = 'TodayDay'">Только мои ICO</a>
 
-              <a href="#" :class="['switch_btn','switch','btn_right',{ active: showOnlyMy === false }]" @click="showOnlyMy = false">Все ICO</a>
+              <a :class="['switch_btn','switch','btn_right',{ active: currentTabComponent === 'itemIcoAll' }]" @click="currentTabComponent = 'itemIcoAll'">Все ICO</a>
 
             </div>
           </div>
 
-          <keep-alive>
-            <component :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent"></component>
+          <keep-alive v-if="currentTabComponent === 'TodayDay'"
+                      v-for="(item, index) in localDatesStorage"
+                      :key="index">
+                    <component  :class="[{'first': index === 0}]"
+                                :itemRender.sync="itemRender"
+                                :preventMultiStack="true"
+                                :date="item"
+                                :is="'TodayDay'"
+                                ></component>
+          </keep-alive >
+          <keep-alive v-else >
+            <component :is="'itemIcoAll'"></component>
           </keep-alive>
 
-          <div class="col-md-12 scheduler__main">
-          </div>
+          <a  v-if="this.currentTabComponent === 'TodayDay'"
+              href="#"
+              class="show-more"
+              @click.prevent="showMore()">
+            Показать еще 24 часа</a>
+
         </div>
       </div>
 
@@ -49,13 +63,13 @@ import tplFooter from './TheFooter'
 import itemIcoAll from './itemIcoAll'
 import schedulerFilter from './schedulerFilter'
 import theEvent from './TheEvent'
-import itemDay from './itemDay'
+import TodayDay from './TodayDay'
 import CurrentEvents from './CurrentEvents'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
   name: 'BusinessForToday',
-  components: { tplHeader, tplFooter, schedulerFilter, CurrentEvents, itemIcoAll, theEvent, itemDay },
+  components: { tplHeader, tplFooter, schedulerFilter, CurrentEvents, itemIcoAll, theEvent, TodayDay },
   data () {
     return {
       itemRender (item, index) {
@@ -64,29 +78,34 @@ export default {
           item, index
         } })
       },
-      dates: this.moment().utc(),
-      showOnlyMy: true
+      localDatesStorage: [],
+      currentTabComponent: 'TodayDay'
     }
   },
   computed: {
     ...storeEvent.mapGetters({
       events: 'events',
-      filteredEvents: 'filteredEvents'
-    }),
-    currentTabComponent: function () {
-      if (this.showOnlyMy === true) {
-        return 'itemDay'
-      } else {
-        return 'itemIcoAll'
-      }
-    }
+      filteredEvents: 'filteredEvents',
+      dates: 'dates'
+    })
   },
   methods: {
+    /**
+     * Добавляем в массив дату для нового компонента
+     * */
+    showMore () {
+      let date = this.localDatesStorage[this.localDatesStorage.length - 1].toISOString()
+      console.log('<><><><><><><><><><', date)
+      this.localDatesStorage.push(new Date(this.moment(date).add(1, 'days')))
+    },
     /**
      * Получаем события с сервера через хранилище store
      * */
     getEvents () {
       this.$store.dispatch('event/getEvents')
+    },
+    getDates () {
+      return this.$store.getters['event/dates']
     },
     headerDates () {
       return `${this.$moment(this.dates[0]).format('D')} - ${this.$moment(this.dates[this.dates.length - 1]).format('D MMMM')}`
@@ -103,19 +122,36 @@ export default {
       type: 'event/setDates',
       data: [this.moment().toISOString()]
     })
-    /**
-     * На всякий случай ,очищаем фильтр по именам
-     * */
-    // this.$store.dispatch('event/setFiltersNames', Array(0))
   },
   created () {
     this.getEvents()
+    this.localDatesStorage = this.getDates()
   }
 }
 </script>
 
 <style lang="less">
   @import "../assets/less/vars";
+  .calendar__today_item.first .timeline_item-head{
+    display: none;
+  }
+  .show-more {
+    display: inline-block;
+    height: 14px;
+    color: #1991eb;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 14px;
+    letter-spacing: -0.07px;
+    text-decoration: underline dotted;
+    margin-top: 20px;
+    margin-left: 48px;
+    &:focus,
+    &:hover,
+    &:active{
+      text-decoration: none;
+    }
+  }
   .calendar--body{
     display: flex;
     flex-direction: row;
@@ -136,52 +172,50 @@ export default {
   }
   /*.events::-webkit-scrollbar {*/
   /*}*/
-  .switch{
-    margin-right: 40px;
-    &_btn{
-      padding: 10px 17px 9px;
-      -webkit-box-shadow: 0 2px 0 #8f96a1;
-      box-shadow: 0 2px 0 #8f96a1;
-      border-radius: 4px;
+  .calendar__today{
+    .switch{
+      margin-right: 40px;
+      &_btn{
+        padding: 10px 17px 9px;
+        -webkit-box-shadow: 0 2px 0 #8f96a1;
+        box-shadow: 0 2px 0 #8f96a1;
+        border-radius: 2px;
+        /*background-color: #44af36;*/
+        background-color: #fff;
+        /*color: #fff;*/
+        color: #8f96a1;
+        position: relative;
+        right: 0;
+        margin-bottom: 20px;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 14px;
+        cursor: pointer;
+      }
+      &_btn.btn_left{
+        border-radius: 2px 0 0 2px;
+      }
+      &_btn.btn_right{
+        border-radius: 0 2px 2px 0;
+      }
+      &_btn.active,
+      &_btn:focus,
+      &_btn:hover{
+        position: relative;
+        text-decoration: none;
+        background-color: #45af37;
+        color: #fff!important;
+        box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+      }
+      /*&_btn:hover{*/
+      /*position: relative;*/
+      /*top: 0px;*/
+      /*text-decoration: none;*/
       /*background-color: #44af36;*/
-      background-color: #fff;
       /*color: #fff;*/
-      color: #8f96a1;
-      position: relative;
-      right: 0;
-      margin-bottom: 20px;
-      font-size: 14px;
-      font-weight: 500;
-      line-height: 14px;
-    }
-    &_btn.btn_left{
-      border-bottom-right-radius: 0;
-      border-top-right-radius: 0;
-    }
-    &_btn.btn_right{
-      border-bottom-left-radius: 0;
-      border-top-left-radius: 0;
-    }
-    &_btn.active,
-    &_btn:focus{
-      position: relative;
-      top: 2px;
-      text-decoration: none;
-      background-color: #44af36;
-      color: #fff;
-      box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-      -webkit-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-      -moz-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-      -o-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-    }
-    &_btn:hover{
-      position: relative;
-      top: 0px;
-      text-decoration: none;
-      background-color: #44af36;
-      color: #fff;
-      -webkit-box-shadow: 0 2px 0 #35882a;
-      box-shadow: 0 2px 0 #35882a;
+      /*-webkit-box-shadow: 0 2px 0 #35882a;*/
+      /*box-shadow: 0 2px 0 #35882a;*/
+      /*}*/
     }
   }
   .radio-buttons {
@@ -296,10 +330,9 @@ export default {
     }
     &_item {
       &-head{
-        border-bottom: 1px solid #e0e6ed;
-        -webkit-box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
-        box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
         z-index: 1;
+        margin-bottom: 8px;
+        margin-top: 26px;
       }
       position: relative;
       /*display: flex;*/
@@ -328,12 +361,12 @@ export default {
         }
       }
       &-date {
-        margin-bottom: 4px;
         color: #333f52;
         font-family: @main-font;
-        font-size: 18px;
-        font-weight: 700;
         line-height: 18px;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: -0.06px;
       }
       &-day {
         color: #8f96a1;
@@ -352,8 +385,8 @@ export default {
         text-align: center;
         &--calendar {
           background-color: #fafbfc;
-          /*min-width: 168px;*/
-          min-width: 125px;
+          min-width: 168px;
+          /*min-width: 125px;*/
           border-right: 1px solid #e0e6ed;
         }
         &--calendar-today {
@@ -479,6 +512,7 @@ export default {
           line-height: 12px;
           text-transform: uppercase;
           letter-spacing: 0.3px;
+          margin-left: 12px;
         }
       }
       &-notification-bell {

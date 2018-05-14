@@ -1,9 +1,9 @@
 <template>
-  <div class="timeline timeline--calendar">
+  <div :class="['timeline timeline--calendar', {'sideGradient': sideGradient }]">
 
     <div class="timeline_top-line">
       <div class="timeline_date">
-        <span class="timeline_date-month">{{headerDates()}}</span>
+        <span class="timeline_date-month">{{headerDates}}</span>
         <span class="timeline_date-day">Сегодня <b>{{ moment().format('D MMMM')}}</b>, {{ moment().format('dddd')}}</span>
       </div>
 
@@ -18,7 +18,7 @@
     </div>
 
     <keep-alive>
-      <component :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent"></component>
+      <component :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent()"></component>
     </keep-alive>
 
     <div class="col-md-12 scheduler__main">
@@ -74,7 +74,8 @@ export default {
       dragItem: null,
       acceptedDate: null,
       clickedEvent: null,
-      showWeek: true
+      showWeek: true,
+      sideGradient: true
     }
   },
   computed: {
@@ -83,19 +84,22 @@ export default {
       filteredEvents: 'filteredEvents',
       dates: 'dates'
     }),
-    currentTabComponent: function () {
-      if (this.showWeek === true) {
-        return 'itemWeek'
-      } else {
-        return 'itemMonth'
-      }
+    headerDates () {
+      const dates = this.dates
+      return `${this.$moment(dates[0]).format('D')} - ${this.$moment(dates[dates.length - 1]).format('D MMMM')}`
     }
   },
   methods: {
-    openPopup () {
+    currentTabComponent: function () {
+      if (this.showWeek === true) {
+        this.sideGradient = true
+        return 'itemWeek'
+      } else {
+        this.sideGradient = false
+        return 'itemMonth'
+      }
     },
-    headerDates () {
-      return `${this.$moment(this.dates[0]).format('D')} - ${this.$moment(this.dates[this.dates.length - 1]).format('D MMMM')}`
+    openPopup () {
     },
     openAddFormModal (date) {
       this.acceptedDate = date || new Date()
@@ -173,6 +177,10 @@ export default {
 
 <style lang="less" >
   @import "../assets/less/vars";
+  .timeline_top-line{
+    width: 75%;
+    min-width: 900px;
+  }
   .calendar--body{
     display: flex;
     flex-direction: row;
@@ -215,7 +223,7 @@ export default {
     padding-bottom: 12px;
     overflow: hidden;
     position: relative;
-    &--calendar {
+    &--calendar.sideGradient {
       &::before {
         content: "";
         position: absolute;
@@ -225,6 +233,7 @@ export default {
         right: 0;
         background-image: linear-gradient(to right, rgba(250, 251, 252, 0) 0%, #eff3f6 100%);
         z-index: 44;
+        pointer-events: none;
       }
     }
     &_top-line {
@@ -286,7 +295,7 @@ export default {
         padding: 10px 17px 9px;
         -webkit-box-shadow: 0 2px 0 #8f96a1;
         box-shadow: 0 2px 0 #8f96a1;
-        border-radius: 4px;
+        border-radius: 2px;
         /*background-color: #44af36;*/
         background-color: #fff;
         /*color: #fff;*/
@@ -299,34 +308,32 @@ export default {
         line-height: 14px;
       }
       &_btn.btn_left{
-        border-bottom-right-radius: 0;
-        border-top-right-radius: 0;
+        border-radius: 2px 0 0 2px;
       }
       &_btn.btn_right{
-        border-bottom-left-radius: 0;
-        border-top-left-radius: 0;
+        border-radius: 0 2px 2px 0;
       }
       &_btn.active,
-      &_btn:focus{
-        position: relative;
-        top: 2px;
-        text-decoration: none;
-        background-color: #44af36;
-        color: #fff;
-        box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-        -webkit-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-        -moz-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-        -o-box-shadow: inset 0px 0px 5px 5px rgba(82, 82, 82, 0.45);
-      }
+      &_btn:focus,
       &_btn:hover{
         position: relative;
-        top: 0px;
         text-decoration: none;
-        background-color: #44af36;
+        background-color: #45af37;
         color: #fff;
-        -webkit-box-shadow: 0 2px 0 #35882a;
-        box-shadow: 0 2px 0 #35882a;
+        box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+        /* Style for "Input Copy" */
+        /*width: 56px;*/
+        /*height: 32px;*/
       }
+      /*&_btn:hover{*/
+        /*position: relative;*/
+        /*top: 0px;*/
+        /*text-decoration: none;*/
+        /*background-color: #44af36;*/
+        /*color: #fff;*/
+        /*-webkit-box-shadow: 0 2px 0 #35882a;*/
+        /*box-shadow: 0 2px 0 #35882a;*/
+      /*}*/
     }
     .radio-buttons {
       margin-left: auto;
@@ -348,6 +355,14 @@ export default {
         border-radius: 4px;
         background-color: @accent-color;
         color: #fff;
+        &:active,
+        &:focus,
+        &:hover{
+          text-decoration: none;
+          background-color: #45af37;
+          color: #fff;
+          box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+        }
       }
     }
     &_item {
@@ -408,8 +423,8 @@ export default {
         text-align: center;
         &--calendar {
           background-color: #fafbfc;
-          /*min-width: 168px;*/
-          min-width: 125px;
+          min-width: 168px;
+          /*min-width: 125px;*/
           border-right: 1px solid #e0e6ed;
         }
         &--calendar-today {

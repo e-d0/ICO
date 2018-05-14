@@ -46,6 +46,7 @@ const getters = {
          * фильтр по имени
          * */
         if (
+          state.filters.names &&
           state.filters.names.length > 0 &&
           state.filters.types instanceof Array && state.filters.types.includes(event.type)
         ) {
@@ -72,9 +73,6 @@ const actions = {
     console.log('set date to storage', payload)
     context.commit('setDates', payload.data)
   },
-  /**
-   * //TODO Протестировать
-   * */
   setFiltersNames (context, payload) {
     context.commit('setFiltersNames', payload)
   },
@@ -114,6 +112,10 @@ const actions = {
   },
   changeEvent (context, payload) {
     console.log(payload)
+    /**
+     * удаляем временное поле даты
+     * */
+    delete payload.value.date
     axios.patch(context.rootGetters.api_url + `/events/${payload.value.id}`, payload.value).then((response) => {
       console.log(response)
       response['id'] = payload.id

@@ -169,7 +169,7 @@ export const createDays = (start, end) => {
  * @param{obj} day or null
  */
 export const generateHours = (day) => {
-  const timePeriod = { start: 7, end: 24 }
+  const timePeriod = { start: 0, end: 24 }
   let hours = []
 
   if (day) {
@@ -178,8 +178,12 @@ export const generateHours = (day) => {
     }
   } else {
     for (let i = timePeriod.start; i <= timePeriod.end; i++) {
-      if (i === 24) hours.push('0:00')
-      else hours.push(i + ':00')
+      let m = moment().utcOffset(0)
+      m.set({hour: i, minute: 0, second: 0, millisecond: 0})
+      hours.push(m)
+      // m.toISOString()
+      // if (i === 24) hours.push('0:00')
+      // else hours.push(i + ':00')
     }
   }
   return hours

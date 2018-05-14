@@ -2,15 +2,16 @@
   <div id="app">
     <tplHeader></tplHeader>
       <div class="container-fluid">
-        <div class="row">
+        <div class="wrapper__clendar">
 
-                <div class="col-md-12 col-lg-3">
+                <div class="left-col">
                     <div class="filter">
                       <scheduler-calendar></scheduler-calendar>
                       <schedulerFilter></schedulerFilter>
+                      <button class="sync_btn">Sync ICO Calendar</button>
                     </div>
                 </div>
-                <div class="col-md-12 col-lg-9">
+                <div class="right-col">
                     <scheduler-main v-if="filteredEvents"
                                     :itemRender.sync="itemRender"
                                     :dates="dates"
@@ -39,10 +40,10 @@ export default {
   components: { schedulerFilter, SchedulerMain, SchedulerCalendar, tplHeader, tplFooter, theEvent },
   data () {
     return {
-      itemRender (item, index) {
+      itemRender (item, index, multi) {
         const h = this.$createElement
         return h(theEvent, { props: {
-          item, index
+          item, index, multi
         } })
       }
     }
@@ -102,12 +103,6 @@ export default {
   },
   mounted () {
   },
-  beforeCreate () {
-    /**
-     * На всякий случай ,очищаем фильтр по именам
-     * */
-    // this.$store.dispatch('event/setFiltersNames', Array(0))
-  },
   destoryed () {
     EventBus.$off()
   }
@@ -115,5 +110,57 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
+<style lang="less" scoped>
+  @import "../assets/less/vars";
+  #app{
+    overflow: hidden;
+  }
+  .wrapper__clendar{
+    display: flex;
+    flex-direction: row;
+    .left-col{
+      position: relative;
+      max-width: 25%;
+      width: 100%;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+    .right-col{
+      position: relative;
+      max-width: 98%;
+      width: 98%;
+      min-height: 1px;
+      padding-right: 15px;
+      padding-left: 15px;
+    }
+  }
+  .sync_btn{
+    margin-top: 24px;
+    width: 159px;
+    height: 40px;
+    border-radius: 4px;
+    border: 1px solid #c5d0de;
+    background-color: #ffffff;
+    position: relative;
+    color: #45af37;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 14px;
+    letter-spacing: -0.07px;
+    padding-bottom: 4px;
+    &::before{
+      content: "";
+      position: relative;
+      display: inline-block;
+      margin-right: 8px;
+      top: 2px;
+      width: 12px;
+      height: 16px;
+      background-image: @img-sync;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
 </style>

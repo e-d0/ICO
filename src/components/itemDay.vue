@@ -4,18 +4,23 @@
     <div class="time-group">
       <div class="empty-slot">
       </div>
-      <div class="timeline_item timeline_item-time" v-for="hour in emptyHoursArray" :key="hour" >
+      <div class="timeline_item timeline_item-time" v-for="(hour, index) in emptyHoursArray" :key="index" >
 
-        <span>{{ hour }}</span>
+        <span v-if=" moment.locale() === 'ru'">{{ hour.format('HH:mm') }}</span>
+        <span v-else>{{ hour.format('hh a') }}</span>
 
       </div>
     </div>
-    <v-touch v-on:swipeleft="onSwipeLeft"
-             v-on:swiperight="onSwipeRight($el)"
-             :swipe-options="{ threshold: 100 }"
+    <v-touch :swipe-options="{ direction: 'horizontal', threshold: 70 }"
+             :pan-options = "{ direction: 'vertical'}"
+             v-on:pandown="onSwipeLeft"
+             v-on:panup="onSwipeRight"
+             v-on:swipeleft="onSwipeLeft"
+             v-on:swiperight="onSwipeRight"
+             v-on:swipeup="onSwipeLeft"
+             v-on:swipedown="onSwipeRight"
              class="events"
              id="events"
-
              transition = "fade" >
     <div class="events-group" v-if="dates"
                               v-for="(dayItem, dayInd) in dates"
@@ -34,6 +39,7 @@
                 <itemHour :hour="hour"
                           :index="updatedIndex(dayInd, ind)"
                           :itemRender.sync="itemRender"
+                          :preventMultiStack="preventMultiStack"
                           :date="updatedDayCell(hour)"></itemHour>
           </div>
         </div>
@@ -56,11 +62,12 @@ const storeEvent = Vuex.createNamespacedHelpers('event')
  * */
 const locale = window.navigator.userLanguage || window.navigator.language
 moment.locale(locale)
-
+console.log('<><><><><><><><><', moment.locale())
 export default {
   name: 'Day',
   props: {
     itemRender: Function,
+    preventMultiStack: Boolean,
     dayIndex: Number
   },
   components: { itemHour },
@@ -88,7 +95,7 @@ export default {
     onSwipeLeft (el) {
       // получаем элемент из DOM
       let elem = this.$el.querySelector('#events')
-      let width = this.$el.querySelector('.timeline_item-scale--calendar').offsetWidth
+      let width = this.$el.querySelector('#events').offsetWidth * 0.75
       let newVal = elem.scrollLeft + width
       // анимируем с tween.js
       function animate () {
@@ -106,7 +113,7 @@ export default {
     onSwipeRight (el) {
       // получаем элемент из DOM
       let elem = this.$el.querySelector('#events')
-      let width = this.$el.querySelector('.timeline_item-scale--calendar').offsetWidth
+      let width = this.$el.querySelector('#events').offsetWidth * 0.75
       let newVal = elem.scrollLeft - width
       // анимируем с tween.js
       function animate () {

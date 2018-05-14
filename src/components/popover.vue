@@ -3,17 +3,16 @@
   <b-popover :target="`event-${clickedEvent.id}`"
              triggers="click"
              :show="popoverShow"
-             placement="auto"
-             container="myContainer"
-             ref="popover">
+             placement="right"
+             container="app">
 
-    <div class="mypopover" id="popover">
+    <div class="mypopover" >
 
       <div class="mypopover_close">
-        <a @click="closePopup()" class="close" aria-label="Close" href="#"></a>
+        <span @click="closePopup()" class="close" aria-label="Close" ></span>
       </div>
       <div class="mypopover_header" >
-        <h5>Aurora</h5>
+        <h5>{{ clickedEvent.name }}</h5>
         <div class="mypopover_header-logo">
           <img src="../assets/img/aurora-logo.png" alt="">
         </div>
@@ -33,39 +32,45 @@
           </div>
         </div>
 
-      <div class="mypopover_remainder" v-if="alerts.length > 0" v-for="(item, index) in alerts" :key="index">
-          <span >
-            Напомнить за {{ countDiffTime(index) }} минут
-          </span>
-          <a href="#" @click="removeAlert(index)">Удалить</a>
+      <template v-if="alerts.length > 0">
+        <div class="mypopover_remainder"  v-for="(item, index) in alerts" :key="index">
+            <span >
+              Напомнить за {{ convertToDiff(item) }} минут
+            </span>
+            <a @click="removeAlert(index)">Удалить</a>
+        </div>
+      </template>
+
+      <div v-if="(notificForm || this.clickedEvent.alerts === undefined ) && (filteredTimeOptions.length > 0)" class="mypopover_remainder">
+        <span>Напомнить за </span>
+        <div class="mypopover_remainder-select">
+          <select v-model="timeValue">
+            <template v-for="( val, index ) in filteredTimeOptions">
+
+                <option :key="index" name="name[]" :value="val" >
+                  <a>{{ val }} минут</a>
+                </option>
+
+            </template>
+          </select>
+        </div>
+        <a :class="['add']" @click="addAlert(timeValue)" >Добавить</a>
+      </div>
+
+      <div class="mypopover_add">
+        <div class="col-sm-6 mypopover_add-remind" >
+          <a :class="[{'active': notificForm }]" @click="openAddAlert()">Добавить напоминание</a>
+        </div>
+        <div class="col-sm-6 mypopover_add-comment">
+          <a v-if="!commentForm && comment != null" @click="removeComment()">Удалить комментарий</a>
+          <a :class="[{'active': commentForm }]" v-else @click="openAddComment()">Добавить комментарий</a>
+        </div>
       </div>
 
       <div class="mypopover_comment" v-if="!commentForm
                                                 && comment != null
                                                 && comment !==  '' ">
         <span>{{comment}}</span>
-      </div>
-
-      <div class="mypopover_add">
-        <div class="col-sm-6 mypopover_add-remind" >
-          <a href="#" @click="openAddAlert()">Добавить напоминание</a>
-        </div>
-        <div class="col-sm-6 mypopover_add-comment">
-          <a v-if="!commentForm && comment != null" href="#" @click="removeComment()">Удалить комментарий</a>
-          <a v-else href="#" @click="openAddComment()">Добавить комментарий</a>
-        </div>
-      </div>
-
-      <div v-if="notificForm" class="mypopover_remainder">
-        <span>Напомнить за </span>
-        <div class="mypopover_remainder-select">
-          <select v-model="timeValue">
-            <option v-for="( val, index ) in timeOptions" :key="index" name="name[]" :value="val">
-              <a href="#">{{ val }} минут</a>
-            </option>
-          </select>
-        </div>
-        <a @click="addAlert(timeValue)" href="#">Добавить</a>
       </div>
 
       <div v-if="commentForm" class="form-group border-exp">
@@ -78,7 +83,7 @@
       </div>
 
       <div class="mypopover_button">
-        <a href="#" class="btn" @click="updateEvent()" >Сохранить</a>
+        <span class="btn" @click="updateEvent()" >Сохранить</span>
       </div>
     </div>
 
@@ -102,17 +107,59 @@ export default {
       notificForm: false,
       timeOptions: [15, 30, 45],
       comment: null,
-      timeValue: '',
+      timeValue: '15',
       alerts: []
     }
   },
   computed: {
+    filteredTimeOptions: {
+      cache: false,
+      get: function () {
+        let arr = [...this.timeOptions]
+        if (this.alerts !== undefined && this.alerts.length) {
+          let alerts = this.alerts
+          /**
+         * Сверяем оповещения события с массивом опромежутков.
+         * Если есть совпадения, то удаляем промежуток.
+         * Таким образом в выборе появляются только уникальные значения.
+         * */
+          for (let i = 0; i < alerts.length; i++) {
+            if (arr.includes(this.countDiffTime(i))) {
+              let index = arr.indexOf(this.countDiffTime(i))
+              if (index !== -1) arr.splice(index, 1)
+            }
+          }
+        }
+        return arr.sort((a, b) => a - b)
+      }
+    }
+  },
+  watch: {
   },
   created () {
-    if (this.clickedEvent.alerts !== undefined) this.alerts = [...this.clickedEvent.alerts]
+    if (this.clickedEvent.alerts !== undefined) {
+      this.alerts = this.sortDates([...this.clickedEvent.alerts])
+      // this.sortDates(this.alerts)
+    }
     if (this.clickedEvent.comment !== undefined) this.comment = this.clickedEvent.comment
   },
   methods: {
+    /**
+     * Сортируем массив ISO дат. Можно сравнивать, не преобразоывавая
+     * */
+    sortDates (item) {
+      let arr = [...item]
+      arr.sort((a, b) => {
+        if (a > b) {
+          return -1
+        }
+        if (a < b) {
+          return 1
+        }
+        return 0
+      })
+      return arr
+    },
     updateComment (value) {
       this.comment = value
     },
@@ -124,12 +171,22 @@ export default {
       return this.$store.getters['event/getTypeNameByCode'](this.clickedEvent.type)
     },
     addAlert (val) {
-      let itemStarts = this.clickedEvent.starts
-      let startTime = this.$moment(itemStarts).subtract(val, 'minutes')
+      let eventStarts = this.clickedEvent.starts
+      let startTime = this.$moment(eventStarts).subtract(val, 'minutes')
       this.alerts.push(startTime.toISOString())
+      this.alerts = this.sortDates(this.alerts)
     },
     removeAlert (index) {
       this.alerts.splice(index, 1)
+    },
+    convertToDiff (item) {
+      let alert = this.$moment(item)
+      let start = this.clickedEvent.starts
+      let diff = countDiffBetweenDates(alert, start)
+      /**
+       * преобразуем разницу в минуты
+       * */
+      return ((diff / 1000) / 60)
     },
     countDiffTime (index) {
       let alert = this.$moment(this.alerts[index])
@@ -156,10 +213,11 @@ export default {
 
       console.log('comments or alerts changed', item)
 
-      return this.$store.dispatch({
+      this.$store.dispatch({
         type: 'event/changeEvent',
         value: item
       })
+      return this.closePopup()
     },
     removeComment () {
       this.comment = null
@@ -190,6 +248,10 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  .bs-popover-left .arrow::before,
+  .bs-popover-auto[x-placement^="left"] .arrow::before{
+    border: none;
+  }
   .popover {
     margin: 0;
     padding: 0;
@@ -239,18 +301,78 @@ export default {
       padding: 10px 20px 10px 40px;
       &--pre_ico {
         background-color: @pre-ico;
+        span::before {
+          content: "";
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          left: -20px;
+          top: 2px;
+          background-image: @img-clock-pre-iso;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       }
       &--start_ico {
         background-color: @start-ico;
+        span::before {
+          content: "";
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          left: -20px;
+          top: 2px;
+          background-image: @img-clock-iso-start;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       }
       &--ending_ico {
         background-color: @ending-ico;
+        span::before {
+          content: "";
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          left: -20px;
+          top: 2px;
+          background-image: @img-clock-iso-end;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       }
       &--white_list {
         background-color: @white-list;
+        span::before {
+          content: "";
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          left: -20px;
+          top: 2px;
+          background-image: @img-clock-white-list;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       }
       &--KYC {
         background-color: @KYC;
+        span::before {
+          content: "";
+          position: absolute;
+          width: 12px;
+          height: 12px;
+          left: -20px;
+          top: 2px;
+          background-image: @img-clock-KYC;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       }
       span {
         color: #ffffff;
@@ -260,6 +382,7 @@ export default {
         line-height: 14px;
         text-transform: uppercase;
         letter-spacing: 0.3px;
+        position: relative;
       }
     }
     &_info {
@@ -327,6 +450,7 @@ export default {
         position: relative;
         select {
           padding: 4px 24px 3px 9px;
+          height: 24px;
           //outline: none;
           color: #707986;
           font-family: @main-font;
@@ -358,6 +482,7 @@ export default {
         font-size: 10px;
         font-weight: 400;
         line-height: 14px;
+        cursor: pointer;
         &::before {
           content: "";
           position: absolute;
@@ -371,6 +496,18 @@ export default {
           z-index: 11;
         }
       }
+      a.add {
+        color: @accent-color;
+        &:focus,
+        &.active,
+        &:hover{
+          color: inherit;
+          text-decoration: none;
+        }
+        &::before {
+          content: none;
+        }
+      }
     }
     &_add-remind {
       margin-top: 15px;
@@ -382,11 +519,19 @@ export default {
         font-family: @main-font;
         font-size: 12px;
         font-weight: 400;
-        line-height: 12px;
         text-decoration: underline dotted;
         word-break: keep-all;
+        cursor: pointer;
+        line-height: 16px;
+        display: inline-block;
+        &:focus,
+        &.active,
         &:hover {
           text-decoration: none;
+          color: #8f96a1;
+          font-size: 12px;
+          font-weight: 400;
+          letter-spacing: -0.06px;
         }
         &::before {
           content: "";
@@ -400,13 +545,20 @@ export default {
           background-repeat: no-repeat;
           z-index: 11;
         }
+        &:hover::before,
+        &.active::before{
+          color: #8f96a1;
+          background-image: @img-grey-bell;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
       }
     }
     &_comment{
       padding: 0 20px;
     }
     &_add-comment {
-      padding: 0 0 0 39px;
+      padding: 0 0 0 70px;
       margin-top: 15px;
       margin-bottom: 5px;
       text-align: right;
@@ -416,11 +568,20 @@ export default {
         font-family: @main-font;
         font-size: 12px;
         font-weight: 400;
-        line-height: 12px;
         text-decoration: underline dotted;
         word-break: keep-all;
+        cursor: pointer;
+        line-height: 16px;
+        display: inline-block;
+        text-align: left;
+        &:focus,
+        &.active,
         &:hover {
           text-decoration: none;
+          color: #8f96a1;
+          font-size: 12px;
+          font-weight: 400;
+          letter-spacing: -0.06px;
         }
         &::before {
           content: "";
@@ -433,6 +594,13 @@ export default {
           background-position: center;
           background-repeat: no-repeat;
           z-index: 11;
+        }
+        &:hover::before,
+        &.active::before{
+          color: #8f96a1;
+          background-image: @img-grey-comment;
+          background-position: center;
+          background-repeat: no-repeat;
         }
       }
     }
@@ -459,7 +627,7 @@ export default {
       }
     }
     .mypopover_close {
-      a {
+      span {
         position: absolute;
         width: 22px;
         height: 22px;
@@ -468,6 +636,7 @@ export default {
         right: -11px;
         border-radius: 50%;
         opacity: 1;
+        cursor: pointer;
         &::before {
           content: "";
           position: absolute;

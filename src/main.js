@@ -16,6 +16,12 @@ import VueTouch from 'vue-touch'
 /**
  * Подключаем Hummer.js для vue. https://github.com/vuejs/vue-touch/tree/next
  * **/
+VueTouch.config.swipe = {
+  direction: 'horizontal'
+}
+VueTouch.config.pan = {
+  direction: 'horizontal'
+}
 Vue.use(VueTouch, {name: 'v-touch'})
 
 /**

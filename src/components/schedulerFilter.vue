@@ -3,33 +3,35 @@
     <form id="filter" autocomplete="off">
       <fieldset>
         <legend class="dropdown" v-b-toggle="'collapse1'">ФИЛЬТР СОБЫТИЙ</legend>
-        <b-collapse id="collapse1">
-          <multiselect class="" type="text"
-                       :value="filters.names"
-                       :options="events"
-                       :multiple="true"
-                       :close-on-select="false"
-                       :clear-on-select="true"
-                       :hide-selected="true"
-                       :preserve-search="true"
-                       placeholder=""
-                       label="name"
-                       track-by="name"
-                       :preselect-first="true"
-                       @input="setFiltersNames">
-            <template slot="tag" slot-scope="props">
-                <span></span>
-            </template>
-          </multiselect>
+        <b-collapse id="collapse1" visible>
+          <!--<multiselect class="" type="text"-->
+                                      <!--:value="names"-->
+                                      <!--:options="events"-->
+                                      <!--:multiple="true"-->
+                                      <!--:close-on-select="false"-->
+                                      <!--:clear-on-select="true"-->
+                                      <!--:hide-selected="true"-->
+                                      <!--:preserve-search="true"-->
+                                      <!--placeholder=""-->
+                                      <!--label="name"-->
+                                      <!--track-by="name"-->
+                                      <!--:preselect-first="false"-->
+                                      <!--@input="setFiltersNames">-->
+          <!--<template slot="tag" slot-scope="props">-->
+            <!--<span></span>-->
+          <!--</template>-->
+        <!--</multiselect>-->
 
-          <div class="multiselect__tags-wrap">
-            <template v-for="(item, index) in chosenNamesStorage" >
-              <span class="badge badge-success _custom" :key="index">
-                    <span class="custom__remove" v-on:click.prevent="removeEventName(item)">❌</span>
-                    <span class="badge__name">{{ item.name}}</span>
-                  </span>
-            </template>
-          </div>
+          <!--<div class="multiselect__tags-wrap">-->
+            <!--<template v-for="(item, index) in chosenNamesStorage" >-->
+              <!--<span class="badge badge-success _custom" :key="index">-->
+                    <!--<span class="custom__remove " v-on:click.prevent="removeEventName(item)">-->
+                      <!--&#215;-->
+                    <!--</span>-->
+                    <!--<span class="badge__name">{{ item.name}}</span>-->
+                  <!--</span>-->
+            <!--</template>-->
+          <!--</div>-->
 
           <ul class="choosing-form_list">
             <li v-for="(item,index) in types" :key="index">
@@ -63,11 +65,12 @@ export default {
   data () {
     return {
       form: {
-        name: '',
+        names: null,
         type: null
       },
       checkedByDefault: true,
-      checkedTypesStorage: []
+      checkedTypesStorage: [],
+      filteredEventsStorage: []
     }
   },
   computed: {
@@ -79,7 +82,22 @@ export default {
        * */
       chosenNamesStorage: 'getFiltersNames'
     }),
-    ...storeEvent.mapState(['filters', 'events'])
+    ...storeEvent.mapState(['events']),
+    names: {
+      get () {
+        return this.$store.getters['event/filters'].names
+      }
+    }
+  },
+  watch: {
+    checkedTypesStorage: function (newVal, oldVal) {
+      this.$store.dispatch({
+        type: 'event/setFiltersTypes',
+        val: newVal
+      })
+    },
+    filters: function () {
+    }
   },
   methods: {
     dropDown () {
@@ -97,6 +115,9 @@ export default {
     /**
      * Привязываем значения input имени к хранилищу vuex.
      * */
+    // setFiltersNames (context) {
+    //   this.$store.dispatch('event/setFiltersNames', context)
+    // },
     ...storeEvent.mapActions(['setFiltersNames']),
     /**
      * Получаем типы событий с сервера через store, используя промис.
@@ -143,16 +164,6 @@ export default {
   },
   mounted: function () {
     this.getTypes()
-  },
-  watch: {
-    checkedTypesStorage: function (newVal, oldVal) {
-      this.$store.dispatch({
-        type: 'event/setFiltersTypes',
-        val: newVal
-      })
-    },
-    chosenNamesStorage: function (newVal, oldVal) {
-    }
   }
 }
 </script>
@@ -186,7 +197,6 @@ export default {
 
   .multiselect{
     margin-bottom: 16px;
-    &__tags-wrap,
     &__tags{
       -webkit-box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.15);
       box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.15);
@@ -196,11 +206,23 @@ export default {
   .badge._custom{
     padding: 5px;
     margin: 2px;
-    font-size: 12px;
+    border-radius: 2px;
+    height: 20px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.28px;
   }
   .custom__remove{
     cursor: pointer;
-    font-size: 9px;
+    font-size: 15px;
+    width: 12px;
+    height: 12px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+
   }
   .filter {
     margin-top: 32px;
@@ -227,7 +249,8 @@ export default {
           }
         }
         .choosing-form_list {
-          margin-top: 12px;
+          /*margin-top: 12px;*/
+          margin-bottom: 15px;
           li {
             display: flex;
             margin-bottom: 5px;

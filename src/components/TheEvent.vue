@@ -7,16 +7,19 @@
               && item.alerts.length
               && item.alerts != null
           " class="timeline_event-notification-bell"></a>
-        <a v-if="(item.comment != null) && (item.comment !== '')" href="#" class="timeline_event-notification-message"></a>
+        <a v-if="(item.comment != null) && (item.comment !== '')" class="timeline_event-notification-message"></a>
       </span>
       <span class="timeline_event-name timeline_event-name--calendar">{{item.name}}</span>
+
     </div>
     <div class="timeline_event-type">
-      <span></span>
+      <template  v-if="index === null || index === undefined ">
+        <span>{{ getTypeNameByCode() }}</span>
+      </template>
     </div>
-    <div v-if="index"
+    <div v-if="index && multi === true"
          :class="['event_nav']"
-         @click.stop.prevent="nextEvent()" >{{ (parseInt(index)+1) }}
+         @click.stop.prevent="nextEvent()" >{{ index }}
     </div>
     <popover :popoverShow="popoverShow" :clickedEvent="item" ></popover>
 
@@ -31,7 +34,8 @@ export default {
   components: { popover },
   props: {
     item: Object,
-    index: String
+    index: String,
+    multi: Boolean
   },
   data () {
     return {
@@ -41,6 +45,9 @@ export default {
   computed: {
   },
   methods: {
+    getTypeNameByCode () {
+      return this.$store.getters['event/getTypeNameByCode'](this.item.type)
+    },
     nextEvent () {
       this.$parent.$emit('update:current')
     },
@@ -69,6 +76,15 @@ export default {
 </script>
 
 <style lang="less" scoped>
+  .calendar__today .timeline_event-type{
+    height: 12px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
   .event_nav {
     padding: 0px 10px 0px 6px;
     border-radius: 10px;
@@ -92,4 +108,14 @@ export default {
        content: "";
      }
   }
+
+  .last .event_nav{
+    padding: 0px 6px 0px 10px;
+  }
+  .last .event_nav:after{
+    right: 14px!important;
+    border-width: 3px 4px 3px 0!important;
+    border-color: transparent #3f3f3f9c transparent transparent!important;
+  }
+
 </style>

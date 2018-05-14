@@ -95,8 +95,8 @@
           <div class="col">
             <ul class="cabinet-nav_menu">
               <li class="cabinet-nav_item"><a>Кабинет инвестора</a></li>
-              <li class="cabinet-nav_item cabinet-nav_item--cases"> <router-link to="/today">Дела на сегодня</router-link></li>
-              <li class="cabinet-nav_item cabinet-nav_item--calendar cabinet-nav_item--active"><router-link to="/">Календарь ICO</router-link></li>
+              <li class="cabinet-nav_item cabinet-nav_item--cases"> <router-link to="/">Дела на сегодня</router-link></li>
+              <li class="cabinet-nav_item cabinet-nav_item--calendar cabinet-nav_item--active"><router-link to="/calendar">Календарь ICO</router-link></li>
               <li class="cabinet-nav_item cabinet-nav_item--investment"><a href="#">Мои инвестиции</a></li>
               <li class="cabinet-nav_item cabinet-nav_item--statistic"><a href="#">Статистика</a></li>
               <li class="cabinet-nav_item cabinet-nav_item--marked-ico"><a href="#">Отмеченные ICO</a></li>
@@ -134,6 +134,8 @@ export default {
       line-height: 20px;
       white-space: nowrap;
       text-decoration: none;
+      position: relative;
+      box-shadow: inset 0 5px 16px rgba(0, 0, 0, 0.1), 0 0 0 #e0e6ed;
     }
     background-color: #fff;
     .main-nav {
@@ -361,11 +363,7 @@ export default {
           font-weight: 400;
           line-height: 16px;
           border: 1px solid rgba(197, 208, 222, 0.5);
-          //border-top-right-radius: 4px;
-          //border-bottom-right-radius: 4px;
           border-radius: 0 4px 4px 0;
-          border-top-left-radius: 0;
-          border-bottom-left-radius: 0;
           background-color: #ffffff;
         }
       }
@@ -423,6 +421,8 @@ export default {
           &:hover {
             background-color: @body-bg;
             color: #525c6c;
+            position: relative;
+            box-shadow: inset 0 5px 16px rgba(0, 0, 0, 0.1), 0 0 0 #e0e6ed;
           }
           &::before {
             content: '';

@@ -7,27 +7,33 @@
     <span v-if="!checkForDateObj(hour)">{{ hour }}</span>
     <!--<span v-else>{{ hour }}</span>-->
 
-    <event v-if="details.length && $route.path === '/today'"
-           v-for="(item) in details"
-           :style="{ zIndex: 1 }"
-           :key="item.id"
-           :item="item"
-           :type="item.type"
-           :itemRender="itemRender"
-           @item-dragstart="dragItem"
-           :date="date"></event>
+    <template v-if="preventMultiStack">
+        <template v-if="details.length">
+          <event v-for="(item) in details"
+                 :style="{ zIndex: 1 }"
+                 :key="item.id"
+                 :item="item"
+                 :type="item.type"
+                 :itemRender="itemRender"
+                 @item-dragstart="dragItem"
+                 :date="date"></event>
+        </template>
+      </template>
 
-      <event v-if="isMulti && details[currentEvent.toString()] && $route.path !== '/today'"
-             :style="{ zIndex: 1 }"
-             :key="details[currentEvent.toString()].id"
-             :item="details[currentEvent.toString()]"
-             :type="details[currentEvent.toString()].type"
-             :itemRender="itemRender"
-             :index="currentEvent.toString()"
-             @item-dragstart="dragItem"
-             v-on:update:current="nextEvent()"
-             :date="date"></event>
-
+    <template v-if="!preventMultiStack">
+      <event v-if="details[currentEvent.toString()]"
+               :class="[{ 'last':isLastElem() }]"
+               :style="{ zIndex: 1+currentEvent.toString() }"
+               :key="details[currentEvent.toString()].id"
+               :item="details[currentEvent.toString()]"
+               :type="details[currentEvent.toString()].type"
+               :itemRender="itemRender"
+               :index="countEvents()"
+               @item-dragstart="dragItem"
+               v-on:update:current="nextEvent()"
+               :date="date"
+               :multi="isMulti"></event>
+      </template>
   </div>
 
 </template>
@@ -63,9 +69,17 @@ export default {
     date: Date,
     hour: Date,
     index: Number,
-    itemRender: Function
+    itemRender: Function,
+    preventMultiStack: Boolean
   },
   methods: {
+    countEvents () {
+      let counter = parseInt(this.details.length - (this.currentEvent + 1))
+      return counter === 0 ? parseInt(this.details.length - 1).toString() : counter.toString()
+    },
+    isLastElem () {
+      return this.currentEvent + 1 === this.details.length
+    },
     nextEvent () {
       if (this.currentEvent < this.details.length - 1) {
         this.currentEvent++
