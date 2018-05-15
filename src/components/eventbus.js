@@ -167,9 +167,13 @@ export const createDays = (start, end) => {
 /**
  * Генерируем часы
  * @param{obj} day or null
+ * @param startHour Number
  */
-export const generateHours = (day) => {
+export const generateHours = (day, startHour) => {
   const timePeriod = { start: 0, end: 24 }
+  if (startHour) {
+    timePeriod.start = startHour
+  }
   let hours = []
 
   if (day) {

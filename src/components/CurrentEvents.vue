@@ -1,13 +1,14 @@
 <template>
   <div class="current-events">
-    <h3>Текущие события</h3>
+    <legend class="dropdown" v-b-toggle="'collapsecurrent'">Текущие события</legend>
+    <b-collapse id="collapsecurrent" visible>
     <div class="radio-buttons">
       <label>
-        <input name="event-radio-actual" value='true' type="radio" v-model="actual">
+        <input name="event-radio-actual" value='true' type="radio" v-model="actual" @change="changeEvent">
         <b>Актуальные</b>
       </label>
       <label>
-        <input name="event-radio-past" value='false' type="radio" v-model="actual">
+        <input name="event-radio-past" value='false' type="radio" v-model="actual" @change="changeEvent">
         <b>Прошедшие</b>
       </label>
     </div>
@@ -28,12 +29,14 @@
         </span>
       </div>
     </div>
+    </b-collapse>
     <!-- /.current-events_item -->
   </div>
   <!-- /.events_current -->
 </template>
 
 <script>
+import { EventBus } from './eventbus'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
@@ -64,6 +67,12 @@ export default {
   },
   methods: {
     /**
+     * Отправляем тип события в компонент
+     * */
+    changeEvent () {
+      EventBus.$emit('filter:event', this.actual)
+    },
+    /**
      * Сортировка массива дат
      * */
     sortedDates (arrEvents) {
@@ -86,6 +95,27 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  .current-events .dropdown {
+    cursor: pointer;
+    &.collapsed{}
+    &::before {
+      content: "";
+      position: absolute;
+      width: 8px;
+      height: 4px;
+      background-image: @img-arrow-top;
+      background-position: center;
+      background-repeat: no-repeat;
+      z-index: 11;
+      right: 0;
+      top: 8px;
+    }
+    &.collapsed{
+      &::before {
+        transform: rotate(180deg);
+      }
+    }
+  }
   .current-events {
     margin-top: 28px;
     margin-bottom: 36px;
@@ -94,8 +124,8 @@ export default {
     box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
     border-radius: 4px;
     background-color: #fafbfc;
-    h3 {
-      margin-bottom: 18px;
+    legend {
+      margin-bottom: 0;
       color: #525c6c;
       font-size: 14px;
       font-weight: 700;
@@ -104,6 +134,7 @@ export default {
       text-transform: uppercase;
     }
     .radio-buttons {
+      margin-top: 18px;
       margin-bottom: 18px;
     }
     &_item {

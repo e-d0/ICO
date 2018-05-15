@@ -62,7 +62,7 @@ const storeEvent = Vuex.createNamespacedHelpers('event')
  * */
 const locale = window.navigator.userLanguage || window.navigator.language
 moment.locale(locale)
-console.log('<><><><><><><><><', moment.locale())
+
 export default {
   name: 'Day',
   props: {

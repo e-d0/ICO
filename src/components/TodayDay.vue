@@ -20,13 +20,13 @@
         <div class="events-group" v-if="date">
 
           <div class="hours">
-            <div v-for="(hour,ind) in generateHours(date)"
+            <div v-for="(hour,ind) in generateHours(date, startHour)"
                  :key="ind"
                  v-bind:class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']">
-              <itemHour :hour="hour"
-                        :itemRender.sync="itemRender"
-                        :preventMultiStack="preventMultiStack"
-                        :date="updatedDayCell(hour)"></itemHour>
+              <TodayHour :hour="hour"
+                         :itemRender.sync="itemRender"
+                         :index="updatedIndex(index, ind)"
+                         :date="updatedDayCell(hour)"></TodayHour>
             </div>
           </div>
 
@@ -38,10 +38,8 @@
 
 <script>
 import moment from 'moment'
-import itemHour from './itemHour'
+import TodayHour from './TodayHour'
 import { generateHours } from './eventbus'
-import Vuex from 'vuex'
-const storeEvent = Vuex.createNamespacedHelpers('event')
 /**
    * Приводим дату в соотетствие с форматом в браузере пользователя
    * */
@@ -51,22 +49,19 @@ moment.locale(locale)
 export default {
   name: 'TodayDay',
   props: {
+    index: null,
     date: null,
     itemRender: Function,
-    preventMultiStack: Boolean
+    startHour: Number
   },
-  components: { itemHour },
+  components: { TodayHour },
   data () {
     return {
       moment: this.moment,
-      emptyHoursArray: generateHours()
+      emptyHoursArray: generateHours(null, this.startHour)
     }
   },
   computed: {
-    ...storeEvent.mapGetters({
-      events: 'events',
-      filteredEvents: 'filteredEvents'
-    })
   },
   filters: {
     weekDayName: function (value) {
@@ -78,9 +73,9 @@ export default {
     /**
        * Генерируем часы с датой для каждой ячейки
        * */
-    generateHours (day) {
+    generateHours (day, startHour) {
       // this.hoursArray = generateHours(this.day)
-      return generateHours(day)
+      return generateHours(day, startHour)
     },
     /**
        * Обновляем часы в текущей дате ячейки
@@ -88,6 +83,12 @@ export default {
     updatedDayCell (hour) {
       const h = new Date(hour)
       return h
+    },
+    /**
+     * Создаем уникальный индекс для ячейки часа
+     * */
+    updatedIndex: function (dayIndex, index) {
+      return Number(dayIndex.toString() + index.toString())
     }
   },
   created () {

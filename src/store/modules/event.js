@@ -1,4 +1,5 @@
 import axios from 'axios'
+import moment from 'moment'
 
 const state = {
   events: [],
@@ -12,6 +13,40 @@ const state = {
 
 const getters = {
   events: state => state.events,
+  /**
+   * Актуальные события с заданного времени
+   * */
+  actualEvents: state => (time) => {
+    let arr = [...state.events]
+    let currTime = ''
+    if (typeof time === 'string') {
+      currTime = moment(time)
+    } else {
+      currTime = time
+    }
+
+    return arr.filter(event => {
+      if (moment(event.ends) > currTime) return event
+    }
+    )
+  },
+  /**
+   * Прошедие события с заданного времени
+   * */
+  pastEvents: state => (time) => {
+    let arr = [...state.events]
+    let currTime = ''
+    if (typeof time === 'string') {
+      currTime = moment(time)
+    } else {
+      currTime = time
+    }
+
+    return arr.filter(event => {
+      if (moment(event.ends) < currTime) return event
+    }
+    )
+  },
   types: state => state.types,
   filters: state => state.filters,
   getFiltersNames: state => state.filters.names,

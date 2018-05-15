@@ -61,6 +61,7 @@ export default {
   name: 'schedulerFilter',
   components: { multiselect },
   props: {
+    actual: Boolean
   },
   data () {
     return {
@@ -80,7 +81,9 @@ export default {
       /**
        * Получаем элементы фильтра по имени из vuex хранилища напрямую.
        * */
-      chosenNamesStorage: 'getFiltersNames'
+      chosenNamesStorage: 'getFiltersNames',
+      actualEvents: 'actualEvents',
+      pastEvents: 'pastEvents'
     }),
     ...storeEvent.mapState(['events']),
     names: {
@@ -148,9 +151,15 @@ export default {
      * Считаем количество событий по типу
      * */
     itemCount (type) {
-      if (this.filteredEvents !== undefined) {
+      let events
+      if (this.actual !== undefined) {
+        this.actual ? events = this.actualEvents(this.moment()) : events = this.pastEvents(this.moment())
+      } else {
+        events = this.filteredEvents
+      }
+      if (events !== undefined) {
         let count = 0
-        this.filteredEvents.filter((event) => {
+        events.filter((event) => {
           if (!event.type.match(type.code)) {
             return
           }

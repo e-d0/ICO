@@ -1,9 +1,9 @@
 <template>
   <div class="calendar--body">
   <!-- /.ico-list_item -->
-    <div class="iso-all">
+    <div v-if="events" class="iso-all">
 
-      <div v-if="events" v-for="(event,index) in events" :key="index" class="ico-list_item">
+      <div v-for="(event,index) in events" :key="index" class="ico-list_item">
         <div class="ico-list_item-logo" style="background-image: linear-gradient(225deg, #a64fff 0%, #743dad 100%)">
           <img src="../assets/img/ins-logo.png" alt="">
         </div>
@@ -19,17 +19,27 @@
           <span :class="['ico-list_item-event',`ico-list_item-event--${event.type}`]">{{ getTypeNameByCode(event.type) }}</span>
           <span class="ico-list_item-time-remain">Завершится через {{ moment(event.starts).fromNow() }}</span>
         </div>
+        <popover :popoverShow="popoverShow" :clickedEvent="event" ></popover>
       </div>
+
+
 
     </div>
   </div>
 </template>
 
 <script>
+import popover from './popover'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
   name: 'itemIcoAll',
+  components: { popover },
+  data () {
+    return {
+      popoverShow: false
+    }
+  },
   computed: {
     ...storeEvent.mapGetters({
       events: 'events'
@@ -129,8 +139,9 @@ export default {
         color: #8f96a1;
         font-family: @main-font;
         font-size: 14px;
-        font-weight: 500;
+        font-weight: 400;
         line-height: 16px;
+        text-transform: uppercase;
       }
       &-reminder {
         a {
@@ -152,45 +163,42 @@ export default {
         margin-left: auto;
         margin-right: 16px;
         text-align: right;
+        align-items: flex-end;
       }
       &-time-remain {
-        color: #707986;
         font-family: @main-font;
-        font-size: 12px;
+        color: #707986;
+        font-size: 11px;
         font-weight: 400;
         line-height: 12px;
+        letter-spacing: -0.05px;
       }
       &-event {
-        margin-left: auto;
-        margin-bottom: 6px;
-        padding: 3px 6px 2px;
-        background-color: #fff;
-        font-family: @main-font;
+        padding: 3px 4px 2px;
+        color: #ffffff;
+        font-family: 'Roboto', sans-serif;
         font-size: 11px;
         font-weight: 700;
         line-height: 11px;
         text-transform: uppercase;
         letter-spacing: 0.28px;
         white-space: nowrap;
+        border-radius: 2px;
+        margin-bottom: 2px;
         &--pre_ico {
-          border: 1px solid @pre-ico;
-          color: @pre-ico;
+          background-color: @pre-ico;
         }
         &--KYC {
-          border: 1px solid @KYC;
-          color: @KYC;
+          background-color: @KYC;
         }
         &--ending_ico {
-          border: 1px solid @ending-ico;
-          color: @ending-ico;
+          background-color: @ending-ico;
         }
         &--white_list {
-          border: 1px solid @white-list;
-          color: @white-list;
+          background-color: @white-list;
         }
         &--start_ico {
-          border: 1px solid @start-ico;
-          color: @start-ico;
+          background-color: @start-ico;
         }
       }
     }

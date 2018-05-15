@@ -1,5 +1,5 @@
 <template>
-  <div :class="['timeline timeline--calendar', {'sideGradient': sideGradient }]">
+  <div :class="['timeline timeline--calendar', {'sideGradient': showWeek === true && sideGradient === true }]">
 
     <div class="timeline_top-line">
       <div class="timeline_date">
@@ -18,7 +18,7 @@
     </div>
 
     <keep-alive>
-      <component :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent()"></component>
+      <component ref="event-body" :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent()"></component>
     </keep-alive>
 
     <div class="col-md-12 scheduler__main">
@@ -75,7 +75,7 @@ export default {
       acceptedDate: null,
       clickedEvent: null,
       showWeek: true,
-      sideGradient: true
+      sideGradient: false
     }
   },
   computed: {
@@ -86,13 +86,19 @@ export default {
     }),
     headerDates () {
       const dates = this.dates
-      return `${this.$moment(dates[0]).format('D')} - ${this.$moment(dates[dates.length - 1]).format('D MMMM')}`
+      let start = this.$moment(dates[0])
+      let end = this.$moment(dates[dates.length - 1])
+      return start.isSame(end) ? `${start.format('D MMMM')}` : `${start.format('D')} - ${end.format('D MMMM')}`
+    }
+  },
+  watch: {
+    dates: function () {
+      this.dates.length > 6 ? this.sideGradient = true : this.sideGradient = false
     }
   },
   methods: {
     currentTabComponent: function () {
       if (this.showWeek === true) {
-        this.sideGradient = true
         return 'itemWeek'
       } else {
         this.sideGradient = false
@@ -168,6 +174,8 @@ export default {
     EventBus.$on('item-click', this.itemClick)
     EventBus.$on('date-click', this.dateClick)
     EventBus.$on('call:addEventForm', this.openAddFormModal)
+  },
+  mounted () {
   },
   destoryed () {
     EventBus.$off()
@@ -270,6 +278,7 @@ export default {
     &_date {
       display: flex;
       flex-direction: column;
+      margin-right: auto;
       &--next-day {
         margin-left: 50px;
       }
@@ -336,7 +345,6 @@ export default {
       /*}*/
     }
     .radio-buttons {
-      margin-left: auto;
       label {
         b {
           display: block;

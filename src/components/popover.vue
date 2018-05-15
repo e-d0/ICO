@@ -248,10 +248,7 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
-  .bs-popover-left .arrow::before,
-  .bs-popover-auto[x-placement^="left"] .arrow::before{
-    border: none;
-  }
+
   .popover {
     margin: 0;
     padding: 0;

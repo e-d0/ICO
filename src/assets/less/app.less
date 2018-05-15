@@ -597,7 +597,6 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
     }
   }
   .radio-buttons {
-    margin-left: auto;
     label {
       b {
         display: block;
@@ -920,10 +919,14 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
 }
 
 /*===============POPOVER================*/
+
 .popover {
   max-width: 350px !important;
   border: none!important;
   & .arrow{
+    &::before{
+      border: none!important;
+    }
     z-index: 1;
   }
 }

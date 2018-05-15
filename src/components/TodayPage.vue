@@ -6,7 +6,7 @@
 
       <div class="col-md-12 col-lg-3">
         <div class="filter">
-          <schedulerFilter></schedulerFilter>
+          <schedulerFilter :actual.sync="actual"></schedulerFilter>
           <CurrentEvents></CurrentEvents>
         </div>
       </div>
@@ -19,11 +19,19 @@
               <span class="timeline_date-day">{{ moment().format('dddd')}} ,{{ moment().format('H:mm')}},({{moment.utc().format('z')}})</span>
             </div>
 
+            <div class="view-buttons">
+
+              <a :class="['view-1',{ active: currentTabComponent === 'TodayDay' }]" @click="currentTabComponent = 'TodayDay'"></a>
+
+              <a :class="['view-2',{ active: currentTabComponent === 'itemIcoAll' }]" @click="currentTabComponent = 'itemIcoAll'"></a>
+
+            </div>
+
             <div class="radio-buttons">
 
-              <a :class="['switch_btn','btn_left',{ active: currentTabComponent === 'TodayDay' }]" @click="currentTabComponent = 'TodayDay'">Только мои ICO</a>
+              <a href="#" @click.prevent="" :class="['switch_btn','btn_left']">Только мои ICO</a>
 
-              <a :class="['switch_btn','switch','btn_right',{ active: currentTabComponent === 'itemIcoAll' }]" @click="currentTabComponent = 'itemIcoAll'">Все ICO</a>
+              <a href="#" @click.prevent="" :class="['switch_btn','switch','btn_right']" >Все ICO</a>
 
             </div>
           </div>
@@ -34,8 +42,10 @@
                     <component  :class="[{'first': index === 0}]"
                                 :itemRender.sync="itemRender"
                                 :preventMultiStack="true"
-                                :date="item"
+                                :date="moment(item).toDate()"
+                                :startHour="isFirstDay(index)"
                                 :is="'TodayDay'"
+                                :index="index"
                                 ></component>
           </keep-alive >
           <keep-alive v-else >
@@ -47,6 +57,12 @@
               class="show-more"
               @click.prevent="showMore()">
             Показать еще 24 часа</a>
+          <a  v-if="this.currentTabComponent === 'TodayDay' && localDatesStorage.length > 1"
+              href="#"
+              style="float: right;"
+              class="show-more"
+              @click.prevent="hideLast()">
+            Скрыть последние 24 часа</a>
 
         </div>
       </div>
@@ -65,8 +81,7 @@ import schedulerFilter from './schedulerFilter'
 import theEvent from './TheEvent'
 import TodayDay from './TodayDay'
 import CurrentEvents from './CurrentEvents'
-import Vuex from 'vuex'
-const storeEvent = Vuex.createNamespacedHelpers('event')
+import { EventBus } from './eventbus'
 export default {
   name: 'BusinessForToday',
   components: { tplHeader, tplFooter, schedulerFilter, CurrentEvents, itemIcoAll, theEvent, TodayDay },
@@ -78,25 +93,36 @@ export default {
           item, index
         } })
       },
-      localDatesStorage: [],
-      currentTabComponent: 'TodayDay'
+      localDatesStorage: [this.moment().toISOString()],
+      currentTabComponent: 'TodayDay',
+      actual: true
     }
   },
   computed: {
-    ...storeEvent.mapGetters({
-      events: 'events',
-      filteredEvents: 'filteredEvents',
-      dates: 'dates'
-    })
   },
   methods: {
+    /**
+     * Если первый день, возвращаем стартовый час
+     * */
+    isFirstDay (index) {
+      if (index === 0) return parseInt(this.moment().format('H'))
+    },
+    switchEvents (val) {
+      this.actual = (val === 'true')
+    },
     /**
      * Добавляем в массив дату для нового компонента
      * */
     showMore () {
-      let date = this.localDatesStorage[this.localDatesStorage.length - 1].toISOString()
-      console.log('<><><><><><><><><><', date)
-      this.localDatesStorage.push(new Date(this.moment(date).add(1, 'days')))
+      const date = this.localDatesStorage[this.localDatesStorage.length - 1]
+      let newDate = this.moment(date).add(1, 'days').toISOString()
+      this.localDatesStorage.push(newDate)
+    },
+    /**
+     * Удаляем последнюю дату из массива ,а заодно и компонент
+     * */
+    hideLast () {
+      this.localDatesStorage.pop()
     },
     /**
      * Получаем события с сервера через хранилище store
@@ -118,20 +144,52 @@ export default {
     /**
      * Устанавливаем текущую дату в storage
      * */
-    this.$store.dispatch({
-      type: 'event/setDates',
-      data: [this.moment().toISOString()]
-    })
   },
   created () {
     this.getEvents()
-    this.localDatesStorage = this.getDates()
+    EventBus.$on('filter:event', this.switchEvents)
   }
 }
 </script>
 
 <style lang="less">
   @import "../assets/less/vars";
+  .view-buttons{
+    margin-left: auto;
+    margin-right: 32px;
+    margin-bottom: 12px;
+    .view-1{
+      display: inline-block;
+      width: 24px;
+      height: 15px;
+      background-image: @img-view_1;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      cursor: pointer;
+      &.active,
+      &:hover,
+      &:focus{
+        background-image: @img-view_1-active;
+      }
+    }
+    .view-2{
+      margin-left: 20px;
+      display: inline-block;
+      width: 24px;
+      height: 15px;
+      background-image: @img-view_2;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      cursor: pointer;
+      &.active,
+      &:hover,
+      &:focus{
+        background-image: @img-view_2-active;
+      }
+    }
+  }
   .calendar__today_item.first .timeline_item-head{
     display: none;
   }
@@ -219,7 +277,6 @@ export default {
     }
   }
   .radio-buttons {
-    margin-left: auto;
     label {
       b {
         display: block;
@@ -333,6 +390,8 @@ export default {
         z-index: 1;
         margin-bottom: 8px;
         margin-top: 26px;
+        box-shadow: none;
+        border: none;
       }
       position: relative;
       /*display: flex;*/
