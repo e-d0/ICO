@@ -2,16 +2,16 @@
   <div id="app">
     <tplHeader></tplHeader>
       <div class="container-fluid">
-        <div class="wrapper__clendar">
+        <div class="row">
 
-                <div class="left-col">
+              <div class="col-md-12 col-lg-3">
                     <div class="filter">
                       <calendar-date-picker></calendar-date-picker>
                       <events-filter :actual="undefined"></events-filter>
                       <button class="sync_btn">Sync ICO Calendar</button>
                     </div>
                 </div>
-                <div class="right-col">
+              <div class="col-md-12 col-lg-9">
                     <calendar-body v-if="filteredEvents"
                                     :itemRender.sync="itemRender"
                                     :dates="dates"

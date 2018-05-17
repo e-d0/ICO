@@ -141,7 +141,6 @@ export default {
     flex-basis: 100%;
     box-shadow: 0 4px 4px rgba(51, 51, 51, 0.1);
     border-radius: 8px;
-    margin: 0px 10px;
     background-color: #ffffff;
     overflow-x: auto;
     &--header-days{
