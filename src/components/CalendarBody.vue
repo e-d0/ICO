@@ -13,9 +13,15 @@
 
           <a href="#" :class="['switch_btn','switch','btn_right',{ active: showWeek === false }]" @click="showWeek = false">Месяц</a>
 
-        <a href="#" class="btn" @click="openAddFormModal()">+ Добавить ICO</a>
+        <!--<a href="#" class="btn" @click="openAddFormModal()">+ Добавить ico</a>-->
+          <b-btn v-b-toggle.formICO variant="primary">+ Добавить ICO</b-btn>
+
       </div>
+
     </div>
+    <b-collapse id="formICO" class="">
+      <formAddICO></formAddICO>
+    </b-collapse>
 
     <keep-alive>
       <component ref="event-body" :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent()"></component>
@@ -48,8 +54,9 @@
 </template>
 
 <script>
-import itemWeek from './itemWeek'
-import itemMonth from './itemMonth'
+import CalendarWeek from './CalendarWeek'
+import CalendarMonth from './CalendarMonth'
+import formAddICO from './formAddICO'
 import { EventBus } from './eventbus'
 import modal from './modalBody'
 import formConfirm from './formConfirm'
@@ -59,8 +66,8 @@ import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 
 export default {
-  name: 'Schedule',
-  components: { itemWeek, itemMonth, popover, FormAddEvent, modal, formConfirm },
+  name: 'CalendarBody',
+  components: { CalendarWeek, CalendarMonth, popover, FormAddEvent, modal, formConfirm, formAddICO },
   props: {
     itemRender: Function
   },
@@ -99,13 +106,11 @@ export default {
   methods: {
     currentTabComponent: function () {
       if (this.showWeek === true) {
-        return 'itemWeek'
+        return 'CalendarWeek'
       } else {
         this.sideGradient = false
-        return 'itemMonth'
+        return 'CalendarMonth'
       }
-    },
-    openPopup () {
     },
     openAddFormModal (date) {
       this.acceptedDate = date || new Date()
@@ -154,8 +159,6 @@ export default {
       console.log('item drop func')
     },
     itemClick (e, item, eventId) {
-      // this.popoverShow = true
-      // this.clickedEvent = {item: item, eventId}
       console.log('[event-click]:', item, eventId)
       this.$emit('event-click', e, item)
     },
@@ -185,8 +188,14 @@ export default {
 
 <style lang="less" >
   @import "../assets/less/vars";
+  #formICO{
+    width: 100%;
+    margin-top: 32px;
+  }
+
   .timeline_top-line{
-    width: 75%;
+    /*width: 75%;*/
+    width: 100%;
     min-width: 900px;
   }
   .calendar--body{

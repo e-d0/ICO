@@ -12,8 +12,8 @@
           <span class="ico-list_item-time">{{ moment(event.starts).format('HH:mm') }}</span>
         </div>
         <div class="ico-list_item-reminder">
-          <a href="#">Добавить напоминание</a>
-          <a href="#">Добавить в календарь</a>
+          <a :id="`event-${event.id}`" @click.prevent="" :class="['item-reminder_btn','reminder', { 'alerts': event.alerts !== undefined && event.alerts.length}]" href="#">Добавить напоминание</a>
+          <a @click.prevent="" class="item-reminder_btn calendar" href="#">Добавить в календарь</a>
         </div>
         <div class="ico-list_item-data">
           <span :class="['ico-list_item-event',`ico-list_item-event--${event.type}`]">{{ getTypeNameByCode(event.type) }}</span>
@@ -21,8 +21,6 @@
         </div>
         <popover :popoverShow="popoverShow" :clickedEvent="event" ></popover>
       </div>
-
-
 
     </div>
   </div>
@@ -33,7 +31,7 @@ import popover from './popover'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
-  name: 'itemIcoAll',
+  name: 'TodayEventsAll',
   components: { popover },
   data () {
     return {
@@ -59,7 +57,7 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
-  //===================================================ICO-LIST=======================//
+  //===================================================ico-LIST=======================//
   .iso-all{
     width: 100%;
   }
@@ -144,16 +142,71 @@ export default {
         text-transform: uppercase;
       }
       &-reminder {
-        a {
-          margin-right: 40px;
-          color: @main-color;
+        .item-reminder_btn{
+          /*margin-right: 40px;*/
           font-family: @main-font;
+          padding: 6px 8px 4px 23px;
+          box-shadow: 0 2px 0 #3b962f;
+          border-radius: 2px;
+          background-color: #44af36;
+          color: #fff;
+          position: relative;
+          cursor: pointer;
+          height: 22px;
+          text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
           font-size: 12px;
-          font-weight: 400;
+          font-weight: 500;
           line-height: 12px;
-          text-decoration: underline;
-          &:hover {
+          /* Text style for "Add remind" */
+          letter-spacing: -0.06px;
+          &:hover,
+          &:focus,
+          &:active{
+            position: relative;
             text-decoration: none;
+            background-color: #45af37;
+            color: #fff!important;
+            box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+          }
+          &.reminder::before{
+            content: "";
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            left: 7px;
+            top: 8px;
+            background-image: @img-bell-white;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 11;
+          }
+          &.calendar::before{
+            content: "";
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            left: 7px;
+            top: 8px;
+            background-image: @img-calendar-white;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 11;
+          }
+          &.reminder.alerts{
+            background: white;
+            border: 1px solid #45af37;
+            color: #45af37;
+            box-shadow: none;
+            position: relative;
+            top: 1px;
+            &:hover,
+            &:focus,
+            &:active{
+              color: #45af37!important;
+            }
+          }
+          &.reminder.alerts::before{
+            background-image: @img-calendar-approved;
           }
         }
       }

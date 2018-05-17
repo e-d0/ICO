@@ -65,10 +65,7 @@ export default {
        * проверка, совпадает ли дата события и дата объекта ячейки
        * //TODO Раскоментировать краткое выражение перед сдачей
        * */
-      // return this.filteredEvents().length ? this.filteredEvents().filter(item => isSameDay(item.date, this.date)) : []
       if ((this.filteredEvents() !== undefined && this.filteredEvents().length) && this.filteredEvents().length) {
-        // console.log('dateail length true', this.filteredEvents().filter(item => isSameDay(item.date, this.date)))
-        // console.log('dateal length true')
         return this.sortedDates(this.filteredEvents().filter(item => isSameDay(item.date, this.date)))
       } else {
         return []

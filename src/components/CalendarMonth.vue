@@ -14,8 +14,8 @@
             <div :class="checkDate(moment(day.date))">{{ moment(day.date).format('D') }}</div>
 
             <template v-if="day.events.length">
-              <itemMonthEvent :events="day.events">
-              </itemMonthEvent>
+              <calendar-month-event :events="day.events">
+              </calendar-month-event>
             </template>
 
           </div>
@@ -29,12 +29,12 @@
 </template>
 
 <script>
-import itemMonthEvent from './itemMonthEvent'
+import CalendarMonthEvent from './CalendarMonthEvent'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
-  name: 'itemMonth',
-  components: { itemMonthEvent },
+  name: 'CalendarMonth',
+  components: { CalendarMonthEvent },
   data () {
     return {
       itemsPerGroup: 3
@@ -126,7 +126,6 @@ export default {
           })
         })
       }
-      console.log('><><><><><><>', calendar)
       return calendar
     }
   },

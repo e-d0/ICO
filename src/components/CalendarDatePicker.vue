@@ -22,7 +22,7 @@ import { createDays } from './eventbus'
  * DOCS https://vcalendardocs.netlify.com/#calendar
  * */
 export default {
-  name: 'calendar',
+  name: 'CalendarDatePicker',
   props: {
   },
   data () {

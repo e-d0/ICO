@@ -1,7 +1,7 @@
 <template>
   <div class="current-events">
-    <legend class="dropdown" v-b-toggle="'collapsecurrent'">Текущие события</legend>
-    <b-collapse id="collapsecurrent" visible>
+    <legend class="dropdown" v-b-toggle="'formActualFilter'">Текущие события</legend>
+    <b-collapse id="formActualFilter" visible>
     <div class="radio-buttons">
       <label>
         <input name="event-radio-actual" value='true' type="radio" v-model="actual" @change="changeEvent">
@@ -40,7 +40,7 @@ import { EventBus } from './eventbus'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
-  name: 'CurrentEvents',
+  name: 'eventsFilterActual',
   data () {
     return {
       eventTempStorage: null,
@@ -175,6 +175,7 @@ export default {
         text-transform: uppercase;
         letter-spacing: 0.28px;
         white-space: nowrap;
+        border-radius: 2px;
         &--pre_ico {
           background-color: @pre-ico;
         }

@@ -8,10 +8,12 @@ const state = {
     'types': [],
     'names': []
   },
-  dates: []
+  dates: [],
+  ICO: []
 }
 
 const getters = {
+  ICO: state => state.ICO,
   events: state => state.events,
   /**
    * Актуальные события с заданного времени
@@ -24,9 +26,13 @@ const getters = {
     } else {
       currTime = time
     }
-
+    /**
+     * Фильр по времени и по типу
+     * */
     return arr.filter(event => {
-      if (moment(event.ends) > currTime) return event
+      if (state.filters.types instanceof Array && state.filters.types.includes(event.type) && moment(event.ends) > currTime) {
+        return event
+      }
     }
     )
   },
@@ -42,8 +48,13 @@ const getters = {
       currTime = time
     }
 
+    /**
+     * Фильр по времени и по типу
+     * */
     return arr.filter(event => {
-      if (moment(event.ends) < currTime) return event
+      if (state.filters.types instanceof Array && state.filters.types.includes(event.type) && moment(event.ends) < currTime) {
+        return event
+      }
     }
     )
   },
@@ -75,7 +86,7 @@ const getters = {
    * Фильтрация по собранным данным. Оптимизировал под минимум операций, как мог.
    * */
   filteredEvents: (state) => {
-    if (state.filters.types.length !== 0) {
+    if (state.filters.types !== undefined && state.filters.types.length !== 0) {
       return state.events.filter(event => {
         /**
          * фильтр по имени
@@ -104,6 +115,18 @@ const getters = {
 }
 
 const actions = {
+  getICO (context) {
+    return new Promise((resolve, reject) => {
+      axios.get(context.rootGetters.api_url + '/ICO').then((response) => {
+        console.log('promise at events action DONE')
+        context.commit('getICO', response.data)
+        resolve(response)
+      }, error => {
+        handleXHRerrors(error)
+        reject(error)
+      })
+    })
+  },
   setDates (context, payload) {
     console.log('set date to storage', payload)
     context.commit('setDates', payload.data)
@@ -210,6 +233,10 @@ let handleXHRerrors = function (error) {
 }
 
 const mutations = {
+  getICO: (state, objEvent) => {
+    state.ICO = objEvent
+    console.log('write object ICOs to State', objEvent)
+  },
   setDates: (state, objEvent) => {
     state.dates = objEvent
   },

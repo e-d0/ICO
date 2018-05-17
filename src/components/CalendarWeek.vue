@@ -1,11 +1,11 @@
 <template>
-      <itemDay  :itemRender.sync="itemRender"
-                 ></itemDay>
+      <calendar-day  :itemRender.sync="itemRender"
+                 ></calendar-day>
 </template>
 
 <script>
 import moment from 'moment'
-import itemDay from './itemDay'
+import CalendarDay from './CalendarDay'
 /**
  * Приводим дату в соотетствие с форматом в браузере пользователя
  * */
@@ -13,8 +13,8 @@ const locale = window.navigator.userLanguage || window.navigator.language
 moment.locale(locale)
 
 export default {
-  name: 'itemWeek',
-  components: { itemDay },
+  name: 'Week',
+  components: { CalendarDay },
   props: {
     itemRender: Function
   },

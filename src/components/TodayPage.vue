@@ -6,8 +6,8 @@
 
       <div class="col-md-12 col-lg-3">
         <div class="filter">
-          <schedulerFilter :actual.sync="actual"></schedulerFilter>
-          <CurrentEvents></CurrentEvents>
+          <events-filter :actual.sync="actual"></events-filter>
+          <events-filter-actual></events-filter-actual>
         </div>
       </div>
       <div class="col-md-12 col-lg-9">
@@ -23,7 +23,7 @@
 
               <a :class="['view-1',{ active: currentTabComponent === 'TodayDay' }]" @click="currentTabComponent = 'TodayDay'"></a>
 
-              <a :class="['view-2',{ active: currentTabComponent === 'itemIcoAll' }]" @click="currentTabComponent = 'itemIcoAll'"></a>
+              <a :class="['view-2',{ active: currentTabComponent === 'TodayEventsAll' }]" @click="currentTabComponent = 'TodayEventsAll'"></a>
 
             </div>
 
@@ -41,7 +41,6 @@
                       :key="index">
                     <component  :class="[{'first': index === 0}]"
                                 :itemRender.sync="itemRender"
-                                :preventMultiStack="true"
                                 :date="moment(item).toDate()"
                                 :startHour="isFirstDay(index)"
                                 :is="'TodayDay'"
@@ -49,7 +48,7 @@
                                 ></component>
           </keep-alive >
           <keep-alive v-else >
-            <component :is="'itemIcoAll'"></component>
+            <component :is="'TodayEventsAll'"></component>
           </keep-alive>
 
           <a  v-if="this.currentTabComponent === 'TodayDay'"
@@ -76,15 +75,15 @@
 <script>
 import tplHeader from './TheHeader'
 import tplFooter from './TheFooter'
-import itemIcoAll from './itemIcoAll'
-import schedulerFilter from './schedulerFilter'
+import TodayEventsAll from './TodayEventsAll'
+import eventsFilter from './eventsFilter'
 import theEvent from './TheEvent'
 import TodayDay from './TodayDay'
-import CurrentEvents from './CurrentEvents'
+import eventsFilterActual from './eventsFilterActual'
 import { EventBus } from './eventbus'
 export default {
-  name: 'BusinessForToday',
-  components: { tplHeader, tplFooter, schedulerFilter, CurrentEvents, itemIcoAll, theEvent, TodayDay },
+  name: 'TodayPage',
+  components: { tplHeader, tplFooter, eventsFilter, eventsFilterActual, TodayEventsAll, theEvent, TodayDay },
   data () {
     return {
       itemRender (item, index) {

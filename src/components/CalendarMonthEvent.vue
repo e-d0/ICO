@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: 'itemMonthEvent',
+  name: 'CalendarMonthEvent',
   data () {
     return {
       index: 0

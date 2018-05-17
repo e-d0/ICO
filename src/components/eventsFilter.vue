@@ -2,8 +2,8 @@
   <div class="events-filter">
     <form id="filter" autocomplete="off">
       <fieldset>
-        <legend class="dropdown" v-b-toggle="'collapse1'">ФИЛЬТР СОБЫТИЙ</legend>
-        <b-collapse id="collapse1" visible>
+        <legend class="dropdown" v-b-toggle="'formEventsFilter'">ФИЛЬТР СОБЫТИЙ</legend>
+        <b-collapse id="formEventsFilter" visible>
           <!--<multiselect class="" type="text"-->
                                       <!--:value="names"-->
                                       <!--:options="events"-->
@@ -58,7 +58,7 @@ import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 
 export default {
-  name: 'schedulerFilter',
+  name: 'eventsFilter',
   components: { multiselect },
   props: {
     actual: Boolean
@@ -199,8 +199,8 @@ export default {
       }
     }
   }
-  span.multiselect__option.multiselect__option--highlight:after,
-  span.multiselect__option.multiselect__option--highlight{
+  #formEventsFilter span.multiselect__option.multiselect__option--highlight:after,
+  #formEventsFilter span.multiselect__option.multiselect__option--highlight{
     background: @accent-color!important;
   }
 
@@ -253,7 +253,7 @@ export default {
         }
         .dropdown {
           &::before {
-            right: 5px;
+            right: 0px;
             top: 7px;
           }
         }

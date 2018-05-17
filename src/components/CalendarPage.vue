@@ -6,16 +6,16 @@
 
                 <div class="left-col">
                     <div class="filter">
-                      <scheduler-calendar></scheduler-calendar>
-                      <schedulerFilter></schedulerFilter>
+                      <calendar-date-picker></calendar-date-picker>
+                      <events-filter :actual="undefined"></events-filter>
                       <button class="sync_btn">Sync ICO Calendar</button>
                     </div>
                 </div>
                 <div class="right-col">
-                    <scheduler-main v-if="filteredEvents"
+                    <calendar-body v-if="filteredEvents"
                                     :itemRender.sync="itemRender"
                                     :dates="dates"
-                                    :events="filteredEvents"></scheduler-main>
+                                    :events="filteredEvents"></calendar-body>
                 </div>
 
         </div>
@@ -29,15 +29,15 @@ import tplHeader from './TheHeader'
 import tplFooter from './TheFooter'
 import theEvent from './TheEvent'
 import { EventBus, countDiffBetweenDates } from './eventbus'
-import schedulerFilter from './schedulerFilter'
-import SchedulerMain from './SchedulerMain'
-import SchedulerCalendar from './SchedulerCalendar'
+import eventsFilter from './eventsFilter'
+import CalendarBody from './CalendarBody'
+import CalendarDatePicker from './CalendarDatePicker'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 
 export default {
-  name: 'FrontPage',
-  components: { schedulerFilter, SchedulerMain, SchedulerCalendar, tplHeader, tplFooter, theEvent },
+  name: 'CalendarPage',
+  components: { eventsFilter, CalendarBody, CalendarDatePicker, tplHeader, tplFooter, theEvent },
   data () {
     return {
       itemRender (item, index, multi) {

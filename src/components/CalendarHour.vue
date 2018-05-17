@@ -7,22 +7,8 @@
     <span v-if="!checkForDateObj(hour)">{{ hour }}</span>
     <!--<span v-else>{{ hour }}</span>-->
 
-    <template v-if="preventMultiStack">
-        <template v-if="details.length">
-          <event v-for="(item) in details"
-                 :style="{ zIndex: 1 }"
-                 :key="item.id"
-                 :item="item"
-                 :type="item.type"
-                 :itemRender="itemRender"
-                 @item-dragstart="dragItem"
-                 :date="date"></event>
-        </template>
-      </template>
-
-    <template v-if="!preventMultiStack">
-      <event v-if="details[currentEvent.toString()]"
-               :class="[{ 'last':isLastElem() }]"
+    <template v-if="details[currentEvent.toString()]">
+      <event   :class="[{ 'last':isLastElem() }]"
                :style="{ zIndex: 1+currentEvent.toString() }"
                :key="details[currentEvent.toString()].id"
                :item="details[currentEvent.toString()]"
@@ -69,8 +55,7 @@ export default {
     date: Date,
     hour: Date,
     index: Number,
-    itemRender: Function,
-    preventMultiStack: Boolean
+    itemRender: Function
   },
   methods: {
     countEvents () {
@@ -147,10 +132,7 @@ export default {
        * проверка, совпадает ли дата события и дата объекта ячейки
        * //TODO Раскоментировать краткое выражение перед сдачей
        * */
-      // return this.filteredEvents.length ? this.filteredEvents.filter(item => isSameDay(item.date, this.date)) : []
       if ((this.filteredEvents !== undefined && this.filteredEvents.length) && this.filteredEvents.length) {
-        // console.log('dateail length true', this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
-        // console.log('dateal length true')
         return this.sortedDates(this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
       } else {
         return []

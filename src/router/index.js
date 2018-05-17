@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import FrontPage from '@/components/FrontPage'
-import BusinessForToday from '@/components/TodayPage'
+import CalendarPage from '@/components/CalendarPage'
+import TodayPage from '@/components/TodayPage'
 
 Vue.use(Router)
 /**
@@ -13,12 +13,12 @@ export default new Router({
     {
       path: '/calendar',
       name: 'FrontPage',
-      component: FrontPage
+      component: CalendarPage
     },
     {
       path: '/',
-      name: 'businessForToday',
-      component: BusinessForToday
+      name: 'TodayPage',
+      component: TodayPage
     }
   ]
 })

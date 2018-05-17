@@ -4,12 +4,21 @@
     <div class="time-group">
       <div class="empty-slot">
       </div>
+      <div class="hours-array">
+        <div class="online_time" v-bind:style="{ top: offset + 'px' }">
+          <span class="dot"></span>
+          <span class="line"></span>
+        </div>
       <div class="timeline_item timeline_item-time" v-for="(hour, index) in emptyHoursArray" :key="index" >
 
-        <span v-if=" moment.locale() === 'ru'">{{ hour.format('HH:mm') }}</span>
+        <span v-if=" moment.locale() === 'ru'">
+          {{ hour.format('HH:mm') }}
+
+        </span>
         <span v-else>{{ hour.format('hh a') }}</span>
 
       </div>
+    </div>
     </div>
     <v-touch :swipe-options="{ direction: 'horizontal', threshold: 70 }"
              :pan-options = "{ direction: 'vertical'}"
@@ -36,11 +45,10 @@
                v-for="(hour,ind) in generateHours(dayItem)"
                :key="ind"
                v-bind:class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']">
-                <itemHour :hour="hour"
+                <calendar-hour :hour="hour"
                           :index="updatedIndex(dayInd, ind)"
                           :itemRender.sync="itemRender"
-                          :preventMultiStack="preventMultiStack"
-                          :date="updatedDayCell(hour)"></itemHour>
+                          :date="updatedDayCell(hour)"></calendar-hour>
           </div>
         </div>
 
@@ -52,7 +60,7 @@
 
 <script>
 import moment from 'moment'
-import itemHour from './itemHour'
+import CalendarHour from './CalendarHour'
 import { generateHours } from './eventbus'
 import Vuex from 'vuex'
 import TWEEN from '@tweenjs/tween.js'
@@ -67,15 +75,14 @@ export default {
   name: 'Day',
   props: {
     itemRender: Function,
-    preventMultiStack: Boolean,
     dayIndex: Number
   },
-  components: { itemHour },
+  components: { CalendarHour },
   data () {
     return {
       moment: moment,
-      currentTime: null,
-      emptyHoursArray: generateHours()
+      emptyHoursArray: generateHours(),
+      offset: 0
     }
   },
   computed: {
@@ -92,6 +99,20 @@ export default {
     }
   },
   methods: {
+    timeOffset: function () {
+      this.offset = this.calcTimeOffset()
+    },
+    /**
+     * Считам отсутп в минутах
+     * */
+    calcTimeOffset () {
+      if (this.$el.querySelector('.hours-array') !== undefined) {
+        let elHeight = this.$el.querySelector('.hours-array').clientHeight
+        let pixelPerMinute = (elHeight / this.emptyHoursArray.length) / 60
+        let offsetHeight = ((this.moment().get('hour') * 60) + (this.moment().get('minute'))) * pixelPerMinute
+        return Math.round(offsetHeight)
+      }
+    },
     onSwipeLeft (el) {
       // получаем элемент из DOM
       let elem = this.$el.querySelector('#events')
@@ -129,16 +150,9 @@ export default {
       animate()
     },
     /**
-     * Обновляем текущее время
-     * */
-    updateCurrentTime () {
-      this.currentTime = moment().format('LTS')
-    },
-    /**
      * Генерируем часы с датой для каждой ячейки
      * */
     generateHours (day) {
-      // this.hoursArray = generateHours(this.day)
       return generateHours(day)
     },
     /**
@@ -156,13 +170,44 @@ export default {
     }
   },
   created () {
-    this.currentTime = moment().format('LTS')
-    setInterval(() => this.updateCurrentTime(), 1 * 1000)
+    /**
+     * Запускаем сетчик времени. Раз в минуту обновляет отступ линии времени.
+     * */
+    setInterval(() => this.timeOffset(), 60000)
+  },
+  mounted () {
+    this.timeOffset()
   }
 }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+  .hours-array{
+    position: relative;
+  }
+  .online_time{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+    left: 68%;
+    .dot{
+      width: 9px;
+      height: 9px;
+      border-radius: 5px;
+      background-image: linear-gradient(199deg, #b4ec51 0%, #429321 100%);
+    }
+    .line{
+      width: 100vw;
+      height: 1px;
+      background-color: #7ed321;
+      position: relative;
+      top: 4px;
+    }
+  }
+
   .timeline_item {
     cursor: -webkit-grab;
   }
