@@ -717,19 +717,19 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
         background-image: linear-gradient(180deg, rgba(89, 182, 178, 0.3) 0%, rgba(89, 182, 178, 0) 100%);
         z-index: 11;
       }
-      .timeline_event-type::before{
-        content: "";
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        width: 16px;
-        height: 16px;
-        bottom: 1px;
-        background-image: @img-clock-KYC;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain;
-      }
+      //.timeline_event-type::before{
+      //  content: "";
+      //  position: relative;
+      //  display: inline-block;
+      //  vertical-align: middle;
+      //  width: 16px;
+      //  height: 16px;
+      //  bottom: 1px;
+      //  background-image: @img-clock-KYC;
+      //  background-position: center;
+      //  background-repeat: no-repeat;
+      //  background-size: contain;
+      //}
     }
     &--white_list {
       position: relative;
@@ -745,19 +745,19 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
         background-image: linear-gradient(180deg, rgba(255, 129, 158, 0.3) 0%, rgba(255, 129, 158, 0) 100%);
         z-index: 11;
       }
-      .timeline_event-type::before{
-        content: "";
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        width: 16px;
-        height: 16px;
-        bottom: 1px;
-        background-image: @img-clock-white-list;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain;
-      }
+      //.timeline_event-type::before{
+      //  content: "";
+      //  position: relative;
+      //  display: inline-block;
+      //  vertical-align: middle;
+      //  width: 16px;
+      //  height: 16px;
+      //  bottom: 1px;
+      //  background-image: @img-clock-white-list;
+      //  background-position: center;
+      //  background-repeat: no-repeat;
+      //  background-size: contain;
+      //}
     }
     &--ending_ico {
       position: relative;
@@ -773,19 +773,19 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
         background-image: linear-gradient(180deg, rgba(171, 149, 211, 0.3) 0%, rgba(171, 149, 212, 0) 100%);
         z-index: 11;
       }
-      .timeline_event-type::before{
-        content: "";
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        width: 16px;
-        height: 16px;
-        bottom: 1px;
-        background-image: @img-clock-iso-end;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain;
-      }
+      //.timeline_event-type::before{
+      //  content: "";
+      //  position: relative;
+      //  display: inline-block;
+      //  vertical-align: middle;
+      //  width: 16px;
+      //  height: 16px;
+      //  bottom: 1px;
+      //  background-image: @img-clock-iso-end;
+      //  background-position: center;
+      //  background-repeat: no-repeat;
+      //  background-size: contain;
+      //}
     }
     &--pre_ico {
       position: relative;
@@ -801,19 +801,19 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
         background-image: linear-gradient(180deg, rgba(247, 152, 27, 0.3) 0%, rgba(247, 152, 27, 0) 100%);
         z-index: 11;
       }
-      .timeline_event-type::before{
-        content: "";
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        width: 16px;
-        height: 16px;
-        bottom: 1px;
-        background-image: @img-clock-pre-iso;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain;
-      }
+      //.timeline_event-type::before{
+      //  content: "";
+      //  position: relative;
+      //  display: inline-block;
+      //  vertical-align: middle;
+      //  width: 16px;
+      //  height: 16px;
+      //  bottom: 1px;
+      //  background-image: @img-clock-pre-iso;
+      //  background-position: center;
+      //  background-repeat: no-repeat;
+      //  background-size: contain;
+      //}
     }
     &--start_ico {
       position: relative;
@@ -829,19 +829,19 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
         background-image: linear-gradient(180deg, rgba(69, 175, 54, 0.3) 0%, rgba(69, 175, 54, 0) 100%);
         z-index: 11;
       }
-      .timeline_event-type::before{
-        content: "";
-        position: relative;
-        display: inline-block;
-        vertical-align: middle;
-        width: 16px;
-        height: 16px;
-        bottom: 1px;
-        background-image: @img-clock-iso-start;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: contain;
-      }
+      //.timeline_event-type::before{
+      //  content: "";
+      //  position: relative;
+      //  display: inline-block;
+      //  vertical-align: middle;
+      //  width: 16px;
+      //  height: 16px;
+      //  bottom: 1px;
+      //  background-image: @img-clock-iso-start;
+      //  background-position: center;
+      //  background-repeat: no-repeat;
+      //  background-size: contain;
+      //}
     }
     &-data {
       display: flex;
@@ -869,6 +869,32 @@ label.checkbox input[type=checkbox]:checked + .ending_ico::after {
     }
     &-type {
       margin-right: 12px;
+      &.starts::before{
+        content: "";
+        position: relative;
+        display: inline-block;
+        vertical-align: middle;
+        width: 16px;
+        height: 16px;
+        bottom: 1px;
+        background-image: @img-clock-start;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: contain;
+      }
+      &.ends::before{
+          content: "";
+          position: relative;
+          display: inline-block;
+          vertical-align: middle;
+          width: 16px;
+          height: 16px;
+          bottom: 1px;
+          background-image: @img-clock-end;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       span {
         color: #ffffff;
         font-family: @main-font;

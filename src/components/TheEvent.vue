@@ -5,14 +5,14 @@
       <span class="timeline_event-time"> {{returnDate(item)}}
         <a v-if="item.alerts !== undefined
               && item.alerts.length
-              && item.alerts != null
-          " class="timeline_event-notification-bell"></a>
+              && item.alerts != null"
+              class="timeline_event-notification-bell"></a>
         <a v-if="(item.comment != null) && (item.comment !== '')" class="timeline_event-notification-message"></a>
       </span>
       <span class="timeline_event-name timeline_event-name--calendar">{{item.name}}</span>
 
     </div>
-    <div class="timeline_event-type">
+    <div :class="['timeline_event-type', {'starts': isStart === true }, {'ends': isStart === false}]">
       <template  v-if="index === null || index === undefined ">
         <span>{{ getTypeNameByCode() }}</span>
       </template>
@@ -21,7 +21,7 @@
          :class="['event_nav']"
          @click.stop.prevent="nextEvent()" >{{ index }}
     </div>
-    <popover :popoverShow="popoverShow" :clickedEvent="item" ></popover>
+    <popover :popoverShow="popoverShow" :clickedEvent="item" :isStart="isStart" ></popover>
 
   </div>
 </template>
@@ -35,7 +35,8 @@ export default {
   props: {
     item: Object,
     index: String,
-    multi: Boolean
+    multi: Boolean,
+    isStart: Boolean
   },
   data () {
     return {
@@ -52,7 +53,7 @@ export default {
       this.$parent.$emit('update:current')
     },
     returnDate: function (el) {
-      return this.$moment(el.starts).format('HH:mm')
+      return this.isStart ? this.$moment(el.starts).format('HH:mm') : this.$moment(el.endss).format('HH:mm')
     },
     onClose () {
       this.popoverShow = false

@@ -24,7 +24,7 @@
     </b-collapse>
 
     <keep-alive>
-      <component ref="event-body" :itemRender.sync="itemRender" :dates.sync="dates" v-bind:is="currentTabComponent()"></component>
+      <component ref="event-body" :dates.sync="dates" v-bind:is="currentTabComponent()"></component>
     </keep-alive>
 
     <div class="col-md-12 scheduler__main">
@@ -69,7 +69,6 @@ export default {
   name: 'CalendarBody',
   components: { CalendarWeek, CalendarMonth, popover, FormAddEvent, modal, formConfirm, formAddICO },
   props: {
-    itemRender: Function
   },
   data () {
     return {

@@ -13,7 +13,6 @@
                 </div>
               <div class="col-md-12 col-lg-9">
                     <calendar-body v-if="filteredEvents"
-                                    :itemRender.sync="itemRender"
                                     :dates="dates"
                                     :events="filteredEvents"></calendar-body>
                 </div>
@@ -27,7 +26,6 @@
 <script>
 import tplHeader from './TheHeader'
 import tplFooter from './TheFooter'
-import theEvent from './TheEvent'
 import { EventBus, countDiffBetweenDates } from './eventbus'
 import eventsFilter from './eventsFilter'
 import CalendarBody from './CalendarBody'
@@ -37,15 +35,9 @@ const storeEvent = Vuex.createNamespacedHelpers('event')
 
 export default {
   name: 'CalendarPage',
-  components: { eventsFilter, CalendarBody, CalendarDatePicker, tplHeader, tplFooter, theEvent },
+  components: { eventsFilter, CalendarBody, CalendarDatePicker, tplHeader, tplFooter },
   data () {
     return {
-      itemRender (item, index, multi) {
-        const h = this.$createElement
-        return h(theEvent, { props: {
-          item, index, multi
-        } })
-      }
     }
   },
   computed: {
@@ -97,7 +89,6 @@ export default {
      * Обработчик глобального события
      */
     EventBus.$on('update-events', this.getEvents)
-    // EventBus.$on('filter:change', this.filterEvents)
     EventBus.$on('event-dragend', this.changeDate)
     this.getEvents()
   },

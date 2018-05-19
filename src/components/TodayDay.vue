@@ -24,7 +24,6 @@
                  :key="ind"
                  v-bind:class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']">
               <TodayHour :hour="hour"
-                         :itemRender.sync="itemRender"
                          :index="updatedIndex(index, ind)"
                          :date="updatedDayCell(hour)"></TodayHour>
             </div>
@@ -51,7 +50,6 @@ export default {
   props: {
     index: null,
     date: null,
-    itemRender: Function,
     startHour: Number
   },
   components: { TodayHour },

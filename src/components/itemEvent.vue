@@ -1,21 +1,44 @@
 <script>
-
+import { isSameDay } from './eventbus'
+import theEvent from './TheEvent'
 export default {
   name: 'event',
+  components: { theEvent },
   props: {
     index: String,
     item: Object,
     date: Date,
     type: String,
-    itemRender: Function,
     multi: Boolean
   },
   data () {
     return {
-      text: 'event'
+      text: 'no-event-name',
+      itemRender (item, index, multi, isStart) {
+        const h = this.$createElement
+        return h(theEvent, { props: {
+          item, index, multi, isStart
+        } })
+      }
+    }
+  },
+  computed: {
+    eventID () {
+      return `event-${this.item.id}-${this.isStart() ? 'starts' : 'ends'}`
     }
   },
   methods: {
+    isStart () {
+      /**
+       * Проверка, является ли событие началом или окончанием
+       * */
+      if (this.date !== undefined &&
+        isSameDay(this.$moment(this.item.starts).toDate(), this.date)) {
+        return true
+      } else {
+        return false
+      }
+    },
     /**
      * Считаем отступ сверху в зависимости от
      * времени начала события в соответствии с заданным
@@ -36,7 +59,7 @@ export default {
       return (100 / 60) * offsetTop
     },
     onDrag (e) {
-      console.log('start item-dragstart')
+      console.log('start item-dragstart', e.gesture)
       this.$emit('item-dragstart', e, this.item, this.date, this.type)
     },
     onClick (e) {
@@ -53,7 +76,7 @@ export default {
       class: ['event', 'timeline_event', 'timeline_event--item'],
       attrs: {
         draggable: true,
-        id: this.item ? `event-${this.item.id}` : null
+        id: this.item ? this.eventID : null
       },
       style: {
         top: `${this.timeOffset()}%`
@@ -62,7 +85,7 @@ export default {
         dragstart: this.onDrag,
         click: this.onClick
       }
-    }, this.itemRender ? [this.itemRender(this.item, this.index, this.multi)] : [h('span', this.text)])
+    }, this.itemRender ? [this.itemRender(this.item, this.index, this.multi, this.isStart())] : [h('span', this.text)])
   },
   created () {
     this.timeOffset()

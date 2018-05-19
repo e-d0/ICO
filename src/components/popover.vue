@@ -1,6 +1,6 @@
 <template>
 
-  <b-popover :target="`event-${clickedEvent.id}`"
+  <b-popover :target="`${eventID}`"
              triggers="click"
              :show="popoverShow"
              placement="right"
@@ -19,16 +19,16 @@
       </div>
 
         <div :class="['mypopover_event',`mypopover_event--${clickedEvent.type}`]">
-          <span class="mypopover_event-type">{{ getTypeNameByCode() }}</span>
+          <span :class="['mypopover_event-type', {'starts': isStart === true }, {'ends': isStart === false}]">{{ getTypeNameByCode() }}</span>
         </div>
         <div class="mypopover_info">
           <div class="mypopover_info-time">
-            <span class="mypopover_info-time-start">{{ moment(this.clickedEvent.starts).format('H:mm') }}</span>
+            <span class="mypopover_info-time-start">{{ dateStart().format('H:mm') }}</span>
             <span class="mypopover_info-time-remain">Начало {{ timeToStart() }}</span>
           </div>
           <div class="mypopover_info-date">
-            <span class="mypopover_info-date-month">{{ dateStart() }}</span>
-            <span class="mypopover_info-date-day"> {{ moment(this.clickedEvent.starts).format('dddd') }}</span>
+            <span class="mypopover_info-date-month">{{ dateStart().format('D MMMM') }}</span>
+            <span class="mypopover_info-date-day"> {{ dateStart().format('dddd') }}</span>
           </div>
         </div>
 
@@ -41,7 +41,7 @@
         </div>
       </template>
 
-      <div v-if="(notificForm || this.clickedEvent.alerts === undefined ) && (filteredTimeOptions.length > 0)" class="mypopover_remainder">
+      <div v-if="(notificForm || this.clickedItemAlerts() === undefined ) && (filteredTimeOptions.length > 0)" class="mypopover_remainder">
         <span>Напомнить за </span>
         <div class="mypopover_remainder-select">
           <select v-model="timeValue">
@@ -98,7 +98,8 @@ export default {
   name: 'popover',
   props: {
     clickedEvent: Object,
-    popoverShow: Boolean
+    popoverShow: Boolean,
+    isStart: Boolean
   },
   data () {
     return {
@@ -112,6 +113,9 @@ export default {
     }
   },
   computed: {
+    eventID () {
+      return `event-${this.clickedEvent.id}-${this.isStart ? 'starts' : 'ends'}`
+    },
     filteredTimeOptions: {
       cache: false,
       get: function () {
@@ -137,13 +141,18 @@ export default {
   watch: {
   },
   created () {
-    if (this.clickedEvent.alerts !== undefined) {
-      this.alerts = this.sortDates([...this.clickedEvent.alerts])
+    if (this.clickedItemAlerts() !== undefined) {
+      this.alerts = this.sortDates([...this.clickedItemAlerts()])
+      console.log('>>>>>><<<<<<', this.alerts)
       // this.sortDates(this.alerts)
     }
     if (this.clickedEvent.comment !== undefined) this.comment = this.clickedEvent.comment
   },
   methods: {
+    clickedItemAlerts () {
+      console.log('clickedItemAlerts', this.isStart ? this.clickedEvent.alerts.starts : this.clickedEvent.alerts.ends)
+      return this.isStart ? this.clickedEvent.alerts.starts : this.clickedEvent.alerts.ends
+    },
     /**
      * Сортируем массив ISO дат. Можно сравнивать, не преобразоывавая
      * */
@@ -171,7 +180,7 @@ export default {
       return this.$store.getters['event/getTypeNameByCode'](this.clickedEvent.type)
     },
     addAlert (val) {
-      let eventStarts = this.clickedEvent.starts
+      let eventStarts = this.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
       let startTime = this.$moment(eventStarts).subtract(val, 'minutes')
       this.alerts.push(startTime.toISOString())
       this.alerts = this.sortDates(this.alerts)
@@ -181,7 +190,7 @@ export default {
     },
     convertToDiff (item) {
       let alert = this.$moment(item)
-      let start = this.clickedEvent.starts
+      let start = this.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
       let diff = countDiffBetweenDates(alert, start)
       /**
        * преобразуем разницу в минуты
@@ -190,7 +199,7 @@ export default {
     },
     countDiffTime (index) {
       let alert = this.$moment(this.alerts[index])
-      let start = this.clickedEvent.starts
+      let start = this.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
       let diff = countDiffBetweenDates(alert, start)
       /**
        * преобразуем разницу в минуты
@@ -209,7 +218,11 @@ export default {
        * */
       let item = Object.assign({}, this.clickedEvent)
       item.comment = this.comment
-      item.alerts = this.alerts
+      if (this.isStart === true) {
+        item.alerts.starts = this.alerts
+      } else {
+        item.alerts.ends = this.alerts
+      }
 
       console.log('comments or alerts changed', item)
 
@@ -231,16 +244,16 @@ export default {
       this.notificForm = !val
     },
     dateStart () {
-      return this.$moment(this.clickedEvent.starts).format('D MMMM')
+      return this.isStart ? this.$moment(this.clickedEvent.starts) : this.$moment(this.clickedEvent.ends)
     },
     timeToStart () {
-      return this.$moment(this.clickedEvent.starts).fromNow()
+      return this.isStart ? this.$moment(this.clickedEvent.starts).fromNow() : this.$moment(this.clickedEvent.ends).fromNow()
     },
     /**
      * Закрываем окно вызовом события и уникального Id. https://bootstrap-vue.js.org/docs/components/popover/
      * */
     closePopup () {
-      this.$root.$emit('bv::hide::popover', `event-${this.clickedEvent.id}`)
+      this.$root.$emit('bv::hide::popover', `${this.eventID}`)
     }
   }
 }
@@ -380,6 +393,32 @@ export default {
         text-transform: uppercase;
         letter-spacing: 0.3px;
         position: relative;
+        &.starts::before{
+          content: "";
+          position: relative;
+          display: inline-block;
+          vertical-align: middle;
+          width: 16px;
+          height: 16px;
+          bottom: 1px;
+          background-image: @img-clock-start;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
+        &.ends::before{
+          content: "";
+          position: relative;
+          display: inline-block;
+          vertical-align: middle;
+          width: 16px;
+          height: 16px;
+          bottom: 1px;
+          background-image: @img-clock-end;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-size: contain;
+        }
       }
     }
     &_info {

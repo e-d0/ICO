@@ -40,7 +40,6 @@
                       v-for="(item, index) in localDatesStorage"
                       :key="index">
                     <component  :class="[{'first': index === 0}]"
-                                :itemRender.sync="itemRender"
                                 :date="moment(item).toDate()"
                                 :startHour="isFirstDay(index)"
                                 :is="'TodayDay'"
@@ -77,21 +76,14 @@ import tplHeader from './TheHeader'
 import tplFooter from './TheFooter'
 import TodayEventsAll from './TodayEventsAll'
 import eventsFilter from './eventsFilter'
-import theEvent from './TheEvent'
 import TodayDay from './TodayDay'
 import eventsFilterActual from './eventsFilterActual'
 import { EventBus } from './eventbus'
 export default {
   name: 'TodayPage',
-  components: { tplHeader, tplFooter, eventsFilter, eventsFilterActual, TodayEventsAll, theEvent, TodayDay },
+  components: { tplHeader, tplFooter, eventsFilter, eventsFilterActual, TodayEventsAll, TodayDay },
   data () {
     return {
-      itemRender (item, index) {
-        const h = this.$createElement
-        return h(theEvent, { props: {
-          item, index
-        } })
-      },
       localDatesStorage: [this.moment().toISOString()],
       currentTabComponent: 'TodayDay',
       actual: true

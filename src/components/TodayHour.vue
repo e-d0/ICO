@@ -7,13 +7,12 @@
     <span v-if="!checkForDateObj(hour)">{{ hour }}</span>
     <!--<span v-else>{{ hour }}</span>-->
 
-      <template v-if="details.length">
-        <event v-for="(item) in details"
+      <template v-if="allEvents.length">
+        <event v-for="(item) in allEvents"
                :style="{ zIndex: 1 }"
                :key="item.id"
                :item="item"
                :type="item.type"
-               :itemRender="itemRender"
                @item-dragstart="dragItem"
                :date="date"></event>
       </template>
@@ -52,21 +51,22 @@ export default {
   props: {
     date: Date,
     hour: Date,
-    index: Number,
-    itemRender: Function
+    index: Number
   },
   computed: {
     ...storeEvent.mapGetters({
       actualEvents: 'actualEvents',
       pastEvents: 'pastEvents'
     }),
-    details () {
+    allEvents () {
       /**
        * проверка, совпадает ли дата события и дата объекта ячейки
        * //TODO Раскоментировать краткое выражение перед сдачей
        * */
       if ((this.filteredEvents() !== undefined && this.filteredEvents().length) && this.filteredEvents().length) {
-        return this.sortedDates(this.filteredEvents().filter(item => isSameDay(item.date, this.date)))
+        let eventStart = this.sortedDates(this.filteredEvents().filter(item => isSameDay(item.date, this.date)))
+        let eventEnd = this.sortedDates(this.filteredEvents().filter(item => isSameDay(this.moment(item.ends).toDate(), this.date)))
+        return [...eventStart, ...eventEnd]
       } else {
         return []
       }

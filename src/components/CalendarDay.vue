@@ -20,7 +20,7 @@
       </div>
     </div>
     </div>
-    <v-touch :swipe-options="{ direction: 'horizontal', threshold: 70 }"
+    <v-touch :swipe-options="{ direction: 'horizontal', threshold: 100 }"
              :pan-options = "{ direction: 'vertical'}"
              v-on:pandown="onSwipeLeft"
              v-on:panup="onSwipeRight"
@@ -30,7 +30,8 @@
              v-on:swipedown="onSwipeRight"
              class="events"
              id="events"
-             transition = "fade" >
+             transition = "fade"
+             ref="dragTarget">
     <div class="events-group" v-if="dates"
                               v-for="(dayItem, dayInd) in dates"
                               :key="dayInd">
@@ -47,7 +48,6 @@
                v-bind:class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']">
                 <calendar-hour :hour="hour"
                           :index="updatedIndex(dayInd, ind)"
-                          :itemRender.sync="itemRender"
                           :date="updatedDayCell(hour)"></calendar-hour>
           </div>
         </div>
@@ -61,7 +61,7 @@
 <script>
 import moment from 'moment'
 import CalendarHour from './CalendarHour'
-import { generateHours } from './eventbus'
+import { generateHours, EventBus } from './eventbus'
 import Vuex from 'vuex'
 import TWEEN from '@tweenjs/tween.js'
 const storeEvent = Vuex.createNamespacedHelpers('event')
@@ -74,7 +74,6 @@ moment.locale(locale)
 export default {
   name: 'Day',
   props: {
-    itemRender: Function,
     dayIndex: Number
   },
   components: { CalendarHour },
@@ -167,6 +166,18 @@ export default {
      * */
     updatedIndex: function (dayIndex, index) {
       return Number(dayIndex.toString() + index.toString())
+    },
+    /**
+     * Останавливаем распознавание жестов pan, swipe
+     * */
+    stopSwipe (e) {
+      this.$refs.dragTarget.disable('pan', 'swipe')
+    },
+    /**
+     * Запускаем распознавание жестов pan, swipe
+     * */
+    startSwipe (e) {
+      this.$refs.dragTarget.enable('pan', 'swipe')
     }
   },
   created () {
@@ -174,6 +185,8 @@ export default {
      * Запускаем сетчик времени. Раз в минуту обновляет отступ линии времени.
      * */
     setInterval(() => this.timeOffset(), 60000)
+    EventBus.$on('item-dragstart', this.stopSwipe)
+    EventBus.$on('event-dragend', this.startSwipe)
   },
   mounted () {
     this.timeOffset()

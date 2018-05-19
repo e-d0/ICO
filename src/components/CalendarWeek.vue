@@ -1,6 +1,5 @@
 <template>
-      <calendar-day  :itemRender.sync="itemRender"
-                 ></calendar-day>
+      <calendar-day></calendar-day>
 </template>
 
 <script>
@@ -16,7 +15,6 @@ export default {
   name: 'Week',
   components: { CalendarDay },
   props: {
-    itemRender: Function
   },
   data () {
     return {

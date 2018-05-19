@@ -7,19 +7,20 @@
     <span v-if="!checkForDateObj(hour)">{{ hour }}</span>
     <!--<span v-else>{{ hour }}</span>-->
 
-    <template v-if="details[currentEvent.toString()]">
+    <template v-if="allEvents[currentEvent.toString()]">
+
       <event   :class="[{ 'last':isLastElem() }]"
                :style="{ zIndex: 1+currentEvent.toString() }"
-               :key="details[currentEvent.toString()].id"
-               :item="details[currentEvent.toString()]"
-               :type="details[currentEvent.toString()].type"
-               :itemRender="itemRender"
+               :key="allEvents[currentEvent.toString()].id"
+               :item="allEvents[currentEvent.toString()]"
+               :type="allEvents[currentEvent.toString()].type"
                :index="countEvents()"
                @item-dragstart="dragItem"
                v-on:update:current="nextEvent()"
                :date="date"
                :multi="isMulti"></event>
       </template>
+
   </div>
 
 </template>
@@ -54,19 +55,18 @@ export default {
   props: {
     date: Date,
     hour: Date,
-    index: Number,
-    itemRender: Function
+    index: Number
   },
   methods: {
     countEvents () {
-      let counter = parseInt(this.details.length - (this.currentEvent + 1))
-      return counter === 0 ? parseInt(this.details.length - 1).toString() : counter.toString()
+      let counter = parseInt(this.allEvents.length - (this.currentEvent + 1))
+      return counter === 0 ? parseInt(this.allEvents.length - 1).toString() : counter.toString()
     },
     isLastElem () {
-      return this.currentEvent + 1 === this.details.length
+      return this.currentEvent + 1 === this.allEvents.length
     },
     nextEvent () {
-      if (this.currentEvent < this.details.length - 1) {
+      if (this.currentEvent < this.allEvents.length - 1) {
         this.currentEvent++
       } else {
         this.currentEvent = 0
@@ -125,15 +125,17 @@ export default {
       filteredEvents: 'filteredEvents'
     }),
     isMulti: function () {
-      if (this.details !== undefined && this.details.length) return this.details.length > 1
+      if (this.allEvents !== undefined && this.allEvents.length) return this.allEvents.length > 1
     },
-    details () {
+    allEvents () {
       /**
        * проверка, совпадает ли дата события и дата объекта ячейки
        * //TODO Раскоментировать краткое выражение перед сдачей
        * */
       if ((this.filteredEvents !== undefined && this.filteredEvents.length) && this.filteredEvents.length) {
-        return this.sortedDates(this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
+        let eventStart = this.sortedDates(this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
+        let eventEnd = this.sortedDates(this.filteredEvents.filter(item => isSameDay(this.moment(item.ends).toDate(), this.date)))
+        return [...eventStart, ...eventEnd]
       } else {
         return []
       }
