@@ -143,14 +143,11 @@ export default {
   created () {
     if (this.clickedItemAlerts() !== undefined) {
       this.alerts = this.sortDates([...this.clickedItemAlerts()])
-      console.log('>>>>>><<<<<<', this.alerts)
-      // this.sortDates(this.alerts)
     }
     if (this.clickedEvent.comment !== undefined) this.comment = this.clickedEvent.comment
   },
   methods: {
     clickedItemAlerts () {
-      console.log('clickedItemAlerts', this.isStart ? this.clickedEvent.alerts.starts : this.clickedEvent.alerts.ends)
       return this.isStart ? this.clickedEvent.alerts.starts : this.clickedEvent.alerts.ends
     },
     /**
@@ -213,10 +210,10 @@ export default {
       this.commentForm = false
       this.notificForm = false
       /**
-       * Напрямую с prop clickedEvent работать bad practice,тк он реактивен.
-       * Поэтому клонируем его.
+       * Напрямую с prop clickedEvent работать без предупреждений от системы не получится,тк он реактивен.
+       * Поэтому клонируем этот объект .
        * */
-      let item = Object.assign({}, this.clickedEvent)
+      let item = JSON.parse(JSON.stringify(this.clickedEvent))
       item.comment = this.comment
       if (this.isStart === true) {
         item.alerts.starts = this.alerts

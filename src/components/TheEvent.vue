@@ -3,9 +3,7 @@
 
     <div class="timeline_event-data">
       <span class="timeline_event-time"> {{returnDate(item)}}
-        <a v-if="item.alerts !== undefined
-              && item.alerts.length
-              && item.alerts != null"
+        <a v-if="showAlertsIcon()"
               class="timeline_event-notification-bell"></a>
         <a v-if="(item.comment != null) && (item.comment !== '')" class="timeline_event-notification-message"></a>
       </span>
@@ -46,6 +44,15 @@ export default {
   computed: {
   },
   methods: {
+    /**
+     * Проверяем, отображаться ли иконке оповещения
+     * */
+    showAlertsIcon: function () {
+      let alert = this.isStart ? this.item.alerts.starts : this.item.alerts.ends
+      return alert !== undefined &&
+             alert.length &&
+             alert != null
+    },
     getTypeNameByCode () {
       return this.$store.getters['event/getTypeNameByCode'](this.item.type)
     },
