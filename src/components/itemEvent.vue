@@ -1,5 +1,4 @@
 <script>
-import { isSameDay } from './eventbus'
 import theEvent from './TheEvent'
 export default {
   name: 'event',
@@ -14,31 +13,20 @@ export default {
   data () {
     return {
       text: 'no-event-name',
-      itemRender (item, index, multi, isStart) {
+      itemRender (item, index, multi, target) {
         const h = this.$createElement
         return h(theEvent, { props: {
-          item, index, multi, isStart
+          item, index, multi, target
         } })
       }
     }
   },
   computed: {
     eventID () {
-      return `event-${this.item.id}-${this.isStart() ? 'starts' : 'ends'}`
+      return `event-${this.item.id}-${this.item.isStart ? 'starts' : 'ends'}`
     }
   },
   methods: {
-    isStart () {
-      /**
-       * Проверка, является ли событие началом или окончанием
-       * */
-      if (this.date !== undefined &&
-        isSameDay(this.$moment(this.item.starts).toDate(), this.date)) {
-        return true
-      } else {
-        return false
-      }
-    },
     /**
      * Считаем отступ сверху в зависимости от
      * времени начала события в соответствии с заданным
@@ -85,7 +73,7 @@ export default {
         dragstart: this.onDrag,
         click: this.onClick
       }
-    }, this.itemRender ? [this.itemRender(this.item, this.index, this.multi, this.isStart())] : [h('span', this.text)])
+    }, this.itemRender ? [this.itemRender(this.item, this.index, this.multi, this.item ? this.eventID : null)] : [h('span', this.text)])
   },
   created () {
     this.timeOffset()

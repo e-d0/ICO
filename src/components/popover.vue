@@ -1,6 +1,6 @@
 <template>
 
-  <b-popover :target="`${eventID}`"
+  <b-popover :target="target"
              triggers="click"
              :show="popoverShow"
              placement="right"
@@ -18,8 +18,8 @@
         </div>
       </div>
 
-        <div :class="['mypopover_event',`mypopover_event--${clickedEvent.type}`]">
-          <span :class="['mypopover_event-type', {'starts': isStart === true }, {'ends': isStart === false}]">{{ getTypeNameByCode() }}</span>
+        <div :class="['mypopover_event',`mypopover_event--${clickedEvent.tempType}`]">
+          <span :class="['mypopover_event-type', {'starts': clickedEvent.isStart === true }, {'ends': clickedEvent.isStart === false}]">{{ getTypeNameByCode() }}</span>
         </div>
         <div class="mypopover_info">
           <div class="mypopover_info-time">
@@ -62,13 +62,13 @@
           <a :class="[{'active': notificForm }]" @click="openAddAlert()">Добавить напоминание</a>
         </div>
         <div class="col-sm-6 mypopover_add-comment">
-          <a v-if="!commentForm && comment != null" @click="removeComment()">Удалить комментарий</a>
+          <a v-if="!commentForm && comment !== null" @click="removeComment()">Удалить комментарий</a>
           <a :class="[{'active': commentForm }]" v-else @click="openAddComment()">Добавить комментарий</a>
         </div>
       </div>
 
       <div class="mypopover_comment" v-if="!commentForm
-                                                && comment != null
+                                                && comment !== null
                                                 && comment !==  '' ">
         <span>{{comment}}</span>
       </div>
@@ -99,6 +99,7 @@ export default {
   props: {
     clickedEvent: Object,
     popoverShow: Boolean,
+    target: String,
     isStart: Boolean
   },
   data () {
@@ -113,9 +114,6 @@ export default {
     }
   },
   computed: {
-    eventID () {
-      return `event-${this.clickedEvent.id}-${this.isStart ? 'starts' : 'ends'}`
-    },
     filteredTimeOptions: {
       cache: false,
       get: function () {
@@ -144,11 +142,18 @@ export default {
     if (this.clickedItemAlerts() !== undefined) {
       this.alerts = this.sortDates([...this.clickedItemAlerts()])
     }
-    if (this.clickedEvent.comment !== undefined) this.comment = this.clickedEvent.comment
+    if (this.clickedItemComments() !== undefined) this.comment = this.clickedItemComments()
   },
   methods: {
     clickedItemAlerts () {
-      return this.isStart ? this.clickedEvent.alerts.starts : this.clickedEvent.alerts.ends
+      if (this.clickedEvent.alerts !== undefined) {
+        return this.clickedEvent.isStart ? this.clickedEvent.alerts.starts : this.clickedEvent.alerts.ends
+      }
+    },
+    clickedItemComments () {
+      if (this.clickedEvent.comment !== undefined) {
+        return this.clickedEvent.isStart ? this.clickedEvent.comment.starts : this.clickedEvent.comment.ends
+      }
     },
     /**
      * Сортируем массив ISO дат. Можно сравнивать, не преобразоывавая
@@ -174,10 +179,10 @@ export default {
      * и получаем имя типа события по коду
      * */
     getTypeNameByCode () {
-      return this.$store.getters['event/getTypeNameByCode'](this.clickedEvent.type)
+      return this.$store.getters['event/getTypeNameByCode'](this.clickedEvent.tempType)
     },
     addAlert (val) {
-      let eventStarts = this.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
+      let eventStarts = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
       let startTime = this.$moment(eventStarts).subtract(val, 'minutes')
       this.alerts.push(startTime.toISOString())
       this.alerts = this.sortDates(this.alerts)
@@ -187,7 +192,7 @@ export default {
     },
     convertToDiff (item) {
       let alert = this.$moment(item)
-      let start = this.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
+      let start = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
       let diff = countDiffBetweenDates(alert, start)
       /**
        * преобразуем разницу в минуты
@@ -196,7 +201,7 @@ export default {
     },
     countDiffTime (index) {
       let alert = this.$moment(this.alerts[index])
-      let start = this.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
+      let start = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
       let diff = countDiffBetweenDates(alert, start)
       /**
        * преобразуем разницу в минуты
@@ -214,10 +219,11 @@ export default {
        * Поэтому клонируем этот объект .
        * */
       let item = JSON.parse(JSON.stringify(this.clickedEvent))
-      item.comment = this.comment
-      if (this.isStart === true) {
+      if (this.clickedEvent.isStart === true) {
+        item.comment.starts = this.comment
         item.alerts.starts = this.alerts
       } else {
+        item.comment.ends = this.comment
         item.alerts.ends = this.alerts
       }
 
@@ -241,16 +247,16 @@ export default {
       this.notificForm = !val
     },
     dateStart () {
-      return this.isStart ? this.$moment(this.clickedEvent.starts) : this.$moment(this.clickedEvent.ends)
+      return this.clickedEvent.isStart ? this.$moment(this.clickedEvent.starts) : this.$moment(this.clickedEvent.ends)
     },
     timeToStart () {
-      return this.isStart ? this.$moment(this.clickedEvent.starts).fromNow() : this.$moment(this.clickedEvent.ends).fromNow()
+      return this.clickedEvent.isStart ? this.$moment(this.clickedEvent.starts).fromNow() : this.$moment(this.clickedEvent.ends).fromNow()
     },
     /**
      * Закрываем окно вызовом события и уникального Id. https://bootstrap-vue.js.org/docs/components/popover/
      * */
     closePopup () {
-      this.$root.$emit('bv::hide::popover', `${this.eventID}`)
+      this.$root.$emit('bv::hide::popover', this.target)
     }
   }
 }
@@ -394,7 +400,6 @@ export default {
           content: "";
           position: relative;
           display: inline-block;
-          vertical-align: middle;
           width: 16px;
           height: 16px;
           bottom: 1px;
@@ -407,7 +412,6 @@ export default {
           content: "";
           position: relative;
           display: inline-block;
-          vertical-align: middle;
           width: 16px;
           height: 16px;
           bottom: 1px;

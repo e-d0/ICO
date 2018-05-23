@@ -12,6 +12,35 @@ const state = {
   ICO: []
 }
 
+/**
+ * Главная функция ,создающая событие
+ * */
+let generatedEvents = (events) => {
+  let arr = []
+  let eventsArr = events
+  /**
+   * фильтруем события и добавляем служебные поля.
+   * При отправке на сервер, служебыне поля будут удалены.
+   * */
+  for (let i = 0; i < eventsArr.length; i++) {
+    if (eventsArr[i].starts !== undefined) {
+      let elem = Object.assign({}, eventsArr[i])
+      elem.date = new Date(eventsArr[i].starts)
+      elem.isStart = true
+      elem.tempType = elem.type === 'ICO' ? 'start_ico' : elem.type
+      arr.push(elem)
+    }
+    if (eventsArr[i].ends !== undefined) {
+      let elem = Object.assign({}, eventsArr[i])
+      elem.date = new Date(eventsArr[i].ends)
+      elem.isStart = false
+      elem.tempType = elem.type === 'ICO' ? 'ending_ico' : elem.type
+      arr.push(elem)
+    }
+  }
+  return arr
+}
+
 const getters = {
   ICO: state => state.ICO,
   events: state => state.events,
@@ -30,7 +59,7 @@ const getters = {
      * Фильр по времени и по типу
      * */
     return arr.filter(event => {
-      if (state.filters.types instanceof Array && state.filters.types.includes(event.type) && moment(event.ends) > currTime) {
+      if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType) && moment(event.ends) > currTime) {
         return event
       }
     }
@@ -52,7 +81,7 @@ const getters = {
      * Фильр по времени и по типу
      * */
     return arr.filter(event => {
-      if (state.filters.types instanceof Array && state.filters.types.includes(event.type) && moment(event.ends) < currTime) {
+      if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType) && moment(event.ends) < currTime) {
         return event
       }
     }
@@ -94,7 +123,7 @@ const getters = {
         if (
           state.filters.names &&
           state.filters.names.length > 0 &&
-          state.filters.types instanceof Array && state.filters.types.includes(event.type)
+          state.filters.types instanceof Array && state.filters.types.includes(event.tempType)
         ) {
           for (let item = 0; item < state.filters.names.length; item++) {
             if (state.filters.names[item].name === (event.name)) {
@@ -105,7 +134,7 @@ const getters = {
           /**
            * фильтр по типу
            * */
-          if (state.filters.types instanceof Array && state.filters.types.includes(event.type)) {
+          if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType)) {
             return event
           }
         }
@@ -171,9 +200,11 @@ const actions = {
   changeEvent (context, payload) {
     console.log(payload)
     /**
-     * удаляем временное поле даты
+     * приводим event в соответствие с сервером
      * */
     delete payload.value.date
+    delete payload.value.isStart
+    delete payload.tempType
     axios.patch(context.rootGetters.api_url + `/events/${payload.value.id}`, payload.value).then((response) => {
       console.log(response)
       response['id'] = payload.id
@@ -191,15 +222,8 @@ const actions = {
   },
   getEvents (context, payload) {
     axios.get(context.rootGetters.api_url + '/events').then((oResponse) => {
-      /**
-       * Создаем поле начала события в каждом объекте события и приводим к объекту Date с форматом браузера
-       * */
-      let events = oResponse.data.map(item => {
-        item.date = new Date(item.starts)
-        return item
-      })
-      context.commit('getEvents', events)
-      console.log('events get at action getEvents', events)
+      context.commit('getEvents', oResponse.data)
+      console.log('events get at action getEvents', oResponse.data)
     }).catch(handleXHRerrors)
   },
   getEventById: (context, payload) => {
@@ -285,9 +309,9 @@ const mutations = {
     state.events = state.events.filter(event => event.id !== objEvent.id)
     console.log('filtered', state.events)
   },
-  getEvents: (state, objEvent) => {
-    state.events = objEvent
-    console.log('write object event to State', objEvent)
+  getEvents: (state, objEvents) => {
+    state.events = generatedEvents(objEvents)
+    console.log('write object event to State', objEvents)
   }
 }
 

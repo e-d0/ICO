@@ -8,9 +8,9 @@
     <!--<span v-else>{{ hour }}</span>-->
 
       <template v-if="allEvents.length">
-        <event v-for="(item) in allEvents"
+        <event v-for="(item, index) in allEvents"
                :style="{ zIndex: 1 }"
-               :key="item.id"
+               :key="index"
                :item="item"
                :type="item.type"
                @item-dragstart="dragItem"
@@ -23,19 +23,12 @@
 
 <script>
 import event from './itemEvent'
-import moment from 'moment'
 import { EventBus, isSameDay } from './eventbus'
 import Vuex from 'vuex'
 import FormAddEvent from './formAddEvent'
 import modal from './modalBody'
 
 const storeEvent = Vuex.createNamespacedHelpers('event')
-
-/**
-   * Приводим дату в соотетствие с форматом в браузере пользователя
-   * */
-const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
 
 export default {
   name: 'TodayHour',
@@ -63,10 +56,9 @@ export default {
        * проверка, совпадает ли дата события и дата объекта ячейки
        * //TODO Раскоментировать краткое выражение перед сдачей
        * */
-      if ((this.filteredEvents() !== undefined && this.filteredEvents().length) && this.filteredEvents().length) {
-        let eventStart = this.sortedDates(this.filteredEvents().filter(item => isSameDay(item.date, this.date)))
-        let eventEnd = this.sortedDates(this.filteredEvents().filter(item => isSameDay(this.moment(item.ends).toDate(), this.date)))
-        return [...eventStart, ...eventEnd]
+      if (this.filteredEvents() !== undefined && this.filteredEvents().length) {
+        let events = this.sortedDates(this.filteredEvents().filter(item => isSameDay(item.date, this.date)))
+        return events
       } else {
         return []
       }
@@ -82,7 +74,7 @@ export default {
      * Возвращает события из хранилища в зависимости от запроса
      * */
     filteredEvents () {
-      return this.actual ? this.actualEvents(this.moment()) : this.pastEvents(this.moment())
+      return this.actual ? this.actualEvents(this.$moment()) : this.pastEvents(this.$moment())
     },
     switchEvents (val) {
       this.actual = (val === 'true')
@@ -114,7 +106,7 @@ export default {
       return typeof hour !== 'string'
     },
     dateFormat (date) {
-      return moment(date).format('H:mm')
+      return this.$moment(date).format('H:mm')
     },
     dragenter (e) {
       if (this.$el.contains(e.target)) {

@@ -7,11 +7,10 @@
     <span v-if="!checkForDateObj(hour)">{{ hour }}</span>
     <!--<span v-else>{{ hour }}</span>-->
 
-    <template v-if="allEvents[currentEvent.toString()]">
+    <template v-if="checkCurrentEvent()">
 
       <event   :class="[{ 'last':isLastElem() }]"
                :style="{ zIndex: 1+currentEvent.toString() }"
-               :key="allEvents[currentEvent.toString()].id"
                :item="allEvents[currentEvent.toString()]"
                :type="allEvents[currentEvent.toString()].type"
                :index="countEvents()"
@@ -27,19 +26,12 @@
 
 <script>
 import event from './itemEvent'
-import moment from 'moment'
 import { EventBus, isSameDay } from './eventbus'
 import Vuex from 'vuex'
 import FormAddEvent from './formAddEvent'
 import modal from './modalBody'
 
 const storeEvent = Vuex.createNamespacedHelpers('event')
-
-/**
- * Приводим дату в соотетствие с форматом в браузере пользователя
- * */
-const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
 
 export default {
   name: 'Hour',
@@ -58,6 +50,14 @@ export default {
     index: Number
   },
   methods: {
+    checkCurrentEvent () {
+      if (this.allEvents[this.currentEvent.toString()] === undefined) {
+        this.currentEvent = 0
+        return this.allEvents[this.currentEvent.toString()]
+      } else {
+        return this.allEvents[this.currentEvent.toString()]
+      }
+    },
     countEvents () {
       let counter = parseInt(this.allEvents.length - (this.currentEvent + 1))
       return counter === 0 ? parseInt(this.allEvents.length - 1).toString() : counter.toString()
@@ -99,7 +99,7 @@ export default {
       return typeof hour !== 'string'
     },
     dateFormat (date) {
-      return moment(date).format('H:mm')
+      return this.$moment(date).format('H:mm')
     },
     dragenter (e) {
       if (this.$el.contains(e.target)) {
@@ -133,9 +133,7 @@ export default {
        * //TODO Раскоментировать краткое выражение перед сдачей
        * */
       if ((this.filteredEvents !== undefined && this.filteredEvents.length) && this.filteredEvents.length) {
-        let eventStart = this.sortedDates(this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
-        let eventEnd = this.sortedDates(this.filteredEvents.filter(item => isSameDay(this.moment(item.ends).toDate(), this.date)))
-        return [...eventStart, ...eventEnd]
+        return this.sortedDates(this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
       } else {
         return []
       }

@@ -1,16 +1,16 @@
 <template>
-  <div :class="['timeline_event', `timeline_event--${item.type}`]">
+  <div :class="['timeline_event', `timeline_event--${item.tempType}`]">
 
     <div class="timeline_event-data">
       <span class="timeline_event-time"> {{returnDate(item)}}
         <a v-if="showAlertsIcon()"
               class="timeline_event-notification-bell"></a>
-        <a v-if="(item.comment != null) && (item.comment !== '')" class="timeline_event-notification-message"></a>
+        <a v-if="showCommentsIcon()" class="timeline_event-notification-message"></a>
       </span>
       <span class="timeline_event-name timeline_event-name--calendar">{{item.name}}</span>
 
     </div>
-    <div :class="['timeline_event-type', {'starts': isStart === true }, {'ends': isStart === false}]">
+    <div :class="['timeline_event-type', {'starts': item.isStart === true }, {'ends': item.isStart === false}]">
       <template  v-if="index === null || index === undefined ">
         <span>{{ getTypeNameByCode() }}</span>
       </template>
@@ -19,7 +19,7 @@
          :class="['event_nav']"
          @click.stop.prevent="nextEvent()" >{{ index }}
     </div>
-    <popover :popoverShow="popoverShow" :clickedEvent="item" :isStart="isStart" ></popover>
+    <popover :target="target" :popoverShow="popoverShow" :clickedEvent="item"></popover>
 
   </div>
 </template>
@@ -34,7 +34,7 @@ export default {
     item: Object,
     index: String,
     multi: Boolean,
-    isStart: Boolean
+    target: String
   },
   data () {
     return {
@@ -48,19 +48,28 @@ export default {
      * Проверяем, отображаться ли иконке оповещения
      * */
     showAlertsIcon: function () {
-      let alert = this.isStart ? this.item.alerts.starts : this.item.alerts.ends
-      return alert !== undefined &&
-             alert.length &&
-             alert != null
+      if (this.item.alerts !== undefined) {
+        let alert = this.isStart ? this.item.alerts.starts : this.item.alerts.ends
+        return alert !== undefined &&
+          alert != null &&
+          alert.length
+      }
+    },
+    showCommentsIcon: function () {
+      if (this.item.comment !== undefined) {
+        let comment = this.isStart ? this.item.comment.starts : this.item.comment.ends
+        return comment !== undefined &&
+               comment != null
+      }
     },
     getTypeNameByCode () {
-      return this.$store.getters['event/getTypeNameByCode'](this.item.type)
+      return this.$store.getters['event/getTypeNameByCode'](this.item.tempType)
     },
     nextEvent () {
       this.$parent.$emit('update:current')
     },
     returnDate: function (el) {
-      return this.isStart ? this.$moment(el.starts).format('HH:mm') : this.$moment(el.endss).format('HH:mm')
+      return this.isStart ? this.$moment(el.starts).format('HH:mm') : this.$moment(el.ends).format('HH:mm')
     },
     onClose () {
       this.popoverShow = false

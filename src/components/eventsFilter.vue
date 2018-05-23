@@ -76,7 +76,6 @@ export default {
   },
   computed: {
     ...storeEvent.mapGetters({
-      types: 'types',
       filteredEvents: 'filteredEvents',
       /**
        * Получаем элементы фильтра по имени из vuex хранилища напрямую.
@@ -90,6 +89,17 @@ export default {
       get () {
         return this.$store.getters['event/filters'].names
       }
+    },
+    types: {
+      get () {
+        /**
+         * Удаляем лишний тип события ICO из массива типов.
+         * */
+        let typesArr = this.$store.getters['event/types']
+        return typesArr.filter(
+          type => { if (type.code !== 'ICO') return type }
+        )
+      }
     }
   },
   watch: {
@@ -98,8 +108,6 @@ export default {
         type: 'event/setFiltersTypes',
         val: newVal
       })
-    },
-    filters: function () {
     }
   },
   methods: {
@@ -133,7 +141,7 @@ export default {
          * */
         if (this.checkedByDefault) {
           for (let i = 0; i < response.data.length; i++) {
-            this.checkedTypesStorage.push(response.data[i].code)
+            if (response.data[i].code !== 'ICO') this.checkedTypesStorage.push(response.data[i].code)
           }
         }
         return response
@@ -160,7 +168,7 @@ export default {
       if (events !== undefined) {
         let count = 0
         events.filter((event) => {
-          if (!event.type.match(type.code)) {
+          if (!event.tempType.match(type.code)) {
             return
           }
           count++

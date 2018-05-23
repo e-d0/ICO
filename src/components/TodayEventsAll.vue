@@ -1,9 +1,9 @@
 <template>
   <div class="calendar--body">
   <!-- /.ico-list_item -->
-    <div v-if="events" class="iso-all">
+    <div v-if="eventUniqueFilter" class="iso-all">
 
-      <div v-for="(event,index) in events" :key="index" class="ico-list_item">
+      <div v-for="(event,index) in eventUniqueFilter" :key="index" class="ico-list_item">
         <div class="ico-list_item-logo" style="background-image: linear-gradient(225deg, #a64fff 0%, #743dad 100%)">
           <img src="../assets/img/ins-logo.png" alt="">
         </div>
@@ -12,14 +12,14 @@
           <span class="ico-list_item-time">{{ moment(event.starts).format('HH:mm') }}</span>
         </div>
         <div class="ico-list_item-reminder">
-          <a :id="`event-${event.id}`" @click.prevent="" :class="['item-reminder_btn','reminder', { 'alerts': event.alerts !== undefined && event.alerts.length}]" href="#">Добавить напоминание</a>
+          <a :id="eventID(event.id)" @click.prevent="" :class="['item-reminder_btn','reminder', { 'alerts': event.alerts !== undefined && event.alerts.starts.length}]" href="#">Добавить напоминание</a>
           <a @click.prevent="" class="item-reminder_btn calendar" href="#">Добавить в календарь</a>
         </div>
         <div class="ico-list_item-data">
-          <span :class="['ico-list_item-event',`ico-list_item-event--${event.type}`]">{{ getTypeNameByCode(event.type) }}</span>
+          <span :class="['ico-list_item-event',`ico-list_item-event--${event.tempType}`]">{{ getTypeNameByCode(event.tempType) }}</span>
           <span class="ico-list_item-time-remain">Завершится через {{ moment(event.starts).fromNow() }}</span>
         </div>
-        <popover :popoverShow="popoverShow" :clickedEvent="event" ></popover>
+        <popover :target="eventID(event.id)" :popoverShow="popoverShow" :clickedEvent="event" ></popover>
       </div>
 
     </div>
@@ -41,9 +41,25 @@ export default {
   computed: {
     ...storeEvent.mapGetters({
       events: 'events'
-    })
+    }),
+    /**
+     * Удаляем дублированные события, и выводи только события - начала
+     * */
+    eventUniqueFilter () {
+      let arr = []
+
+      for (let i = 0; i < this.events.length; i++) {
+        if (this.events[i].isStart) {
+          arr.push(this.events[i])
+        }
+      }
+      return arr
+    }
   },
   methods: {
+    eventID (id) {
+      return `event-${id}-${'iso-all'}`
+    },
     /**
      * Вызываем геттер модуля events хранилища с параметрами
      * и получаем имя типа события по коду

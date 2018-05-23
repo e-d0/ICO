@@ -89,16 +89,23 @@ export default {
       return group
     },
     /**
-     * Фильтрация события по дате
+     * Фильтрация событий по дате
      * */
     filteredEventsByDay (date) {
-      return this.sortedDates(
-        this.events.filter(event => {
-          if (this.moment(date).isSame(event.date, 'day')) {
-            return event
-          }
-        })
-      )
+      let arr = []
+      /**
+       * клонируем массив
+       * */
+      let eventsArr = JSON.parse(JSON.stringify(this.events))
+      /**
+       * фильтруем события
+       * */
+      for (let i = 0; i < eventsArr.length; i++) {
+        if (this.moment(date).isSame(this.moment(eventsArr[i].date), 'day')) {
+          arr.push(JSON.parse(JSON.stringify(eventsArr[i])))
+        }
+      }
+      return this.sortedDates(arr)
     },
     /**
      * creating a custom calendar with moment using days weeks
@@ -216,7 +223,7 @@ export default {
         font-size: 16px;
         width: 28px;
         height: 28px;
-        padding: 3px;
+        padding: 2px;
         margin-right: 4px;
         display: inline-block;
         text-align: center;

@@ -39,11 +39,6 @@
 import moment from 'moment'
 import TodayHour from './TodayHour'
 import { generateHours } from './eventbus'
-/**
-   * Приводим дату в соотетствие с форматом в браузере пользователя
-   * */
-const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
 
 export default {
   name: 'TodayDay',
@@ -55,7 +50,7 @@ export default {
   components: { TodayHour },
   data () {
     return {
-      moment: this.moment,
+      moment: this.$moment,
       emptyHoursArray: generateHours(null, this.startHour)
     }
   },

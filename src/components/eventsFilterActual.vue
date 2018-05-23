@@ -15,7 +15,7 @@
     <div v-if="filteredEvents" v-for="(event, index) in filteredEvents" :key="index" class="current-events_item">
       <div class="current-events_item-data">
         <span class="current-events_item-name" data-toggle="tooltip" data-placement="right" title="">{{event.name}}</span>
-        <span :class="['current-events_item-event',`current-events_item-event--${event.type}`]">{{ getTypeNameByCode(event.type) }}</span>
+        <span :class="['current-events_item-event',`current-events_item-event--${event.tempType}`]">{{ getTypeNameByCode(event.tempType) }}</span>
       </div>
       <div class="current-events_item-data">
         <span class="current-events_item-time" data-toggle="tooltip" data-placement="top" title="">

@@ -91,7 +91,7 @@ export default {
   border-radius: 4px;
   background-color: #fff;
   box-shadow: 0 10px 30px rgba(82, 92, 108, 0.15);
-  z-index: 2;
+  z-index: 45;
   .fieldset-left {
     width: 100%;
     .multiselect{

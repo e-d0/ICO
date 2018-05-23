@@ -3,7 +3,7 @@
 
     <div class="timeline_top-line">
       <div class="timeline_date">
-        <span class="timeline_date-month">{{headerDates}}</span>
+        <span class="timeline_date-month">{{headerDates}} {{ $t('links.english') }}</span>
         <span class="timeline_date-day">Сегодня <b>{{ moment().format('D MMMM')}}</b>, {{ moment().format('dddd')}}</span>
       </div>
 
@@ -81,7 +81,7 @@ export default {
       acceptedDate: null,
       clickedEvent: null,
       showWeek: true,
-      sideGradient: false
+      sideGradient: true
     }
   },
   computed: {
@@ -200,6 +200,18 @@ export default {
   .calendar--body{
     display: flex;
     flex-direction: row;
+    overflow: hidden;
+    &:after{
+      content: '';
+      position: absolute;
+      bottom: 13px;
+      left: 47px;
+      display: inline-block;
+      width: calc(100% - 53px);
+      height: 1px;
+      padding-bottom: 4px;
+      box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
+    }
   }
   .events {
     width: 100%;
@@ -237,7 +249,6 @@ export default {
     margin-top: 32px;
     margin-bottom: 32px;
     padding-bottom: 12px;
-    overflow: hidden;
     position: relative;
     &--calendar.sideGradient {
       &::before {

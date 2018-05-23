@@ -10,26 +10,34 @@
 
     <li v-for="(event,count) in events[index]"
         :key="count"
-        :class="`calendar__day__event--${[event.type]}`">
+        :class="`calendar__day__event--${[event.tempType]}`"
+        :id="generateId(event)">
       {{event.name}}
+      <popover :target="generateId(event)" :popoverShow="popoverShow" :clickedEvent="event" :isStart="event.isStart" ></popover>
     </li>
 
   </ul>
 
-</template>
+</template>s
 
 <script>
+import popover from './popover'
 export default {
   name: 'CalendarMonthEvent',
+  components: { popover },
   data () {
     return {
-      index: 0
+      index: 0,
+      popoverShow: false
     }
   },
   props: {
     events: Array
   },
   methods: {
+    generateId (event) {
+      return `event-month-${event.id}-${event.isStart ? 'starts' : 'ends'}`
+    },
     isLastElem () {
       return this.events.length === this.index + 1
     },
@@ -69,6 +77,12 @@ export default {
       font-weight: 700;
       line-height: 14px;
       letter-spacing: -0.05px;
+      cursor: pointer;
+      &:active,
+      &:focus,
+      &:hover {
+        box-shadow: inset 0 0 100px 100px rgba(255, 255, 255, 0.2);
+      }
       &.calendar__day__event {
         white-space: nowrap;
         width: 100%;

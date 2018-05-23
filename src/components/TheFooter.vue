@@ -43,23 +43,32 @@
                   <img src="../assets/img/rus-icon.svg" alt="" height="12" width="18">
                 </div>
                 <div class="language_list">
-                  <ul>
-                    <li class="language_list-item">
-                      <a href="#">
-                        <img src="../assets/img/rus-icon.svg" alt="" height="12" width="18">
-                      </a>
-                    </li>
-                    <li class="language_list-item">
-                      <a href="#">
-                        <img src="../assets/img/rus-icon.svg" alt="" height="12" width="18">
-                      </a>
-                    </li>
-                    <li class="language_list-item">
-                      <a href="#">
-                        <img src="../assets/img/rus-icon.svg" alt="" height="12" width="18">
-                      </a>
-                    </li>
-                  </ul>
+                  <select v-model="selectedLanguage">
+                    <option class="language_list-item" disabled value="">Выберите один из вариантов</option>
+                    <option class="language_list-item"
+                            v-for="(item, index) in langs"
+                            :key="index"
+                            :value="item">
+                      {{ item }}
+                    </option>
+                  </select>
+                  <!--<ul>-->
+                    <!--<li class="language_list-item">-->
+                      <!--<a href="#">-->
+                        <!--<img src="../assets/img/rus-icon.svg" alt="" height="12" width="18">-->
+                      <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="language_list-item">-->
+                      <!--<a href="#">-->
+                        <!--<img src="../assets/img/rus-icon.svg" alt="" height="12" width="18">-->
+                      <!--</a>-->
+                    <!--</li>-->
+                    <!--<li class="language_list-item">-->
+                      <!--<a href="#">-->
+                        <!--<img src="../assets/img/rus-icon.svg" alt="" height="12" width="18">-->
+                      <!--</a>-->
+                    <!--</li>-->
+                  <!--</ul>-->
                 </div>
               </div>
               <!-- /.language -->
@@ -86,13 +95,64 @@
 </template>
 
 <script>
+import Vuex from 'vuex'
+const storeLocale = Vuex.createNamespacedHelpers('locale')
 export default {
-  name: 'TheFooter'
+  name: 'TheFooter',
+  data () {
+    return {
+      moment: this.$moment,
+      selectedLanguage: ''
+    }
+  },
+  computed: {
+    ...storeLocale.mapGetters({
+      langs: 'getLanguages',
+      language: 'language'
+    })
+  },
+  watch: {
+    selectedLanguage: function (context) {
+      console.log('>>>>>>>>>>>>>>>>>>>', this.moment)
+      this.$store.dispatch('locale/setLanguage', context)
+      this.$i18n.locale = this.language
+      this.moment.locale(this.language).lang(this.language)
+    }
+  }
 }
 </script>
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  //============================Language ===========================//
+  .language {
+    z-index: 22;
+    &_current,
+    &-header_current {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 5px;
+      &::before {
+        content: "";
+        position: absolute;
+        width: 8px;
+        height: 4px;
+        left: 23px;
+        top: 9px;
+        background-image: @img-select-arrow;
+        background-position: center;
+        background-repeat: no-repeat;
+        z-index: 11;
+      }
+    }
+    &_list,
+    &-header_list {
+      /*display: none;*/
+      &-item {
+        margin-bottom: 5px;
+      }
+    }
+  }
   .footer {
     background-color: #ffffff;
     &-wrapper {

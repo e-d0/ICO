@@ -12,7 +12,12 @@ import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import moment from 'moment'
 import VueTouch from 'vue-touch'
+import i18n from './locales'
 
+/**
+ * Получаем язык из vuex storage
+ * */
+const lang = store.getters['locale/language']
 /**
  * Подключаем Hummer.js для vue. https://github.com/vuejs/vue-touch/tree/next
  * **/
@@ -33,7 +38,7 @@ moment.suppressDeprecationWarnings = true
  * Приводим дату в соотетствие с форматом в браузере пользователя
  * */
 const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
+moment.locale(lang || locale)
 /**
  * Импортируем глобально moment.js
  * теперь он доступен во всех компонентах через this.$moment && this.moment
@@ -50,11 +55,15 @@ Vue.use(VCalendar, {
   firstDayOfWeek: 2 // Monday
 })
 
+if (lang) {
+  i18n.locale = lang
+}
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
   router,
   components: { App },
   store,
+  i18n,
   template: '<App/>'
 })

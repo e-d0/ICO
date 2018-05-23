@@ -38,13 +38,7 @@
 </template>
 
 <script>
-import moment from 'moment'
 import { EventBus } from './eventbus'
-/**
- * Приводим дату в соотетствие с форматом в браузере пользователя
- * */
-const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
 
 export default {
   name: 'FormAddEvent',
@@ -55,8 +49,8 @@ export default {
     return {
       form: {
         name: null,
-        starts: this.acceptedDate !== null ? moment(this.acceptedDate).format('YYYY-MM-DDThh:mm') : moment().format('YYYY-MM-DDThh:mm'),
-        ends: this.acceptedDate !== null ? moment(this.acceptedDate).format('YYYY-MM-DDThh:mm') : moment().format('YYYY-MM-DDThh:mm'),
+        starts: this.acceptedDate !== null ? this.$moment(this.acceptedDate).format('YYYY-MM-DDThh:mm') : this.$moment().format('YYYY-MM-DDThh:mm'),
+        ends: this.acceptedDate !== null ? this.$moment(this.acceptedDate).format('YYYY-MM-DDThh:mm') : this.$moment().format('YYYY-MM-DDThh:mm'),
         type: null
       },
       types: null
@@ -82,10 +76,10 @@ export default {
        * Формируем json объект для отправки на сервер. Все даты в ISO 8601. (https://en.wikipedia.org/wiki/ISO_8601)
        * */
       let body = this.form
-      body.created_at = moment().toISOString()
-      body.updated_at = moment().toISOString()
-      body.starts = moment(this.form.starts).toISOString()
-      body.ends = moment(this.form.ends).toISOString()
+      body.created_at = this.$moment().toISOString()
+      body.updated_at = this.$moment().toISOString()
+      body.starts = this.$moment(this.form.starts).toISOString()
+      body.ends = this.$moment(this.form.ends).toISOString()
 
       console.log('event created', body)
       return this.$http.post(`http://localhost:3000/events`, body).then(response => {
@@ -98,8 +92,8 @@ export default {
   },
   created () {
     this.getTypes()
-    this.form.starts = moment(this.acceptedDate).format('YYYY-MM-DDThh:mm')
-    this.form.ends = moment(this.acceptedDate).format('YYYY-MM-DDThh:mm')
+    this.form.starts = this.$moment(this.acceptedDate).format('YYYY-MM-DDThh:mm')
+    this.form.ends = this.$moment(this.acceptedDate).format('YYYY-MM-DDThh:mm')
   }
 }
 </script>

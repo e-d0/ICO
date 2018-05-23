@@ -76,18 +76,28 @@ export default {
             }),
             ...(!params.inBetween && {
               color: '#fff'
+            }),
+            ...(params.onEnd && {
+              color: '#000'
             })
           }),
-          highlightCaps: {
-            backgroundColor: '#7dc773'
-          }
+          highlightCaps: params => ({
+            ...(params.onStart && {
+              backgroundColor: '#7dc773'
+            }),
+            ...(params.onEnd && {
+              backgroundColor: '#e8edf1',
+              border: 'none',
+              color: '#000'
+            })
+          })
         },
       formats: {
         title: 'MMMM YYYY'
       },
       selectedDate: {
         start: this.$moment().startOf('day').toDate(),
-        end: this.$moment().endOf('week').toDate()
+        end: this.$moment().startOf('day').add(6, 'days')
       }
     }
   },

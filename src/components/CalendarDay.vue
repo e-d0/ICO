@@ -59,17 +59,12 @@
 </template>
 
 <script>
-import moment from 'moment'
 import CalendarHour from './CalendarHour'
 import { generateHours, EventBus } from './eventbus'
 import Vuex from 'vuex'
 import TWEEN from '@tweenjs/tween.js'
+import moment from 'moment'
 const storeEvent = Vuex.createNamespacedHelpers('event')
-/**
- * Приводим дату в соотетствие с форматом в браузере пользователя
- * */
-const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(locale)
 
 export default {
   name: 'Day',
@@ -79,7 +74,7 @@ export default {
   components: { CalendarHour },
   data () {
     return {
-      moment: moment,
+      moment: this.$moment,
       emptyHoursArray: generateHours(),
       offset: 0
     }
@@ -170,14 +165,14 @@ export default {
     /**
      * Останавливаем распознавание жестов pan, swipe
      * */
-    stopSwipe (e) {
-      this.$refs.dragTarget.disable('pan', 'swipe')
+    stopSwipe () {
+      if (this.$refs.dragTarget) this.$refs.dragTarget.disable('pan', 'swipe')
     },
     /**
      * Запускаем распознавание жестов pan, swipe
      * */
-    startSwipe (e) {
-      this.$refs.dragTarget.enable('pan', 'swipe')
+    startSwipe () {
+      if (this.$refs.dragTarget) this.$refs.dragTarget.enable('pan', 'swipe')
     }
   },
   created () {
