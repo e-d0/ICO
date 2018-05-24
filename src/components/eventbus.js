@@ -9,6 +9,7 @@ export const EventBus = new Vue()
 /**
  * Проверка на наличие строки в объекте
  * @param {object} obj
+ * @return {object}
  */
 const tryParse = obj => (typeof obj === 'string' ? new Date(obj) : obj)
 
@@ -16,6 +17,7 @@ const tryParse = obj => (typeof obj === 'string' ? new Date(obj) : obj)
  * Проверка даты события и даты ячейки
  * @param {*} one
  * @param {*} two
+ * @return {boolean}
  */
 export const isSameDay = (one, two) => {
   const oneDate = tryParse(one)
@@ -47,7 +49,9 @@ export const isSameDay = (one, two) => {
 
 /**
  * Создаем массив дней в зависимости от принятых дат
- * @param {object} dates
+ * @param {object} start
+ * @param {object} end
+ * @return {array}
  */
 export const createDays = (start, end) => {
   let currentDate = start
@@ -63,8 +67,9 @@ export const createDays = (start, end) => {
 
 /**
  * Генерируем часы
- * @param{obj} day or null
- * @param startHour Number
+ * @param {object} day or null
+ * @param {number} startHour
+ * @return {array}
  */
 export const generateHours = (day, startHour) => {
   const timePeriod = { start: 0, end: 23 }
@@ -89,8 +94,8 @@ export const generateHours = (day, startHour) => {
 
 /**
  * Считает разницу между датами
- * @param {obj} one
- * @param {obj} two
+ * @param {date,string} start
+ * @param {date,string} end
  * return object Duration
  * */
 export const countDiffBetweenDates = (start, end) => {

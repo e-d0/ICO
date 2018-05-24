@@ -1,16 +1,51 @@
 {
   "links": {
-    "home": "Главная",
-    "about": "О нас",
-    "english": "Английская версия",
-    "russian": "Русская версия"
+    "ICOs": "Каталог<br>ICO",
+    "OurRatings": "Наши<br>рейтинги",
+    "Exchanges": "Биржи<br>и обменники",
+    "Forum": "Форум",
+    "Team": "Наша команда",
+    "FAQ": "FAQ",
+    "Dashboard": "Кабинет инвестора",
+    "Today": "Дела на сегодня",
+    "Calendar": "Календарь ICO",
+    "Portfolio": "Мои инвестиции",
+    "Stats": "Статистика",
+    "Favourite": "Отмеченные ICO",
+    "login": "Войти"
   },
-  "home": {
-    "title": "Welcome",
-    "introduction": "This is an introduction in English."
+  "calendar": {
+    "Today": "Сегодня",
+    "Week": "Неделя",
+    "Month": "Месяц",
+    "AddICO": "Добавить ICO",
+    "myICO": "Только мои ICO",
+    "allICO": "Все ICO",
+    "ShowMore24": "Показать еще 24 часа",
+    "ShowLess24": "Скрыть последние 24 часа",
+    "AddToCalendar": "Добавить в календарь",
+    "AddReminder": "Добавить напоминание",
+    "ReminderAdded": "Напоминание добавлено",
+    "EndsIn": "Завершится {time}",
+    "StartsIn": "Начнется {time}"
   },
-  "about": {
-    "title": "About",
-    "introduction": "This page is made to give you more informations."
+  "form": {
+    "": "",
+    "eventFilterTitle": "ФИЛЬТР СОБЫТИЙ",
+    "eventFilterActualTitle": "Текущие события",
+    "Actual": "Актуальные",
+    "Past": "Прошедшие",
+    "eventFilterActualStart": "Начало {time}",
+    "eventFilterActualEnd": "Завершилось {time}",
+    "Starts": "Начало",
+    "RemindTime": "Напомнить за {time} минут",
+    "Remind": "Напомнить за",
+    "min": "минут",
+    "AddReminder": "Добавить напоминание",
+    "AddComment": "Добавить комментарий",
+    "RemoveComment": "Удалить комментарий",
+    "Add": "Добавить",
+    "Remove": "Удалить",
+    "Save": "Сохранить"
   }
 }

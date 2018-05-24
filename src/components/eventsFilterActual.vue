@@ -1,15 +1,15 @@
 <template>
   <div class="current-events">
-    <legend class="dropdown" v-b-toggle="'formActualFilter'">Текущие события</legend>
+    <legend class="dropdown" v-b-toggle="'formActualFilter'">{{ $t('form.eventFilterActualTitle') }}</legend>
     <b-collapse id="formActualFilter" visible>
     <div class="radio-buttons">
       <label>
         <input name="event-radio-actual" value='true' type="radio" v-model="actual" @change="changeEvent">
-        <b>Актуальные</b>
+        <b>{{ $t('form.Actual') }}</b>
       </label>
       <label>
         <input name="event-radio-past" value='false' type="radio" v-model="actual" @change="changeEvent">
-        <b>Прошедшие</b>
+        <b>{{ $t('form.Past') }}</b>
       </label>
     </div>
     <div v-if="filteredEvents" v-for="(event, index) in filteredEvents" :key="index" class="current-events_item">
@@ -22,10 +22,10 @@
           {{ moment(event.starts).format('HH:mm') }}
         </span>
         <span v-if="actual === 'true'" class="current-events_item-time-remain" data-toggle="tooltip" data-placement="right" title="">
-          Начало {{ moment(event.starts).fromNow() }}
+          {{ $t('form.eventFilterActualStart', { time: moment(event.starts).fromNow() }  ) }}
         </span>
         <span v-else class="current-events_item-time-remain" data-toggle="tooltip" data-placement="right" title="">
-          Завершилось {{ moment(event.ends).fromNow() }}
+          {{ $t('form.eventFilterActualEnd', { time: moment(event.ends).fromNow() }  ) }}
         </span>
       </div>
     </div>

@@ -1,6 +1,8 @@
+import VueI18n from '../../locales/index.js'
+
 export const state = () => ({
   locales: ['en', 'ru'],
-  locale: 'ru'
+  locale: window.localStorage.language || 'en'
 })
 
 const getters = {
@@ -19,6 +21,8 @@ export const mutations = {
   SET_LANG (state, locale) {
     if (state.locales.indexOf(locale) !== -1) {
       state.locale = locale
+      VueI18n.locale = locale
+      window.localStorage.language = locale
     }
   }
 }

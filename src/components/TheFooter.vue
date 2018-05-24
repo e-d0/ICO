@@ -102,7 +102,7 @@ export default {
   data () {
     return {
       moment: this.$moment,
-      selectedLanguage: ''
+      selectedLanguage: this.$i18n.locale
     }
   },
   computed: {
@@ -112,11 +112,14 @@ export default {
     })
   },
   watch: {
+    /**
+     * При изменении языка, значение идет в хранилище и страница перезагружается
+     * */
     selectedLanguage: function (context) {
-      console.log('>>>>>>>>>>>>>>>>>>>', this.moment)
       this.$store.dispatch('locale/setLanguage', context)
-      this.$i18n.locale = this.language
-      this.moment.locale(this.language).lang(this.language)
+      location.reload()
+      // this.$i18n.locale = this.language
+      // this.moment.locale(this.language)
     }
   }
 }

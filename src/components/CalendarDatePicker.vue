@@ -1,5 +1,5 @@
 <template >
-  <div class="datepicker">
+  <div class="datepicker" v-if="show">
     <v-date-picker
       mode='range'
       v-model='selectedDate'
@@ -27,6 +27,8 @@ export default {
   },
   data () {
     return {
+      self: this,
+      show: true,
       themeStyles: {
         wrapper: {
           width: '100%'
@@ -78,17 +80,18 @@ export default {
               color: '#fff'
             }),
             ...(params.onEnd && {
-              color: '#000'
+              color: this.dynamicEndFontStyle(params)
             })
           }),
           highlightCaps: params => ({
             ...(params.onStart && {
-              backgroundColor: '#7dc773'
+              backgroundColor: '#7dc773',
+              color: '#fff'
             }),
             ...(params.onEnd && {
-              backgroundColor: '#e8edf1',
+              backgroundColor: this.dynamicEndCapStyle(params),
               border: 'none',
-              color: '#000'
+              color: this.dynamicEndFontStyle(params)
             })
           })
         },
@@ -97,11 +100,21 @@ export default {
       },
       selectedDate: {
         start: this.$moment().startOf('day').toDate(),
-        end: this.$moment().startOf('day').add(6, 'days')
+        end: this.$moment().startOf('day').add(6, 'days').toDate()
       }
     }
   },
   methods: {
+    dynamicEndCapStyle (params) {
+      if (params.targetDate.daySpan === 0) {
+        return '#7dc773'
+      } else { return '#e8edf1' }
+    },
+    dynamicEndFontStyle (params) {
+      if (params.targetDate.daySpan === 0) {
+        return '#fff'
+      } else { return '#000' }
+    },
     datesEmit (e) {
       /**
        * Готовим и отправляем  событие массив выбранных дней

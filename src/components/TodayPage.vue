@@ -15,7 +15,7 @@
 
           <div class="timeline_top-line">
             <div class="timeline_date">
-              <span class="timeline_date-month">Сегодня <b>{{ moment().format('D MMMM')}}</b></span>
+              <span class="timeline_date-month">{{ $t('calendar.Today') }} <b>{{ moment().format('D MMMM')}}</b></span>
               <span class="timeline_date-day">{{ moment().format('dddd')}} ,{{ moment().format('H:mm')}},({{moment.utc().format('z')}})</span>
             </div>
 
@@ -29,9 +29,9 @@
 
             <div class="radio-buttons">
 
-              <a href="#" @click.prevent="" :class="['switch_btn','btn_left']">Только мои ICO</a>
+              <a href="#" @click.prevent="" :class="['switch_btn','btn_left']">{{ $t('calendar.myICO') }}</a>
 
-              <a href="#" @click.prevent="" :class="['switch_btn','switch','btn_right']" >Все ICO</a>
+              <a href="#" @click.prevent="" :class="['switch_btn','switch','btn_right']" >{{ $t('calendar.allICO') }}</a>
 
             </div>
           </div>
@@ -54,13 +54,13 @@
               href="#"
               class="show-more"
               @click.prevent="showMore()">
-            Показать еще 24 часа</a>
+            {{ $t('calendar.ShowMore24') }}</a>
           <a  v-if="this.currentTabComponent === 'TodayDay' && localDatesStorage.length > 1"
               href="#"
               style="float: right;"
               class="show-more"
               @click.prevent="hideLast()">
-            Скрыть последние 24 часа</a>
+            {{ $t('calendar.ShowLess24') }}</a>
 
         </div>
       </div>

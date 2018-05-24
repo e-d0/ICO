@@ -1,20 +1,20 @@
 <template>
-  <div :class="['timeline timeline--calendar', {'sideGradient': showWeek === true && sideGradient === true }]">
+  <div :class="['timeline timeline--calendar', 'calendar', {'calendar__week': showWeek === true }, {'calendar__month': showWeek === false }, {'sideGradient': showWeek === true && sideGradient === true }]">
 
     <div class="timeline_top-line">
       <div class="timeline_date">
         <span class="timeline_date-month">{{headerDates}} {{ $t('links.english') }}</span>
-        <span class="timeline_date-day">Сегодня <b>{{ moment().format('D MMMM')}}</b>, {{ moment().format('dddd')}}</span>
+        <span class="timeline_date-day">{{ $t('calendar.Today') }} <b>{{ moment().format('D MMMM')}}</b>, {{ moment().format('dddd')}}</span>
       </div>
 
       <div class="radio-buttons">
 
-          <a href="#" :class="['switch_btn','btn_left',{ active: showWeek === true }]" @click="showWeek = true">Неделя</a>
+          <a href="#" :class="['switch_btn','btn_left',{ active: showWeek === true }]" @click="showWeek = true">{{ $t('calendar.Week') }}</a>
 
-          <a href="#" :class="['switch_btn','switch','btn_right',{ active: showWeek === false }]" @click="showWeek = false">Месяц</a>
+          <a href="#" :class="['switch_btn','switch','btn_right',{ active: showWeek === false }]" @click="showWeek = false">{{ $t('calendar.Month') }}</a>
 
         <!--<a href="#" class="btn" @click="openAddFormModal()">+ Добавить ico</a>-->
-          <b-btn v-b-toggle.formICO variant="primary">+ Добавить ICO</b-btn>
+          <b-btn v-b-toggle.formICO variant="primary">+ {{ $t('calendar.AddICO') }}</b-btn>
 
       </div>
 
@@ -197,7 +197,7 @@ export default {
     width: 100%;
     min-width: 900px;
   }
-  .calendar--body{
+  .calendar .calendar--body{
     display: flex;
     flex-direction: row;
     overflow: hidden;

@@ -2,7 +2,7 @@
   <div class="events-filter">
     <form id="filter" autocomplete="off">
       <fieldset>
-        <legend class="dropdown" v-b-toggle="'formEventsFilter'">ФИЛЬТР СОБЫТИЙ</legend>
+        <legend class="dropdown" v-b-toggle="'formEventsFilter'">{{ $t('form.eventFilterTitle') }}</legend>
         <b-collapse id="formEventsFilter" visible>
           <!--<multiselect class="" type="text"-->
                                       <!--:value="names"-->

@@ -15,10 +15,6 @@ import VueTouch from 'vue-touch'
 import i18n from './locales'
 
 /**
- * Получаем язык из vuex storage
- * */
-const lang = store.getters['locale/language']
-/**
  * Подключаем Hummer.js для vue. https://github.com/vuejs/vue-touch/tree/next
  * **/
 VueTouch.config.swipe = {
@@ -34,11 +30,20 @@ Vue.use(VueTouch, {name: 'v-touch'})
 * календарь отсюда https://github.com/nathanreyes/v-calendar
 **/
 moment.suppressDeprecationWarnings = true
+
+/**
+ * Получаем язык из vuex storage
+ * */
+const lang = store.getters['locale/language']
+
 /**
  * Приводим дату в соотетствие с форматом в браузере пользователя
  * */
 const locale = window.navigator.userLanguage || window.navigator.language
-moment.locale(lang || locale)
+/**
+ * Устанавливаем по язык для формата дат. Сначала проверяем localStorage браузера
+ * */
+moment.locale(window.localStorage.language || lang || locale)
 /**
  * Импортируем глобально moment.js
  * теперь он доступен во всех компонентах через this.$moment && this.moment
@@ -52,11 +57,15 @@ Vue.use(VueResource)
 Vue.config.productionTip = false
 
 Vue.use(VCalendar, {
-  firstDayOfWeek: 2 // Monday
+  firstDayOfWeek: 2, // Monday
+  locale: window.localStorage.language || lang || locale
 })
 
+/**
+ * Устанавливаем яык приложения для перевода
+ * */
 if (lang) {
-  i18n.locale = lang
+  i18n.locale = window.localStorage.language || lang || locale
 }
 /* eslint-disable no-new */
 new Vue({

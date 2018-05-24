@@ -24,7 +24,7 @@
         <div class="mypopover_info">
           <div class="mypopover_info-time">
             <span class="mypopover_info-time-start">{{ dateStart().format('H:mm') }}</span>
-            <span class="mypopover_info-time-remain">Начало {{ timeToStart() }}</span>
+            <span class="mypopover_info-time-remain">{{ $t('form.Starts') }} {{ timeToStart() }}</span>
           </div>
           <div class="mypopover_info-date">
             <span class="mypopover_info-date-month">{{ dateStart().format('D MMMM') }}</span>
@@ -35,35 +35,35 @@
       <template v-if="alerts.length > 0">
         <div class="mypopover_remainder"  v-for="(item, index) in alerts" :key="index">
             <span >
-              Напомнить за {{ convertToDiff(item) }} минут
+               {{ $t('form.RemindTime', { time: convertToDiff(item) }  ) }}
             </span>
-            <a @click="removeAlert(index)">Удалить</a>
+            <a @click="removeAlert(index)">{{ $t('form.Remove') }}</a>
         </div>
       </template>
 
       <div v-if="(notificForm || this.clickedItemAlerts() === undefined ) && (filteredTimeOptions.length > 0)" class="mypopover_remainder">
-        <span>Напомнить за </span>
+        <span>{{ $t('form.Remind') }} </span>
         <div class="mypopover_remainder-select">
           <select v-model="timeValue">
             <template v-for="( val, index ) in filteredTimeOptions">
 
                 <option :key="index" name="name[]" :value="val" >
-                  <a>{{ val }} минут</a>
+                  <a>{{ val }} {{ $t('form.min') }}</a>
                 </option>
 
             </template>
           </select>
         </div>
-        <a :class="['add']" @click="addAlert(timeValue)" >Добавить</a>
+        <a :class="['add']" @click="addAlert(timeValue)" >{{ $t('form.Add') }}</a>
       </div>
 
       <div class="mypopover_add">
         <div class="col-sm-6 mypopover_add-remind" >
-          <a :class="[{'active': notificForm }]" @click="openAddAlert()">Добавить напоминание</a>
+          <a :class="[{'active': notificForm }]" @click="openAddAlert()">{{ $t('form.AddReminder') }}</a>
         </div>
         <div class="col-sm-6 mypopover_add-comment">
-          <a v-if="!commentForm && comment !== null" @click="removeComment()">Удалить комментарий</a>
-          <a :class="[{'active': commentForm }]" v-else @click="openAddComment()">Добавить комментарий</a>
+          <a v-if="!commentForm && comment !== null" @click="removeComment()">{{ $t('form.RemoveComment') }}</a>
+          <a :class="[{'active': commentForm }]" v-else @click="openAddComment()">{{ $t('form.AddComment') }}</a>
         </div>
       </div>
 
@@ -83,7 +83,7 @@
       </div>
 
       <div class="mypopover_button">
-        <span class="btn" @click="updateEvent()" >Сохранить</span>
+        <span class="btn" @click="updateEvent()" >{{ $t('form.Save') }}</span>
       </div>
     </div>
 
@@ -503,7 +503,7 @@ export default {
           position: absolute;
           width: 8px;
           height: 4px;
-          left: 69px;
+          right: 6px;
           top: 10px;
           background-image: @img-select-arrow;
           background-position: center;
@@ -595,7 +595,7 @@ export default {
       padding: 0 20px;
     }
     &_add-comment {
-      padding: 0 0 0 70px;
+      padding: 0 0 0 55px;
       margin-top: 15px;
       margin-bottom: 5px;
       text-align: right;

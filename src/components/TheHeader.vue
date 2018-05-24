@@ -9,14 +9,14 @@
             </div>
             <div class="main-nav_wrapper">
               <ul class="main-nav_menu">
-                <li class="main-nav_item"><a href="#">Каталог<br>ICO</a></li>
-                <li class="main-nav_item"><a href="#">Наши<br>рейтинги</a></li>
-                <li class="main-nav_item"><a href="#">Биржи<br>и обменники</a></li>
-                <li class="main-nav_item"><a href="#">Форум</a></li>
+                <li class="main-nav_item"><a href="#" v-html="$t('links.ICOs')"></a></li>
+                <li class="main-nav_item"><a href="#"  v-html="$t('links.OurRatings')"></a></li>
+                <li class="main-nav_item"><a href="#" v-html="$t('links.Exchanges')"></a></li>
+                <li class="main-nav_item"><a href="#" v-html="$t('links.Forum')"></a></li>
                 <li class="main-nav_item">
                   <ul class="main-nav_faq">
-                    <li class="main-nav_faq-item"><a href="vk">Наша команда</a></li>
-                    <li class="main-nav_faq-item"><a href="#">FAQ</a></li>
+                    <li class="main-nav_faq-item"><a href="vk" v-html="$t('links.Team')"></a></li>
+                    <li class="main-nav_faq-item"><a href="#" v-html="$t('links.FAQ')"></a></li>
                   </ul>
                 </li>
               </ul>
@@ -54,7 +54,7 @@
                   <!-- /.language -->
                 </li>
                 <li class="main-nav_user-login">
-                  <a href="#" class="btn btn--login">Войти</a>
+                  <!--<a href="#" class="btn btn&#45;&#45;login" >Войти</a>-->
                 </li>
               </ul>
               <!-- /.main-nav_user-menu -->
@@ -94,12 +94,12 @@
         <div class="row">
           <div class="col">
             <ul class="cabinet-nav_menu">
-              <li class="cabinet-nav_item"><a>Кабинет инвестора</a></li>
-              <li class="cabinet-nav_item cabinet-nav_item--cases"> <router-link to="/">Дела на сегодня</router-link></li>
-              <li class="cabinet-nav_item cabinet-nav_item--calendar cabinet-nav_item--active"><router-link to="/calendar">Календарь ICO</router-link></li>
-              <li class="cabinet-nav_item cabinet-nav_item--investment"><a href="#">Мои инвестиции</a></li>
-              <li class="cabinet-nav_item cabinet-nav_item--statistic"><a href="#">Статистика</a></li>
-              <li class="cabinet-nav_item cabinet-nav_item--marked-ico"><a href="#">Отмеченные ICO</a></li>
+              <li class="cabinet-nav_item"><a href="#" v-html="$t('links.Dashboard')"></a></li>
+              <li class="cabinet-nav_item cabinet-nav_item--cases"> <router-link to="/" v-html="$t('links.Today')"></router-link></li>
+              <li class="cabinet-nav_item cabinet-nav_item--calendar cabinet-nav_item--active"><router-link to="/calendar" v-html="$t('links.Calendar')"></router-link></li>
+              <li class="cabinet-nav_item cabinet-nav_item--investment"><a href="#" v-html="$t('links.Portfolio')"></a></li>
+              <li class="cabinet-nav_item cabinet-nav_item--statistic"><a href="#" v-html="$t('links.Stats')"></a></li>
+              <li class="cabinet-nav_item cabinet-nav_item--marked-ico"><a href="#" v-html="$t('links.Favourite')"></a></li>
             </ul>
           </div>
           <!-- /.col -->

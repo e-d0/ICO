@@ -1,9 +1,9 @@
 <template>
   <div class="calendar--body">
   <!-- /.ico-list_item -->
-    <div v-if="eventUniqueFilter" class="iso-all">
+    <div v-if="filteredEvents" class="iso-all">
 
-      <div v-for="(event,index) in eventUniqueFilter" :key="index" class="ico-list_item">
+      <div v-for="(event,index) in filteredEvents()" :key="index" class="ico-list_item">
         <div class="ico-list_item-logo" style="background-image: linear-gradient(225deg, #a64fff 0%, #743dad 100%)">
           <img src="../assets/img/ins-logo.png" alt="">
         </div>
@@ -12,14 +12,29 @@
           <span class="ico-list_item-time">{{ moment(event.starts).format('HH:mm') }}</span>
         </div>
         <div class="ico-list_item-reminder">
-          <a :id="eventID(event.id)" @click.prevent="" :class="['item-reminder_btn','reminder', { 'alerts': event.alerts !== undefined && event.alerts.starts.length}]" href="#">Добавить напоминание</a>
-          <a @click.prevent="" class="item-reminder_btn calendar" href="#">Добавить в календарь</a>
+          <a :id="eventID(event)"
+             @click.prevent=""
+             :class="['item-reminder_btn','reminder', { 'alerts': event.alerts !== undefined && event.alerts.starts.length}]"
+             href="#">
+            <template v-if="event.alerts !== undefined && event.alerts.starts.length">
+              {{ $t('calendar.ReminderAdded') }}
+            </template>
+            <template v-else>
+              {{ $t('calendar.AddReminder') }}
+            </template>
+
+          </a>
+          <a @click.prevent="" class="item-reminder_btn calendar" href="#">{{ $t('calendar.AddToCalendar') }}</a>
         </div>
         <div class="ico-list_item-data">
           <span :class="['ico-list_item-event',`ico-list_item-event--${event.tempType}`]">{{ getTypeNameByCode(event.tempType) }}</span>
-          <span class="ico-list_item-time-remain">Завершится через {{ moment(event.starts).fromNow() }}</span>
+          <span class="ico-list_item-time-remain"
+                v-html="event.isStart ?
+                $t('calendar.StartsIn', { time: moment(event.starts).fromNow() }  ) :
+                $t('calendar.EndsIn', { time: moment(event.ends).fromNow() }  )">
+          </span>
         </div>
-        <popover :target="eventID(event.id)" :popoverShow="popoverShow" :clickedEvent="event" ></popover>
+        <popover :target="eventID(event)" :popoverShow="popoverShow" :clickedEvent="event" ></popover>
       </div>
 
     </div>
@@ -28,6 +43,7 @@
 
 <script>
 import popover from './popover'
+import { EventBus } from './eventbus'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
@@ -35,30 +51,49 @@ export default {
   components: { popover },
   data () {
     return {
-      popoverShow: false
+      popoverShow: false,
+      actual: true
     }
   },
   computed: {
     ...storeEvent.mapGetters({
-      events: 'events'
-    }),
-    /**
-     * Удаляем дублированные события, и выводи только события - начала
-     * */
-    eventUniqueFilter () {
-      let arr = []
-
-      for (let i = 0; i < this.events.length; i++) {
-        if (this.events[i].isStart) {
-          arr.push(this.events[i])
-        }
-      }
-      return arr
+      events: 'events',
+      actualEvents: 'actualEvents',
+      pastEvents: 'pastEvents'
+    })
+  },
+  watch: {
+    actual: function () {
+      this.filteredEvents()
     }
   },
   methods: {
-    eventID (id) {
-      return `event-${id}-${'iso-all'}`
+    /**
+     * Удаляем дублированные события, и выводи только события - начала или конца,
+     * в зависимости от фильтра
+     * */
+    eventUniqueFilter (events) {
+      let arr = []
+
+      for (let i = 0; i < events.length; i++) {
+        let filter = this.actual ? events[i].isStart : !events[i].isStart
+        if (filter) {
+          arr.push(events[i])
+        }
+      }
+      return arr
+    },
+    /**
+     * Возвращает события из хранилища в зависимости от запроса
+     * */
+    filteredEvents () {
+      return this.actual ? this.eventUniqueFilter(this.actualEvents(this.$moment())) : this.eventUniqueFilter(this.pastEvents(this.$moment()))
+    },
+    switchEvents (val) {
+      this.actual = (val === 'true')
+    },
+    eventID (event) {
+      return `event-${event.id}-${event.isStart}`
     },
     /**
      * Вызываем геттер модуля events хранилища с параметрами
@@ -67,6 +102,12 @@ export default {
     getTypeNameByCode (code) {
       return this.$store.getters['event/getTypeNameByCode'](code)
     }
+  },
+  created () {
+    /**
+     * На событии из фильтра вызываем функцию
+     * */
+    EventBus.$on('filter:event', this.switchEvents)
   }
 }
 </script>
@@ -175,6 +216,7 @@ export default {
           line-height: 12px;
           /* Text style for "Add remind" */
           letter-spacing: -0.06px;
+          margin-left: 10px;
           &:hover,
           &:focus,
           &:active{

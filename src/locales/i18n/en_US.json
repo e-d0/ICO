@@ -1,16 +1,50 @@
 {
   "links": {
-    "home": "Home",
-    "about": "About",
-    "english": "English version",
-    "russian": "Russian version"
+    "ICOs": "ICOs",
+    "OurRatings": "Our ratings",
+    "Exchanges": "Exchanges",
+    "Forum": "Forum",
+    "Team": "Our team",
+    "FAQ": "FAQ",
+    "Dashboard": "Investor Dashboard",
+    "Today": "Today",
+    "Calendar": "ICO Calendar",
+    "Portfolio": "Portfolio",
+    "Stats": "ICO Stats",
+    "Favourite": "Favourite ICO",
+    "login": "Login"
   },
-  "home": {
-    "title": "Welcome",
-    "introduction": "This is an introduction in English."
+  "calendar": {
+    "Today": "Today",
+    "Week": "Week",
+    "Month": "Month",
+    "AddICO": "Add ICO",
+    "myICO": "Only my ICO",
+    "allICO": "All ICO",
+    "ShowMore24": "Show more 24 hours",
+    "ShowLess24": "Hide last 24 hours",
+    "AddToCalendar": "Add to ICO Calendar",
+    "AddReminder": "Add reminder",
+    "ReminderAdded": "Reminder added",
+    "EndsIn": "Ends {time}",
+    "StartsIn": "Starts {time}"
   },
-  "about": {
-    "title": "About",
-    "introduction": "This page is made to give you more informations."
+  "form": {
+    "eventFilterTitle": "EVENT FILTER",
+    "eventFilterActualTitle": "Current ICO events",
+    "Actual": "Actual",
+    "Past": "Past",
+    "eventFilterActualStart": "Starts in {time}",
+    "eventFilterActualEnd": "Ends in {time}",
+    "Starts": "Starts",
+    "RemindTime": "Remind in {time} minutes",
+    "Remind": "Remind in",
+    "min": "min",
+    "AddReminder": "Add reminder",
+    "AddComment": "Add comment",
+    "RemoveComment": "Delete comment",
+    "Add": "Add",
+    "Remove": "Remove",
+    "Save": "Save"
   }
 }

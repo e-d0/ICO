@@ -49,15 +49,14 @@ export default {
      * */
     showAlertsIcon: function () {
       if (this.item.alerts !== undefined) {
-        let alert = this.isStart ? this.item.alerts.starts : this.item.alerts.ends
+        let alert = this.item.isStart ? this.item.alerts.starts : this.item.alerts.ends
         return alert !== undefined &&
-          alert != null &&
-          alert.length
+               alert.length > 0
       }
     },
     showCommentsIcon: function () {
       if (this.item.comment !== undefined) {
-        let comment = this.isStart ? this.item.comment.starts : this.item.comment.ends
+        let comment = this.item.isStart ? this.item.comment.starts : this.item.comment.ends
         return comment !== undefined &&
                comment != null
       }

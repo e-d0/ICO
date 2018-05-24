@@ -13,11 +13,13 @@ const state = {
 }
 
 /**
- * Главная функция ,создающая событие
+ * Главная функция ,создающая события с служебными полями
+ * @param {array} events
+ * @return {array}
  * */
 let generatedEvents = (events) => {
   let arr = []
-  let eventsArr = events
+  let eventsArr = [...events]
   /**
    * фильтруем события и добавляем служебные поля.
    * При отправке на сервер, служебыне поля будут удалены.
@@ -204,7 +206,7 @@ const actions = {
      * */
     delete payload.value.date
     delete payload.value.isStart
-    delete payload.tempType
+    delete payload.value.tempType
     axios.patch(context.rootGetters.api_url + `/events/${payload.value.id}`, payload.value).then((response) => {
       console.log(response)
       response['id'] = payload.id
@@ -303,7 +305,11 @@ const mutations = {
   },
   updateEvent: (state, objEvent) => {
     mutations.deleteEvent(state, objEvent.id)
-    state.events = [...state.events, objEvent]
+    /**
+     * Создаем служебные поля для обновленных событий
+     * */
+    let serviceEvents = generatedEvents([objEvent])
+    state.events = [...state.events, ...serviceEvents]
   },
   deleteEvent: (state, objEvent) => {
     state.events = state.events.filter(event => event.id !== objEvent.id)
