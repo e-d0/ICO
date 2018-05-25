@@ -16,7 +16,9 @@
           <div class="timeline_top-line">
             <div class="timeline_date">
               <span class="timeline_date-month">{{ $t('calendar.Today') }} <b>{{ moment().format('D MMMM')}}</b></span>
-              <span class="timeline_date-day">{{ moment().format('dddd')}} ,{{ moment().format('H:mm')}},({{moment.utc().format('z')}})</span>
+              <span class="timeline_date-day">{{ moment().format('dddd')}} ,{{ moment().format('H:mm')}},
+              (<form-time-zone></form-time-zone>)
+              </span>
             </div>
 
             <div class="view-buttons">
@@ -79,9 +81,10 @@ import eventsFilter from './eventsFilter'
 import TodayDay from './TodayDay'
 import eventsFilterActual from './eventsFilterActual'
 import { EventBus } from './eventbus'
+import formTimeZone from './formTimeZone'
 export default {
   name: 'TodayPage',
-  components: { tplHeader, tplFooter, eventsFilter, eventsFilterActual, TodayEventsAll, TodayDay },
+  components: { tplHeader, tplFooter, eventsFilter, eventsFilterActual, TodayEventsAll, TodayDay, formTimeZone },
   data () {
     return {
       localDatesStorage: [this.moment().toISOString()],

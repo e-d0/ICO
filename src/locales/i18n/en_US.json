@@ -12,7 +12,10 @@
     "Portfolio": "Portfolio",
     "Stats": "ICO Stats",
     "Favourite": "Favourite ICO",
-    "login": "Login"
+    "login": "Login",
+    "userPolicy": "User policy",
+    "confident":"Confidentional information",
+    "advert":"Advertisement and Sponsorship"
   },
   "calendar": {
     "Today": "Today",
@@ -45,6 +48,7 @@
     "RemoveComment": "Delete comment",
     "Add": "Add",
     "Remove": "Remove",
-    "Save": "Save"
+    "Save": "Save",
+    "default": "Default"
   }
 }

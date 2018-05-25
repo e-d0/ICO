@@ -10,7 +10,7 @@ import VCalendar from 'v-calendar'
 import 'v-calendar/lib/v-calendar.min.css'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import moment from 'moment'
+import moment from 'moment-timezone'
 import VueTouch from 'vue-touch'
 import i18n from './locales'
 
@@ -44,6 +44,15 @@ const locale = window.navigator.userLanguage || window.navigator.language
  * Устанавливаем по язык для формата дат. Сначала проверяем localStorage браузера
  * */
 moment.locale(window.localStorage.language || lang || locale)
+
+/**
+ * Получаем язык из vuex storage
+ * */
+const timezone = store.getters['locale/timezone']
+/**
+ * Устанавливаем таймзону по умолчанию http://momentjs.com/timezone/
+ * */
+moment.tz.setDefault(window.localStorage.timezone || timezone || moment.tz.guess())
 /**
  * Импортируем глобально moment.js
  * теперь он доступен во всех компонентах через this.$moment && this.moment

@@ -301,7 +301,11 @@ const mutations = {
     }
   },
   addEvent: (state, objEvent) => {
-    state.events = [...state.events, objEvent]
+    /**
+     * Создаем служебные поля для обновленных событий
+     * */
+    let serviceEvents = generatedEvents([objEvent])
+    state.events = [...state.events, ...serviceEvents]
   },
   updateEvent: (state, objEvent) => {
     mutations.deleteEvent(state, objEvent.id)

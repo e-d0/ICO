@@ -3,7 +3,7 @@
 
     <div class="timeline_top-line">
       <div class="timeline_date">
-        <span class="timeline_date-month">{{headerDates}} {{ $t('links.english') }}</span>
+        <span class="timeline_date-month">{{headerDates}}</span>
         <span class="timeline_date-day">{{ $t('calendar.Today') }} <b>{{ moment().format('D MMMM')}}</b>, {{ moment().format('dddd')}}</span>
       </div>
 

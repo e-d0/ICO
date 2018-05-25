@@ -21,14 +21,14 @@
               <!-- /.footer_about-us -->
               <div class="footer_nav">
                 <ul class="footer_nav-menu">
-                  <li class="footer_nav-menu-item"><a href="#">Каталог ICO</a></li>
-                  <li class="footer_nav-menu-item"><a href="#">Наши рейтинги</a></li>
-                  <li class="footer_nav-menu-item"><a href="#">Биржи и обменники</a></li>
-                  <li class="footer_nav-menu-item"><a href="#">Форум</a></li>
+                  <li class="footer_nav-menu-item"><a href="#" v-html="$t('links.ICOs')"></a></li>
+                  <li class="footer_nav-menu-item"><a href="#"  v-html="$t('links.OurRatings')"></a></li>
+                  <li class="footer_nav-menu-item"><a href="#" v-html="$t('links.Exchanges')"></a></li>
+                  <li class="footer_nav-menu-item"><a href="#" v-html="$t('links.Forum')"></a></li>
                 </ul>
                 <ul class="footer_nav-menu">
-                  <li class="footer_nav-menu-item"><a href="#">Наша команда</a></li>
-                  <li class="footer_nav-menu-item"><a href="#">FAQ</a></li>
+                  <li class="footer_nav-menu-item"><a href="vk" v-html="$t('links.Team')"></a></li>
+                  <li class="footer_nav-menu-item"><a href="#" v-html="$t('links.FAQ')"></a></li>
                 </ul>
               </div>
               <!-- /.footer_main-nav -->
@@ -84,9 +84,9 @@
     <!-- /.container-fluid -->
     <div class="terms">
       <div class="container-fluid">
-        <a href="#">Условия использования</a>
-        <a href="#">Политика конфиденциальности </a>
-        <a href="#">Предложения о сотрудничестве, реклама</a>
+        <a href="#">{{ $t('links.userPolicy') }}</a>
+        <a href="#" >{{ $t('links.confident') }}</a>
+        <a href="#" >{{ $t('links.advert') }}</a>
       </div>
     </div>
     <!-- /.terms -->
@@ -118,9 +118,9 @@ export default {
     selectedLanguage: function (context) {
       this.$store.dispatch('locale/setLanguage', context)
       location.reload()
-      // this.$i18n.locale = this.language
-      // this.moment.locale(this.language)
     }
+  },
+  created () {
   }
 }
 </script>
