@@ -76,7 +76,7 @@ export default {
      * Считаем отступ текущей таймзоны в часах
      * */
     currentZoneOffset () {
-      return Math.abs(this.$moment().utcOffset() / 60)
+      return `UTC +${Math.abs(this.$moment().utcOffset() / 60)}:00`
     },
     ...storeLocale.mapGetters({
       timezones: 'getTimezones',
