@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import CalendarPage from '@/components/CalendarPage'
 import TodayPage from '@/components/TodayPage'
+import PortfolioPage from '@/components/PortfolioPage'
 
 Vue.use(Router)
 /**
@@ -19,6 +20,11 @@ export default new Router({
       path: '/',
       name: 'TodayPage',
       component: TodayPage
+    },
+    {
+      path: '/portfolio',
+      name: 'portfolio',
+      component: PortfolioPage
     }
   ]
 })

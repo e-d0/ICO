@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="17px" height="17px" viewBox="0 0 17 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Group 6</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="ICO-Kabinet" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Kabinet-1280x-ICO-Portfolio-Edit-Coin-7" transform="translate(-397.000000, -650.000000)">
+            <g id="Group-6" transform="translate(398.000000, 651.000000)">
+                <path d="M7.5,0 C3.35825893,0 0,3.35825893 0,7.5 C0,11.6417411 3.35825893,15 7.5,15 C11.6417411,15 15,11.6417411 15,7.5 C15,3.35825893 11.6417411,0 7.5,0 Z" id="Shape-Copy-24" stroke="#45AF37" fill-rule="nonzero"></path>
+                <rect id="Rectangle-9" fill="#45AF37" x="4" y="7" width="7" height="1"></rect>
+                <rect id="Rectangle-9-Copy" fill="#45AF37" transform="translate(7.500000, 7.500000) rotate(90.000000) translate(-7.500000, -7.500000) " x="4" y="7" width="7" height="1"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

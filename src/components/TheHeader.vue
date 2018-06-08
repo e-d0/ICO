@@ -97,7 +97,7 @@
               <li class="cabinet-nav_item"><a href="#" v-html="$t('links.Dashboard')"></a></li>
               <li class="cabinet-nav_item cabinet-nav_item--cases"> <router-link to="/" v-html="$t('links.Today')"></router-link></li>
               <li class="cabinet-nav_item cabinet-nav_item--calendar cabinet-nav_item--active"><router-link to="/calendar" v-html="$t('links.Calendar')"></router-link></li>
-              <li class="cabinet-nav_item cabinet-nav_item--investment"><a href="#" v-html="$t('links.Portfolio')"></a></li>
+              <li class="cabinet-nav_item cabinet-nav_item--investment"><router-link to="/portfolio" v-html="$t('links.Portfolio')"></router-link></li>
               <li class="cabinet-nav_item cabinet-nav_item--statistic"><a href="#" v-html="$t('links.Stats')"></a></li>
               <li class="cabinet-nav_item cabinet-nav_item--marked-ico"><a href="#" v-html="$t('links.Favourite')"></a></li>
             </ul>

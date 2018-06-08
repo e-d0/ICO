@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="22px" height="24px" viewBox="0 0 22 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Shape Copy 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M956,608 C953.791,608 952,609.791 952,612 C952,614.209 956,618 956,618 C956,618 960,614.209 960,612 C960,609.791 958.209,608 956,608 Z" id="path-1"></path>
+        <filter x="-125.0%" y="-90.0%" width="350.0%" height="300.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="2" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.25 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="ICO-Catalogue" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ICO-CATALOGUE-Active-1280x-5.4" transform="translate(-945.000000, -602.000000)" fill-rule="nonzero">
+            <g id="Shape-Copy-2">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <path stroke="#FFFFFF" stroke-width="2" d="M956,607 C958.761285,607 961,609.238715 961,612 C961,612.830856 960.643455,613.739064 960.013291,614.753274 C959.671565,615.303262 959.253138,615.875156 958.774376,616.4611 C958.318318,617.019259 957.832004,617.560733 957.345764,618.066321 C957.175503,618.243358 957.017102,618.403575 956.874411,618.544439 C956.787402,618.630335 956.723939,618.69165 956.687891,618.725814 L956,619.377763 L955.312109,618.725814 C955.276061,618.69165 955.212598,618.630335 955.125589,618.544439 C954.982898,618.403575 954.824497,618.243358 954.654236,618.066321 C954.167996,617.560733 953.681682,617.019259 953.225624,616.4611 C952.746862,615.875156 952.328435,615.303262 951.986709,614.753274 C951.356545,613.739064 951,612.830856 951,612 C951,609.238715 953.238715,607 956,607 Z" fill="#45AF37" fill-rule="evenodd"></path>
+            </g>
+        </g>
+    </g>
+</svg>

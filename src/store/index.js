@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 
 import Event from './modules/event'
 import Locale from './modules/locale'
+import Portfolio from './modules/Portfolio'
 
 Vue.use(Vuex)
 
@@ -29,7 +30,8 @@ export default new Vuex.Store({
   mutations: {},
   modules: {
     event: Event,
-    locale: Locale
+    locale: Locale,
+    portfolio: Portfolio
   },
   strict: debug
 })

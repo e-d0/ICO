@@ -4,9 +4,9 @@
       "id": 1,
       "name": "event-1",
       "created_at": "2018-04-13T21:53:17.892Z",
-      "updated_at": "2018-05-21T20:33:05.848Z",
-      "starts": "2018-05-23T09:53:00.000Z",
-      "ends": "2018-05-24T11:53:00.000Z",
+      "updated_at": "2018-05-26T00:42:12.360Z",
+      "starts": "2018-05-26T14:53:00.000Z",
+      "ends": "2018-05-27T16:53:00.000Z",
       "type": "KYC",
       "alerts": {
         "starts": [
@@ -23,9 +23,9 @@
       "id": 2,
       "name": "event-2",
       "created_at": "2018-05-13T21:53:17.892Z",
-      "updated_at": "2018-05-23T01:18:09.602Z",
-      "starts": "2018-05-23T05:53:00.000Z",
-      "ends": "2018-05-24T09:53:00.000Z",
+      "updated_at": "2018-05-26T00:42:17.073Z",
+      "starts": "2018-05-29T05:53:00.000Z",
+      "ends": "2018-05-30T09:53:00.000Z",
       "type": "KYC",
       "alerts": {
         "starts": [],
@@ -40,9 +40,9 @@
       "id": 3,
       "name": "event-3",
       "created_at": "2018-04-13T21:53:17.892Z",
-      "updated_at": "2018-05-19T14:37:33.579Z",
-      "starts": "2018-05-24T00:53:00.000Z",
-      "ends": "2018-05-25T03:53:17.000Z",
+      "updated_at": "2018-05-26T00:44:33.748Z",
+      "starts": "2018-05-25T01:53:00.000Z",
+      "ends": "2018-05-26T04:53:17.000Z",
       "type": "pre_ico",
       "alerts": {
         "starts": [],
@@ -76,11 +76,11 @@
     },
     {
       "name": "jgdfg",
-      "starts": "2018-05-23T00:26:00.000Z",
-      "ends": "2018-05-23T02:26:00.000Z",
+      "starts": "2018-05-27T08:26:00.000Z",
+      "ends": "2018-05-27T10:26:00.000Z",
       "type": "white_list",
       "created_at": "2018-04-19T14:26:00.000Z",
-      "updated_at": "2018-05-23T01:17:49.083Z",
+      "updated_at": "2018-05-26T00:42:02.077Z",
       "id": 6,
       "comment": {
         "starts": null,
@@ -96,11 +96,11 @@
     },
     {
       "name": "test554",
-      "starts": "2018-05-24T01:20:00.000Z",
-      "ends": "2018-05-24T10:20:00.000Z",
+      "starts": "2018-05-28T04:20:00.000Z",
+      "ends": "2018-05-28T13:20:00.000Z",
       "type": "ICO",
       "created_at": "2018-04-19T20:21:00.000Z",
-      "updated_at": "2018-05-23T04:07:02.068Z",
+      "updated_at": "2018-05-26T00:44:25.068Z",
       "id": 9,
       "comment": {
         "starts": null,
@@ -136,11 +136,11 @@
     },
     {
       "name": "teste4346",
-      "starts": "2018-05-24T09:44:00.000Z",
-      "ends": "2018-05-25T11:44:00.000Z",
+      "starts": "2018-05-28T08:44:00.000Z",
+      "ends": "2018-05-29T10:44:00.000Z",
       "type": "pre_ico",
       "created_at": "2018-04-19T20:44:00.000Z",
-      "updated_at": "2018-05-19T14:11:19.365Z",
+      "updated_at": "2018-05-26T00:44:37.835Z",
       "id": 11,
       "comment": {
         "starts": null,
@@ -153,11 +153,11 @@
     },
     {
       "name": "rewr3443",
-      "starts": "2018-05-24T14:46:00.000Z",
-      "ends": "2018-05-24T17:46:00.000Z",
+      "starts": "2018-05-28T13:46:00.000Z",
+      "ends": "2018-05-28T16:46:00.000Z",
       "type": "KYC",
       "created_at": "2018-04-19T20:47:00.000Z",
-      "updated_at": "2018-05-23T01:17:24.111Z",
+      "updated_at": "2018-05-26T00:43:46.455Z",
       "id": 12,
       "comment": {
         "starts": "asdsadasd",
@@ -189,11 +189,11 @@
     },
     {
       "name": "4444445555",
-      "starts": "2018-05-22T21:44:00.000Z",
-      "ends": "2018-05-22T22:44:00.000Z",
+      "starts": "2018-05-27T01:44:00.000Z",
+      "ends": "2018-05-27T02:44:00.000Z",
       "type": "ICO",
       "created_at": "2018-04-23T10:44:00.000Z",
-      "updated_at": "2018-05-21T20:33:00.237Z",
+      "updated_at": "2018-05-26T00:41:53.657Z",
       "id": 14,
       "comment": {
         "starts": null,
@@ -206,11 +206,11 @@
     },
     {
       "name": "test66634",
-      "starts": "2018-05-22T23:54:00.000Z",
-      "ends": "2018-05-24T01:54:00.000Z",
+      "starts": "2018-05-27T21:54:00.000Z",
+      "ends": "2018-05-28T23:54:00.000Z",
       "type": "ICO",
       "created_at": "2018-04-23T10:54:48.654Z",
-      "updated_at": "2018-05-19T14:11:14.474Z",
+      "updated_at": "2018-05-26T00:43:40.763Z",
       "id": 15,
       "comment": {
         "starts": null,
@@ -225,11 +225,11 @@
     },
     {
       "name": "test6789",
-      "starts": "2018-05-24T00:52:00.000Z",
-      "ends": "2018-05-25T00:52:00.000Z",
+      "starts": "2018-05-28T02:52:00.000Z",
+      "ends": "2018-05-29T02:52:00.000Z",
       "type": "pre_ico",
       "created_at": "2018-04-25T08:52:57.615Z",
-      "updated_at": "2018-05-23T01:17:36.899Z",
+      "updated_at": "2018-05-26T00:44:30.726Z",
       "id": 16,
       "alerts": {
         "starts": [],
@@ -278,11 +278,11 @@
     },
     {
       "name": "adfhhfg43",
-      "starts": "2018-05-23T00:00:00.000Z",
-      "ends": "2018-05-24T00:00:00.000Z",
+      "starts": "2018-05-27T00:00:00.000Z",
+      "ends": "2018-05-28T00:00:00.000Z",
       "type": "pre_ico",
       "created_at": "2018-04-27T21:07:49.145Z",
-      "updated_at": "2018-05-18T23:45:51.167Z",
+      "updated_at": "2018-05-26T00:41:58.116Z",
       "id": 19,
       "alerts": {
         "starts": [],
@@ -295,11 +295,11 @@
     },
     {
       "name": "sdafsdaf",
-      "starts": "2018-05-23T12:00:00.000Z",
-      "ends": "2018-05-25T12:00:00.000Z",
+      "starts": "2018-05-27T12:00:00.000Z",
+      "ends": "2018-05-29T12:00:00.000Z",
       "type": "ICO",
       "created_at": "2018-04-29T09:02:16.092Z",
-      "updated_at": "2018-05-19T14:11:24.272Z",
+      "updated_at": "2018-05-26T00:42:08.951Z",
       "id": 20,
       "comment": {
         "starts": null,
@@ -341,19 +341,356 @@
   ],
   "ico": [
     {
+      "id": 1,
       "title": "Bitcoin",
       "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAD0klEQVRIS5WWW0wdVRSGv7VnDlAO1FKKWmgQjJhGiOVNE0GS1lgNjRdaS73WpCRGo1wKMaYPvvTBxBsFNVYTqqnaiNVQUm+xsVbbEI0aNaU1JgoBbCmlQoTD7ZyZvc0MQoEz56DrabLXP/+/9vrXrIyQJIabWRtWbFPCRgMlSsgBjDYMi9CtXY5Honx45dNcSEQjQQmPOF2x11Y8DKQkKwKIas1BrXk23MDgUmycwGQL9ypFm0DWMsSL0hpGYg67VjZwZGFikcBEK4/bwquA+j/kC7DaMTwRruWNubN5gfFmqlJsDicjt26s9xzAPfsmqBSIjQXVoWccts7dxBe49DJ5GSG6BVbF9fCKIsx4P+gZQjt+QZ8/iRk4hn3HB0QP5MLMX3EiBkbHHYpzGhj0BaZaeUsJjwaVE9rZh6StQV/4DrWuAvfH55G0bCS3jNihGxJ20tG0heuoEa/6zBC9QCgeLajcCqyb9/qEC8O7ldv1DPr3dr9tAREdcyiQyVbqLaE5malWWQtWaS1mrBe3aw/q2rtRRfeBWOieTpzPqgJFXE29TLZw1FJsSSYQqv4ZydmAPtOG81WND7U27MYqf8l/jn1UgRn8Jo7CNRyVqVZ6lVCQUCA1m5SaIb9a98RTuN3eFINV2oRV9sKswOFbMENdQWb3yMwrRIBwIgFVeA92Zce/aYOJnINoBMm6HkSh/zyB03kbGDeIIuIJTADpiQSssmas0nrM3724Xz+J5G/GWv8QpK2GqUvEOjZiRk4nej0i0630iZCfCBGq/gnJKUWfPYBzfJcPkxVXYVf/gGSsw4z8SuxQsbcD4yi0odfz4FMl3Lk0a936OpKRhyqs9FvhHNuJ/u3gPCxUdXJ2dN0o0f1hME68B5qPvSlqshSzbs2FlUbori+Qq28Ca3aZmvEBzPlTmPE+ZFUR6rqts+fnThHrKA9sgOuyW0ZayA8r/gDsOFQoE3vT20heOUwMIWtKFkOiY8Q6N2OGvg0ScCKTFM6tineV8GAQyvNAD3Zh+j/H3tKJ88k2SMkAd9qfIKYvBlavDe+sqOURX8C7RbritMDKxWiFXfEauucIkn87qqCS2HvrE83D/LmBsYkoJdmNDFxe1y3sSFEc8oYkiEHS14I3NRe/X07ARF3uz6yn3Z+4hejIPhpDlm94oMhyzJ7nrktjev3l3RZHFNnHA7ZivwiZ/4FwUVtimscy63h/4XuBlY6+yDWpNs9ZFtu9tbOMkONq2qdhz+o6+pdik7ZitJmCVJvtYtgkQrHg/7Z43+ywMZwxhi9nYrRnNdGXqIh/AClEYn33iJn+AAAAAElFTkSuQmCC",
       "ticker": "BTC"
     },
     {
+      "id": 2,
       "title": "Monero",
       "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFMElEQVRIS52Wb0yVVRzHv7/nPPdeIbjwAKKJ/5Js84au7WI6rhqSUg1uFgauV4pK1qhZrpXrRdPeuOqFsZkb0zntVUpWA0USl6YX0OGtzV1oZUoJYhBy8fLPy/Occ9p54BKKf2Zne7a7c5/z/fz+Pb/fIdx7kdcL/dhCZEx3YhUEVkMgG0DG2OvXoeEigJNw4VT2eXQGg7AAyLvl6O6NpwFnaCXmIxPvQkMRGFIgAPvhY28zAOpRpzl6wXEUV1GRdRqXW4CRiZoTAbTKgLt+LfzQsBMM82COCd/HTXtbA+CwQVf4bexYUoOaYBiRmDfjgCUpcJ9fgw1wYheAeFv8UZaCAEMwsX3p9zh0odeG2E7CDksZikHYByDOjub/WfoYZARl2QdRFQRMBaC/XodndgKOQ0OG5OghwICEa3LKHkDVEJUSYdKRBoEOaCigSvyqqsVx8RnshQubpYkeLrCXAUuJYSU4HA+FKBMZTGnhRy5xgTGUkxOpuI192QdQTrIcczCCSwDckuHGPxGUtvShL3cGPiUNOQ+ExMQlGk7fwIcLE5GSloQDxPE4gAj6sJDkRmyCC/tVcUkHuoLXsWVDDU588SJynp+FjwnwQcA5yZNR8REpETjVgU/eO4Gmg3685M1AJZmYBidUwW4iWYoquPCaqhob0Ik3Flej+knA9WU+fKtn4yMiLL8D8p/42foO7Co/gYY/gGizH2vGAQ5AjOCIArRBx1z1IU0EqHQqyJ4XsDx/Fj4gDc+B23bFLD/zQzs+e6cOASWutu8AqO/DRJsKkfrTqQp2AuDYokWL4trb2/WkpHC04iks98/B+6QhVwlJgTO11/D5278hcOuW4YqLizM7OzuHm/14edyD0aYRvR/geGFhYdbAwMCyUCj0bVZCT3jbfKwofALl6sutuYo9u3/HudBAWorH43k1Pj7+XF1dXUuzH4WTAaX4Ezrm3BWiYyUlJXmDg4MVQ0NDh1taWioznd2RxQY8yqxL/WhpHUpP8ng8byYkJBRHo9Gt9fX1p5v98I8DxkNUiqNIQJGdZB3dv1zDW95qfFdSUpI7PDxcxRgb6uvrq2xtbd3f3d3dpQDp6enTPB5PWXJy8hYhxJTe3t7iQCDwU/MrKPLOwl4ykW73p0F8Q1Yp1oh4lGgqEw5Efu7AgWdrcLGoqCjXNM2vGWNThRDt/f39NkRKSR6PZ7Pb7d6iadpMznl3T0/PuqamprMNfmQvnomNmgm3cAFiAIepeCoSom5MV6mWDDx6G90nuzC4YMGCFZmZmVWapqWPdcb2SCRyRLWWxMTEYiKapX5LKbtCoVBxW1vbufxpeMw1BenEweACXBH8bTc7r9frYIy5icjUdV1alkW6ri8zDOOQpmlpQggQkdQ0rVcIoc4YyhNN0yClVB6sF0I0xs5KKR2c80gwGLSbHQoKCgwhxG5d1+cKISx1mIiSAWQR0WjtK3NptLtLecfgGuGch4iob8wInXPeFolEtgUCgXBsHjj9fv86TdP2EZF6wdaTUqpaeOgiIjXvJGNMwU0pZVl1dbUK58j4wDEMI8nn861njO0ionjLerShoOu6Eh+yLGt7Y2PjV+Fw+Nb4wIlFwDAMd05Ojp8xtpMxNk95ouL/oKXyoCwXQlyxLGtHY2NjTTgcnjwyJ4g4fT7f/NTU1K1EtJYxlqJiPhEWE1U54Zz3SimP3rx5s6KhoeGy3UMnrEm3ipg3APS8vLwZbrd7Fec8X0qZLaW0ry1EdJ2I7GsL5/xUbW1tJ3Dva8u/EVdnAa3C9pIAAAAASUVORK5CYII=",
       "ticker": "XMR"
     },
     {
+      "id": 3,
       "title": "Etherium",
       "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAD50lEQVRIS6WVx0psXRCFq80ZnYhhYJgoCA5EQUTRgTgygiA4caSIoKLoG/gM4jPowBdQMWPEBCYwB4yYU9vh8tVPNYf/3tsO7obD6dN771q71lpV2+X3+/3yl+Hz+cSmeYeEhMj397eEhoZKWFiYzrHG6/Xqtw3Wvb+/S0xMjLiCAbDBCbK3t6cxMjMzFSQiIkJcLpeu4c0DGIN5RlAAOyEbOdHw8LDs7u5Kc3Oz5Ofna0AGQXnCw8P1+/PzU6KiojTjHzNgI7Ts7OzI6OiozM3NSV1dnbS0tEhsbKwG4bGT89to/RHA+L27u5PZ2VlZW1uT1dVViYyMlJ6eHiktLdVg0MHjdrs1A8tEaQumAZs/Pj40MM/V1ZUsLS3J+fm5ZtHe3i5paWni8XgUlICAoI0JHxSARYeHhzI+Pi4PDw8KtrKyImdnZ5KUlKQAtbW1Ghw6yAI6zWF/pMj44zSPj49KzebmpkRHR8vLy4tSdHJyIl9fX1JcXCz9/f2Sm5urgaHGKbC6yOfzKUtmN/409yDs1NSUBgPg+vpalpeX9c161rW1tUlTU5PEx8frycnahA8AgG68mc2en5+VmsvLSw2ETQ8ODmR9fV2/AWRfenq69PX1SUlJiVrTKDILqwagWqHgHPje398PcA/I09OT3N7eys3NjQoJ71ZoDQ0N0tnZKSkpKSo4/zNUAyiyCmQSoY6OjmRoaEhOT0+FTNCCUzMPwNvbW0BIgBISEmRgYECqqqoUGC2stbjcbrefP8zDZADA4OCgWhLnQIcVE1aFLgZ7oAWRe3t7FcCCW224PB6Pn6AMRGIThUXfoS1Qudvb27qRTI0u1ufk5GixZWdnS3l5uWRlZUlcXJwKzVpAlCIDMGHgG0FxC3NbW1syMzOjmd3f36tjCFhUVKTfiYmJUl1dLampqf8FteBUMgBmLU4Fz9BxcXEhCwsLSkdGRoYKPDk5Ka+vr1JQUKDZbmxsqCFaW1uloqJCsySWdVIFw0XQYv3DLAv3UAQIWdAScAeCkxGtg9N3dHRIfX29Nj4CcjjnvaAAdomYkGZZHETlIjZiMqgDNIHGmpoa6erqkuTk5MAl9FuhOevAWi2AgPCNDtPT09oeoGtxcVH7U2FhoXR3d0teXp5ak8D/v4C0DnARqTlvJbvFAAHs+PhY5ufnlTLe8E9hVVZW6rVoTc5JUaCSvV6vHyTn3Wp9xvqS6TE2NiYTExNSVlamwkIN+3jskNa6tQ857wMqz9kyLLi9cc/IyIjS09jYqFem86JnnmxMR+Jp7ZABJ3Autu5qXRUQ1mBV/qPnWPe1m4z9Rqlp8eOlH/DbP/z4BTcZC+bon+3sAAAAAElFTkSuQmCC",
       "ticker": "ETH"
+    }
+  ],
+  "currencies": [
+    {
+      "id": 1,
+      "title": "DOLLAR",
+      "icon": "&#36;",
+      "ticker": "USD",
+      "price": "1",
+      "24_change": "0.29245",
+      "capitalization": "432345.23",
+      "24H_volume": "32315000000000"
+    },
+    {
+      "id": 2,
+      "title": "Bitcoin",
+      "icon": "BTC",
+      "ticker": "BTC",
+      "price": "5334.2",
+      "24_change": "3.43",
+      "capitalization": "432345.23",
+      "24H_volume": "323000000000"
+    },
+    {
+      "id": 3,
+      "title": "Etherium",
+      "icon": "ETH",
+      "ticker": "ETH",
+      "price": "834.2",
+      "24_change": "3.43",
+      "capitalization": "792345.67",
+      "24H_volume": "15000000000"
+    },
+    {
+      "id": 4,
+      "title": "WAVES",
+      "icon": "WAVES",
+      "ticker": "WAVES",
+      "price": "4.23",
+      "24_change": "5.45",
+      "capitalization": "792345.67",
+      "24H_volume": "12000000000"
+    }
+  ],
+  "coins": [
+    {
+      "id": 1,
+      "title": "Bitcoin",
+      "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAD0klEQVRIS5WWW0wdVRSGv7VnDlAO1FKKWmgQjJhGiOVNE0GS1lgNjRdaS73WpCRGo1wKMaYPvvTBxBsFNVYTqqnaiNVQUm+xsVbbEI0aNaU1JgoBbCmlQoTD7ZyZvc0MQoEz56DrabLXP/+/9vrXrIyQJIabWRtWbFPCRgMlSsgBjDYMi9CtXY5Honx45dNcSEQjQQmPOF2x11Y8DKQkKwKIas1BrXk23MDgUmycwGQL9ypFm0DWMsSL0hpGYg67VjZwZGFikcBEK4/bwquA+j/kC7DaMTwRruWNubN5gfFmqlJsDicjt26s9xzAPfsmqBSIjQXVoWccts7dxBe49DJ5GSG6BVbF9fCKIsx4P+gZQjt+QZ8/iRk4hn3HB0QP5MLMX3EiBkbHHYpzGhj0BaZaeUsJjwaVE9rZh6StQV/4DrWuAvfH55G0bCS3jNihGxJ20tG0heuoEa/6zBC9QCgeLajcCqyb9/qEC8O7ldv1DPr3dr9tAREdcyiQyVbqLaE5malWWQtWaS1mrBe3aw/q2rtRRfeBWOieTpzPqgJFXE29TLZw1FJsSSYQqv4ZydmAPtOG81WND7U27MYqf8l/jn1UgRn8Jo7CNRyVqVZ6lVCQUCA1m5SaIb9a98RTuN3eFINV2oRV9sKswOFbMENdQWb3yMwrRIBwIgFVeA92Zce/aYOJnINoBMm6HkSh/zyB03kbGDeIIuIJTADpiQSssmas0nrM3724Xz+J5G/GWv8QpK2GqUvEOjZiRk4nej0i0630iZCfCBGq/gnJKUWfPYBzfJcPkxVXYVf/gGSsw4z8SuxQsbcD4yi0odfz4FMl3Lk0a936OpKRhyqs9FvhHNuJ/u3gPCxUdXJ2dN0o0f1hME68B5qPvSlqshSzbs2FlUbori+Qq28Ca3aZmvEBzPlTmPE+ZFUR6rqts+fnThHrKA9sgOuyW0ZayA8r/gDsOFQoE3vT20heOUwMIWtKFkOiY8Q6N2OGvg0ScCKTFM6tineV8GAQyvNAD3Zh+j/H3tKJ88k2SMkAd9qfIKYvBlavDe+sqOURX8C7RbritMDKxWiFXfEauucIkn87qqCS2HvrE83D/LmBsYkoJdmNDFxe1y3sSFEc8oYkiEHS14I3NRe/X07ARF3uz6yn3Z+4hejIPhpDlm94oMhyzJ7nrktjev3l3RZHFNnHA7ZivwiZ/4FwUVtimscy63h/4XuBlY6+yDWpNs9ZFtu9tbOMkONq2qdhz+o6+pdik7ZitJmCVJvtYtgkQrHg/7Z43+ywMZwxhi9nYrRnNdGXqIh/AClEYn33iJn+AAAAAElFTkSuQmCC",
+      "ticker": "BTC",
+      "price": "5334.2",
+      "24_change": "3.43",
+      "capitalization": "432345.23",
+      "24H_volume": "123250000000"
+    },
+    {
+      "id": 2,
+      "title": "Monero",
+      "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAFMElEQVRIS52Wb0yVVRzHv7/nPPdeIbjwAKKJ/5Js84au7WI6rhqSUg1uFgauV4pK1qhZrpXrRdPeuOqFsZkb0zntVUpWA0USl6YX0OGtzV1oZUoJYhBy8fLPy/Occ9p54BKKf2Zne7a7c5/z/fz+Pb/fIdx7kdcL/dhCZEx3YhUEVkMgG0DG2OvXoeEigJNw4VT2eXQGg7AAyLvl6O6NpwFnaCXmIxPvQkMRGFIgAPvhY28zAOpRpzl6wXEUV1GRdRqXW4CRiZoTAbTKgLt+LfzQsBMM82COCd/HTXtbA+CwQVf4bexYUoOaYBiRmDfjgCUpcJ9fgw1wYheAeFv8UZaCAEMwsX3p9zh0odeG2E7CDksZikHYByDOjub/WfoYZARl2QdRFQRMBaC/XodndgKOQ0OG5OghwICEa3LKHkDVEJUSYdKRBoEOaCigSvyqqsVx8RnshQubpYkeLrCXAUuJYSU4HA+FKBMZTGnhRy5xgTGUkxOpuI192QdQTrIcczCCSwDckuHGPxGUtvShL3cGPiUNOQ+ExMQlGk7fwIcLE5GSloQDxPE4gAj6sJDkRmyCC/tVcUkHuoLXsWVDDU588SJynp+FjwnwQcA5yZNR8REpETjVgU/eO4Gmg3685M1AJZmYBidUwW4iWYoquPCaqhob0Ik3Flej+knA9WU+fKtn4yMiLL8D8p/42foO7Co/gYY/gGizH2vGAQ5AjOCIArRBx1z1IU0EqHQqyJ4XsDx/Fj4gDc+B23bFLD/zQzs+e6cOASWutu8AqO/DRJsKkfrTqQp2AuDYokWL4trb2/WkpHC04iks98/B+6QhVwlJgTO11/D5278hcOuW4YqLizM7OzuHm/14edyD0aYRvR/geGFhYdbAwMCyUCj0bVZCT3jbfKwofALl6sutuYo9u3/HudBAWorH43k1Pj7+XF1dXUuzH4WTAaX4Ezrm3BWiYyUlJXmDg4MVQ0NDh1taWioznd2RxQY8yqxL/WhpHUpP8ng8byYkJBRHo9Gt9fX1p5v98I8DxkNUiqNIQJGdZB3dv1zDW95qfFdSUpI7PDxcxRgb6uvrq2xtbd3f3d3dpQDp6enTPB5PWXJy8hYhxJTe3t7iQCDwU/MrKPLOwl4ykW73p0F8Q1Yp1oh4lGgqEw5Efu7AgWdrcLGoqCjXNM2vGWNThRDt/f39NkRKSR6PZ7Pb7d6iadpMznl3T0/PuqamprMNfmQvnomNmgm3cAFiAIepeCoSom5MV6mWDDx6G90nuzC4YMGCFZmZmVWapqWPdcb2SCRyRLWWxMTEYiKapX5LKbtCoVBxW1vbufxpeMw1BenEweACXBH8bTc7r9frYIy5icjUdV1alkW6ri8zDOOQpmlpQggQkdQ0rVcIoc4YyhNN0yClVB6sF0I0xs5KKR2c80gwGLSbHQoKCgwhxG5d1+cKISx1mIiSAWQR0WjtK3NptLtLecfgGuGch4iob8wInXPeFolEtgUCgXBsHjj9fv86TdP2EZF6wdaTUqpaeOgiIjXvJGNMwU0pZVl1dbUK58j4wDEMI8nn861njO0ionjLerShoOu6Eh+yLGt7Y2PjV+Fw+Nb4wIlFwDAMd05Ojp8xtpMxNk95ouL/oKXyoCwXQlyxLGtHY2NjTTgcnjwyJ4g4fT7f/NTU1K1EtJYxlqJiPhEWE1U54Zz3SimP3rx5s6KhoeGy3UMnrEm3ipg3APS8vLwZbrd7Fec8X0qZLaW0ry1EdJ2I7GsL5/xUbW1tJ3Dva8u/EVdnAa3C9pIAAAAASUVORK5CYII=",
+      "ticker": "XMR",
+      "price": "984.2",
+      "24_change": "3.43",
+      "capitalization": "3232345.43",
+      "24H_volume": "3150000000"
+    },
+    {
+      "id": 3,
+      "title": "Etherium",
+      "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAD50lEQVRIS6WVx0psXRCFq80ZnYhhYJgoCA5EQUTRgTgygiA4caSIoKLoG/gM4jPowBdQMWPEBCYwB4yYU9vh8tVPNYf/3tsO7obD6dN771q71lpV2+X3+/3yl+Hz+cSmeYeEhMj397eEhoZKWFiYzrHG6/Xqtw3Wvb+/S0xMjLiCAbDBCbK3t6cxMjMzFSQiIkJcLpeu4c0DGIN5RlAAOyEbOdHw8LDs7u5Kc3Oz5Ofna0AGQXnCw8P1+/PzU6KiojTjHzNgI7Ts7OzI6OiozM3NSV1dnbS0tEhsbKwG4bGT89to/RHA+L27u5PZ2VlZW1uT1dVViYyMlJ6eHiktLdVg0MHjdrs1A8tEaQumAZs/Pj40MM/V1ZUsLS3J+fm5ZtHe3i5paWni8XgUlICAoI0JHxSARYeHhzI+Pi4PDw8KtrKyImdnZ5KUlKQAtbW1Ghw6yAI6zWF/pMj44zSPj49KzebmpkRHR8vLy4tSdHJyIl9fX1JcXCz9/f2Sm5urgaHGKbC6yOfzKUtmN/409yDs1NSUBgPg+vpalpeX9c161rW1tUlTU5PEx8frycnahA8AgG68mc2en5+VmsvLSw2ETQ8ODmR9fV2/AWRfenq69PX1SUlJiVrTKDILqwagWqHgHPje398PcA/I09OT3N7eys3NjQoJ71ZoDQ0N0tnZKSkpKSo4/zNUAyiyCmQSoY6OjmRoaEhOT0+FTNCCUzMPwNvbW0BIgBISEmRgYECqqqoUGC2stbjcbrefP8zDZADA4OCgWhLnQIcVE1aFLgZ7oAWRe3t7FcCCW224PB6Pn6AMRGIThUXfoS1Qudvb27qRTI0u1ufk5GixZWdnS3l5uWRlZUlcXJwKzVpAlCIDMGHgG0FxC3NbW1syMzOjmd3f36tjCFhUVKTfiYmJUl1dLampqf8FteBUMgBmLU4Fz9BxcXEhCwsLSkdGRoYKPDk5Ka+vr1JQUKDZbmxsqCFaW1uloqJCsySWdVIFw0XQYv3DLAv3UAQIWdAScAeCkxGtg9N3dHRIfX29Nj4CcjjnvaAAdomYkGZZHETlIjZiMqgDNIHGmpoa6erqkuTk5MAl9FuhOevAWi2AgPCNDtPT09oeoGtxcVH7U2FhoXR3d0teXp5ak8D/v4C0DnARqTlvJbvFAAHs+PhY5ufnlTLe8E9hVVZW6rVoTc5JUaCSvV6vHyTn3Wp9xvqS6TE2NiYTExNSVlamwkIN+3jskNa6tQ857wMqz9kyLLi9cc/IyIjS09jYqFem86JnnmxMR+Jp7ZABJ3Autu5qXRUQ1mBV/qPnWPe1m4z9Rqlp8eOlH/DbP/z4BTcZC+bon+3sAAAAAElFTkSuQmCC",
+      "ticker": "ETH",
+      "price": "834.2",
+      "24_change": "3.43",
+      "capitalization": "792345.67",
+      "24H_volume": "15324455000"
+    },
+    {
+      "id": 4,
+      "title": "DigitalCash",
+      "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAANUlEQVRIS+3SsQkAAAwCQd1/aUf4yu5TS4TD5nw9/48FKCyRRCiAAVckEQpgwBVJhAIYuK9oesQAGQOvmYAAAAAASUVORK5CYII=",
+      "ticker": "DASH",
+      "price": "7334.2",
+      "24_change": "3.43",
+      "capitalization": "782345.43",
+      "24H_volume": "223323000"
+    },
+    {
+      "id": 5,
+      "title": "EOS",
+      "icon": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAD3ElEQVRIS51WXSikexj/zcxrhjnY2R0ZY9iDC5HUzkqRxI0b7bkQkgsXEmWVC1cUygVFERsXbtSefNxpp9hNSZ1NXOGMFNHZsD7nA4NmMO877/Y8k10fszPTeWuad5qZ5/f1PM//VdjtDhlhXLL8+GcKhSKMfwGKcACouCCocF+UsERR/Pk5GFJIACoeEREBp9OB0dFR2O12NDY2Ij09HV5vaJCQAEqlgtlOTU3hy+cvECURubm5aGhowMuXr+D1eoMqCQtgeXkZH4Y+wOF0QBAEKJVK1NfX4927v6BSqfA0n4eWBQVQqZTY39/HyMgIFhYWcHd3B0mSoNFokJWVhebmZrx9m/P/AMgat9uNyclJTExM4OTk5Cf76+trxMfHo6SkBE1NTUhISIAk+QJmHUSBjMXFRQwMDGB3d5fDTU1NZfbb29uIiYmBwWBAXV0dKisroVZrAip5BkB+kq8u1wUGBwcxPz+Pvb09aLVa6PV69v/i4gJOp5MBMzIy0NnZidev/wwPgHRSkW/f/kN3dzcODw+xubmJuLg4eDwezoGACCAtLQ3R0dFoaWlBQUEBAMUzkGcK/MMkY2lpCT09Pbi9veXC9Do+PuaWNRqNbFFUVBS3aW1tLWpqaqBSCfD5HmfxDIDYS5K/74eHh9kuYr+xscHW0BUZGQmz2YyrqytQ4KWlpWhra4NW+0c4AP7u6evrg8VigTZKC32cHisrK7i5uWEAIpGTk8PqXC4XsrOz0dvbC4MhITyLbLZTtLa2svekgGw7PT3F2dkZA5DvZBOtELJMp9OxneY3ZtCekvFrMT6xSAGKwGr9Fx0dHczw6OiIWVGxg4MDvqe+p4kmRUlJSZB9Mt43vUdFRYUf4MHmfQRATAlgenoaY2NjHOD6+jozjo2N5ZCpi5KTkxnc4XBwJ1FGhYWF3E2CEBEcwOu9w9DQEFZXV7G1tcXWEAAVoVCJNU0xeX9+fs6Dl5eXx993dXVB90L3wKAA54HH40Z7ezsXvry85HfKgYqSdPKcgqfJdnvcrIwGjrqpv78fJlPS7xX4l4mMr1//wcePf/Oio44iK2iSqe+pg8geCpwGjuaB2JeVlaG8vJwtenjaBVwVlMPB9+/4ZLFgbm6OraCiarWa1RAo3ZN1+fn5qKqqQmZmJhemfIMC3K9E2qa0mtfW1jA+Pg6r1YqUlBQesp2dHZhMJlRXV6OoqIiV+XyBj/ag5wEpIcaUxezsLGZmZnhlFBcXc0smJiZCFCW2lfZQoCvkiUbBku8ajRo2m43b1GhMhM8ncfFQTxchAe5Z+Z8sBC4oit7fMn6q4gdNNTRPeYHBVQAAAABJRU5ErkJggg==",
+      "ticker": "EOS",
+      "price": "434.2",
+      "24_change": "3.43",
+      "capitalization": "3232345.434",
+      "24H_volume": "133000000"
+    },
+    {
+      "id": 6,
+      "title": "NEO",
+      "icon": "data:image/png;base64,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",
+      "ticker": "NEO",
+      "price": "12334.2",
+      "24_change": "-8.43",
+      "capitalization": "982345.40",
+      "24H_volume": "2467000000000"
+    }
+  ],
+  "portfolios": [
+    {
+      "id": 1,
+      "title": "Portfolio #1",
+      "is_private": false,
+      "coin": [
+        {
+          "id": 6,
+          "amount": 31,
+          "operations": [
+            {
+              "date": "2018-06-07T08:32:48.450Z",
+              "deal_currency": {
+                "id": 1,
+                "title": "DOLLAR",
+                "icon": "&#36;",
+                "ticker": "USD",
+                "price": "1",
+                "24_change": "0.29245",
+                "capitalization": "432345.23",
+                "24H_volume": "32315000000000"
+              },
+              "price": 37002.6,
+              "price_per_coin": "12334.2",
+              "quantity": 3,
+              "type": "sold"
+            },
+            {
+              "date": "2018-06-05T22:28:15.766Z",
+              "deal_currency": 1,
+              "price": "12334.2",
+              "price_per_coin": "12334.2",
+              "quantity": 1,
+              "type": "bought"
+            },
+            {
+              "date": "2018-06-05T22:28:57.927Z",
+              "deal_currency": 2,
+              "price": "2.31",
+              "price_per_coin": "12334.2",
+              "quantity": 1,
+              "type": "sold"
+            },
+            {
+              "date": "2018-06-05T22:30:11.345Z",
+              "deal_currency": 2,
+              "price": "2.31",
+              "price_per_coin": "12334.2",
+              "quantity": 1,
+              "type": "sold"
+            },
+            {
+              "date": "2018-06-07T09:33:16.719Z",
+              "deal_currency": 1,
+              "price": "37002.6",
+              "price_per_coin": "12334.2",
+              "price_per_coin_swapped": "984.2",
+              "quantity": 3,
+              "type": "swapped"
+            },
+            {
+              "date": "2018-06-07T15:27:57.622Z",
+              "deal_currency": 5,
+              "price": "24668.4",
+              "price_per_coin": "12334.2",
+              "price_per_coin_swapped": "434.2",
+              "quantity": 2,
+              "type": "swapped"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "amount": 101.4394645,
+          "operations": [
+            {
+              "type": "bought",
+              "date": "2018-05-26T00:41:58.116Z",
+              "price": "50.24",
+              "quantity": "1",
+              "price_per_coin": "5410.30"
+            },
+            {
+              "date": "2018-06-05T02:55:02.234Z",
+              "deal_currency": 1,
+              "price": "834.2",
+              "price_per_coin": "834.2",
+              "quantity": 1,
+              "type": "bought"
+            },
+            {
+              "date": "2018-06-05T02:55:46.041Z",
+              "deal_currency": 1,
+              "price": "4171",
+              "price_per_coin": "834.2",
+              "quantity": 5,
+              "type": "bought"
+            },
+            {
+              "date": "2018-06-05T22:39:22.841Z",
+              "deal_currency": 1,
+              "price": "834.2",
+              "price_per_coin": "834.2",
+              "quantity": 1,
+              "type": "sold"
+            },
+            {
+              "date": "2018-06-05T22:43:01.486Z",
+              "deal_currency": 1,
+              "price": "834.2",
+              "price_per_coin": "834.2",
+              "quantity": 1,
+              "type": "sold"
+            },
+            {
+              "date": "2018-06-07T15:27:31.853Z",
+              "deal_currency": 2,
+              "price": "0.16",
+              "price_per_coin": "834.2",
+              "quantity": 1,
+              "type": "bought"
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "amount": 3,
+          "operations": [
+            {
+              "date": "2018-06-07T15:27:57.622Z",
+              "deal_currency": 6,
+              "price": "24668.4",
+              "price_per_coin": "434.2",
+              "price_per_coin_swapped": "12334.2",
+              "quantity": 56.81345,
+              "type": "swapped"
+            },
+            {
+              "date": "2018-06-07T16:53:32.905Z",
+              "deal_currency": 3,
+              "price": "0.52",
+              "price_per_coin": "434.2",
+              "quantity": 1,
+              "type": "bought"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Private Invest",
+      "is_private": true,
+      "coin": [
+        {
+          "id": 6,
+          "amount": "13.5",
+          "operations": [
+            {
+              "type": "sold",
+              "date": "2018-04-13T21:53:17.892Z",
+              "price": "320.25",
+              "quantity": "5",
+              "price_per_coin": "7821.30"
+            },
+            {
+              "type": "bought",
+              "date": "2018-04-23T10:54:48.654Z",
+              "price": "100.24",
+              "quantity": "4",
+              "price_per_coin": "7821.30"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "amount": "84.5",
+          "operations": [
+            {
+              "type": "sold",
+              "date": "2018-05-26T00:41:58.116Z",
+              "price": "50.24",
+              "quantity": "1",
+              "price_per_coin": "1221.80"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Shared",
+      "is_private": false,
+      "coin": [
+        {
+          "id": 6,
+          "amount": "62.5",
+          "operations": [
+            {
+              "type": "bought",
+              "date": "2018-04-13T21:53:17.892Z",
+              "price": "320.25",
+              "quantity": "5",
+              "price_per_coin": "721.80"
+            }
+          ]
+        },
+        {
+          "id": 3,
+          "amount": "14.5",
+          "operations": [
+            {
+              "type": "sold",
+              "date": "2018-05-23T01:14:20.471Z",
+              "price": "300",
+              "quantity": "3",
+              "price_per_coin": "621.80"
+            },
+            {
+              "type": "bought",
+              "date": "2018-05-26T00:41:58.116Z",
+              "price": "50.24",
+              "quantity": "1",
+              "price_per_coin": "1233.80"
+            }
+          ]
+        }
+      ]
     }
   ]
 }

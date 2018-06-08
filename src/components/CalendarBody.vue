@@ -9,9 +9,9 @@
 
       <div class="radio-buttons">
 
-          <a href="#" :class="['switch_btn','btn_left',{ active: showWeek === true }]" @click="showWeek = true">{{ $t('calendar.Week') }}</a>
+          <a href="#" :class="['switch_btn','btn_left',{ active: showWeek === true }]" @click.prevent="showWeek = true">{{ $t('calendar.Week') }}</a>
 
-          <a href="#" :class="['switch_btn','switch','btn_right',{ active: showWeek === false }]" @click="showWeek = false">{{ $t('calendar.Month') }}</a>
+          <a href="#" :class="['switch_btn','switch','btn_right',{ active: showWeek === false }]" @click.prevent="showWeek = false">{{ $t('calendar.Month') }}</a>
 
         <!--<a href="#" class="btn" @click="openAddFormModal()">+ Добавить ico</a>-->
           <b-btn v-b-toggle.formICO variant="primary">+ {{ $t('calendar.AddICO') }}</b-btn>

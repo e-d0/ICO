@@ -1,0 +1,95 @@
+<template>
+  <b-popover :target="`deleteConfirmForm-${index}-${id}`"
+             triggers="click"
+             placement="left"
+             container="app"
+             :ref="`deleteConfirmForm-${index}-${id}`"
+             :index="index">
+    <div class="deleteConfirmForm">
+      <div @click="$emit('close')" class="btn close"></div>
+      <div>
+        <div>{{ $t('portfolio.remove_operation') }}?</div>
+        <a href="#" @click.prevent="$emit('confirm')" size="sm" class="btn submit" variant="primary">{{ $t('form.Remove')}}</a>
+        <a href="#" @click.prevent="$emit('close')" size="sm" class="btn submit" variant="primary">{{ $t('form.Cancel')}}</a>
+      </div>
+    </div>
+  </b-popover>
+</template>
+
+<script>
+export default {
+  name: 'popoverOperationDelete',
+  props: {
+    index: Number,
+    id: Number
+  },
+  methods: {
+  }
+}
+</script>
+
+<style lang="less" scoped>
+  .deleteConfirmForm{
+    padding: 28px 12px 12px 12px;
+    box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.35);
+    .btn.submit{
+      font-family: 'Roboto', sans-serif;
+      padding: 6px 8px 4px 6px;
+      -webkit-box-shadow: 0 2px 0 #3b962f;
+      box-shadow: 0 2px 0 #3b962f;
+      border-radius: 4px;
+      background-color: #44af36;
+      color: #fff;
+      position: relative;
+      cursor: pointer;
+      height: 26px;
+      text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 14px;
+      letter-spacing: -0.23px;
+      margin-top: 10px;
+      &:hover,
+      &:focus,
+      &:active{
+        position: relative;
+        text-decoration: none;
+        background-color: #45af37;
+        color: #fff!important;
+        box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+      }
+    }
+    .btn.close{
+      position: absolute;
+      right: 0px;
+      top: 6px;
+      width: 8px;
+      height: 8px;
+      background-color: transparent;
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+      z-index: 30000;
+      &::before {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 1px;
+        top: 6px;
+        left: 1px;
+        background-color: #707986;;
+        transform: rotate(45deg);
+      }
+      &::after {
+        content: "";
+        position: absolute;
+        width: 12px;
+        height: 1px;
+        top: 6px;
+        left: 1px;
+        background-color: #707986;;
+        transform: rotate(-45deg);
+      }
+    }
+  }
+</style>
