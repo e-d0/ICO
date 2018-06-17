@@ -72,6 +72,7 @@
     "Quantity": "Количество",
     "Price": "Цена",
     "Price_per_coin": "Цена за монету",
+    "price_per_coin_swapped": "Цена за обменную монету",
     "bought": "Покупка",
     "sold": "Продажа",
     "swapped": "Обмен",

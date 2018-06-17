@@ -4,6 +4,7 @@
     <template v-if="item">
     <tr v-if="coin">
         <th :class="['portfolio_item-cell', 'portfolio_item-name', `portfolio_item-name--${coin.ticker}`]">
+          <small :class="[`portfolio_item-name--pseudo`]" :style="{backgroundColor: coin.color}"></small>
           <div class="portfolio_item-logo">
             <img :src="coin.icon"
                  :alt="coin.title">
@@ -27,210 +28,155 @@
           </th>
 
           <th :class="['portfolio_item-cell', 'portfolio_item-24hour', `portfolio_item-24hour--${ isPositive (coin) }`]">
-            <span v-html=" currencyConverter(coin['24_change'], currentCurrency.ticker, false )+'%'"></span>
+            <span v-html=" coin['24_change']+'%'"></span>
           </th>
 
         <th class="portfolio_item-cell portfolio_item-capitalizations">
-          <span v-html=" currencyConverter(coin.capitalization, currentCurrency.ticker ) "></span>
+          <span v-html=" currencyConverter(coin.market_cap, currentCurrency.ticker ) "></span>
         </th>
 
-        <th class="portfolio_item-cell portfolio_item-volume">
+        <th class="portfolio_item-cell portfolio_item-volume" v-if="coin">
           <div class="portfolio_item-volume-wrapper">
             <span v-html=" currencyConverter(coin['24H_volume'], currentCurrency.ticker ) "></span>
-            <a href="#" class="portfolio_item-dropdown js-thead-show"></a>
+            <a href="#" @click.prevent="collapseOpen = !collapseOpen" class="portfolio_item-dropdown js-thead-show"></a>
           </div>
         </th>
       </tr>
     </template>
     </thead>
-    <tbody v-if="coin" :class="['tbody', `tbody--${coin.ticker}`, 'js-tbody']">
-    <tr>
-      <td>
-        <span>{{ $t('portfolio.Operation') }}</span>
-      </td>
-      <td>
-        <span>{{ $t('portfolio.Quantity') }}</span>
-      </td>
-      <td colspan="2">
-        <span>{{ $t('portfolio.Price') }}</span>
-      </td>
-      <td colspan="3">
-        <span>{{ $t('portfolio.Price_per_coin') }}</span>
-        <a href="#" :id="`removeCoinForm-${coin.id}`" @click.prevent="onEnable(`removeCoinForm-${coin.id}`)" class="removeCoin"></a>
 
-        <b-popover :target="`removeCoinForm-${coin.id}`"
-                   :placement="'top'"
-                   triggers="hover"
-                   >
-          <span v-bind:style="[
-                       {padding: '8px'},
-                       {fontSize: '12px'},
-                       {textAlign: 'center'},
-                       {backgroundColor: '#ffffff'},
-                       {boxShadow: '-8px 8px 24px rgba(0, 0, 0, 0.2)'}
-                        ]">{{ $t('portfolio.remove_coin_short') }}</span>
-        </b-popover>
+      <tbody :id="`coin-toggle--${coin.ticker}`"
+             v-if="coin" :class="['tbody', `tbody--${coin.ticker}`, 'js-tbody', {collapsed: !collapseOpen}]">
+        <tr>
+          <td>
+            <span>{{ $t('portfolio.Operation') }}</span>
+          </td>
+          <td>
+            <span>{{ $t('portfolio.Quantity') }}</span>
+          </td>
+          <td colspan="2">
+            <span>{{ $t('portfolio.Price') }}</span>
+          </td>
+          <td colspan="3">
+            <span>{{ $t('portfolio.Price_per_coin') }}</span>
+            <a href="#" :id="`removeCoinForm-${coin.id}`" @click.prevent="onEnable(`removeCoinForm-${coin.id}`)" class="removeCoin"></a>
 
-        <popover-coin-delete :id="coin.id"
-                             :coin="coin"
-                             v-on:confirm="removeCoin()"
-                             v-on:close="onDisable(`removeCoinForm-${coin.id}`)"></popover-coin-delete>
-      </td>
-    </tr>
+            <b-popover :target="`removeCoinForm-${coin.id}`"
+                       :placement="'top'"
+                       triggers="hover"
+                       >
+              <span v-bind:style="[
+                           {padding: '8px'},
+                           {fontSize: '12px'},
+                           {textAlign: 'center'},
+                           {backgroundColor: '#ffffff'},
+                           {boxShadow: '-8px 8px 24px rgba(0, 0, 0, 0.2)'}
+                            ]">{{ $t('portfolio.remove_coin_short') }}</span>
+            </b-popover>
 
-    <tr v-if="item" v-for="(operation, index) in item.operations" :key="index">
+            <popover-coin-delete :id="coin.id"
+                                 :coin="coin"
+                                 v-on:confirm="removeCoin()"
+                                 v-on:close="onDisable(`removeCoinForm-${coin.id}`)"></popover-coin-delete>
+          </td>
+        </tr>
+        <small :class="[`tbody--pseudo`]" :style="{backgroundColor: coin.color}"></small>
+        <template v-if="item" v-for="(operation, index) in item.operations">
+          <tr  :key="index">
 
-      <template v-if="operation.type === 'swapped'">
-        <td>
-          <span :class="[ operationType(operation) ]">{{ $t(`portfolio.${operationType(operation) }`) }}</span>
-        </td>
-        <td>
-          <span>{{ operation.quantity }} <b>{{ coin.ticker }}</b></span>
-          <span class="swapped_coin"><small>{{ $t(`portfolio.IN`)}}</small> {{ countSwappedCoinQuantity(operation) }} <b>{{ swappedCoinTicker(operation) }}</b></span>
-        </td>
-        <td colspan="2">
-          <span v-html="currencyConverter(operation.price, currentCurrency.ticker )"></span>
-        </td>
-        <td colspan="2">
-          <span v-html="currencyConverter( operation.price_per_coin, currentCurrency.ticker )"></span>
-          <span class="swapped_coin" v-html="pricePerCoinSwapped(operation)"></span>
-        </td>
-      </template>
+          <template v-if="operation.type === 'swapped'">
+            <td>
+              <span :class="[ operationType(operation) ]">{{ $t(`portfolio.${operationType(operation) }`) }}</span>
+            </td>
+            <td>
+              <span>{{ operation.quantity }} <b>{{ coin.ticker }}</b></span>
+              <span class="swapped_coin"><small>{{ $t(`portfolio.IN`)}}</small> {{ countSwappedCoinQuantity(operation) }} <b>{{ swappedCoinTicker(operation) }}</b></span>
+            </td>
+            <td colspan="2">
+              <span v-html="currencyConverter(operation.price, currentCurrency.ticker )"></span>
+            </td>
+            <td colspan="2">
+              <span v-html="currencyConverter( operation.price_per_coin, currentCurrency.ticker )"></span>
+              <span class="swapped_coin" v-html="pricePerCoinSwapped(operation)"></span>
+            </td>
+          </template>
 
-      <template v-else>
-        <td>
-          <span :class="[ operationType(operation) ]">{{ $t(`portfolio.${operationType(operation) }`) }}</span>
-        </td>
-        <td>
-          <span>{{ operation.quantity }} <b>{{ coin.ticker }}</b></span>
-        </td>
-        <td colspan="2">
-          <span v-html="currencyConverter(countOperationValue(operation), currentCurrency.ticker )"></span>
-        </td>
-        <td colspan="2">
-          <span v-html="currencyConverter( operation.price_per_coin, currentCurrency.ticker )"></span>
-        </td>
-      </template>
-      <td>
-        <a href="#" :id="`editConfirmForm-${index}-${item.id}`" @click.prevent="onEnable(`editConfirmForm-${index}-${item.id}`)" class="edit">{{ $t(`form.edit`) }}</a>
-        <a href="#" :id="`deleteConfirmForm-${index}-${item.id}`" @click.prevent="onEnable(`deleteConfirmForm-${index}-${item.id}`)" class="delete">{{ $t(`form.delete`) }}</a>
-        <span>
+          <template v-else>
+            <td>
+              <span :class="[ operationType(operation) ]">{{ $t(`portfolio.${operationType(operation) }`) }}</span>
+            </td>
+            <td>
+              <span>{{ operation.quantity }} <b>{{ coin.ticker }}</b></span>
+            </td>
+            <td colspan="2">
+              <span v-html="currencyConverter(countOperationValue(operation), currentCurrency.ticker )"></span>
+            </td>
+            <td colspan="2">
+              <span v-html="currencyConverter( operation.price_per_coin, currentCurrency.ticker )"></span>
+            </td>
+          </template>
+          <td>
+            <!--<a href="#" :id="`editConfirmForm-${index}-${item.id}`" @click.prevent="onEnable(`editConfirmForm-${index}-${item.id}`)" class="edit">{{ $t(`form.edit`) }}</a>-->
+            <a href="#" v-b-toggle="`formEditRecord--${index}--${item.id}`" @click.prevent="" class="edit">{{ $t(`form.edit`) }}</a>
+            <a href="#" :id="`deleteConfirmForm-${index}-${item.id}`" @click.prevent="onEnable(`deleteConfirmForm-${index}-${item.id}`)" class="delete">{{ $t(`form.delete`) }}</a>
+            <span>
 
-            <popover-operation-delete :index="index"
-                                      :id="item.id"
-                                      v-on:confirm="deleteOperation(operation, index)"
-                                      v-on:close="onDisable(`deleteConfirmForm-${index}-${item.id}`)"></popover-operation-delete>
+                <popover-operation-delete :index="index"
+                                          :id="item.id"
+                                          v-on:confirm="deleteOperation(operation, index)"
+                                          v-on:close="onDisable(`deleteConfirmForm-${index}-${item.id}`)"></popover-operation-delete>
 
-            <popover-operation-edit :index="index"
-                                    :coinId="item.id"
-                                    :operation="operation"
-                                    v-on:confirm="editOperation(index, payload = $event)"
-                                    v-on:close="onDisable(`editConfirmForm-${index}-${item.id}`)"></popover-operation-edit>
+                <!--<popover-operation-edit :index="index"-->
+                                        <!--:coinId="item.id"-->
+                                        <!--:operation="operation"-->
+                                        <!--v-on:confirm="editOperation(index, payload = $event)"-->
+                                        <!--v-on:close="onDisable(`editConfirmForm-${index}-${item.id}`)"></popover-operation-edit>-->
+            </span>
+          </td>
+          </tr>
+          <tr>
+            <td class="form_td" colspan="12">
+              <b-collapse :id="`formEditRecord--${index}--${item.id}`">
+                <form-edit-operation-portfolio :index="index"
+                                               :selectedCoin="item"
+                                               :portfolio="portfolio"
+                                               :operation="operation"></form-edit-operation-portfolio>
+              </b-collapse>
+            </td>
+          </tr>
+        </template>
+        <tr>
+          <td colspan="12">
 
-        </span>
-      </td>
-    </tr>
+              <form-add-record-portfolio :selectedCoin="item" :portfolio="portfolio"></form-add-record-portfolio>
 
-    <tr>
-      <td colspan="7">
+            <!-- /.portfolio_form -->
+          </td>
+        </tr>
+        <tr>
+          <td class="exchange" colspan="12">
+            <PortfolioExchangeMarkets></PortfolioExchangeMarkets>
+          </td>
+        </tr>
+      </tbody>
 
-          <form-add-record-portfolio :selectedCoin="item" :portfolio="portfolio"></form-add-record-portfolio>
-
-        <!-- /.portfolio_form -->
-      </td>
-    </tr>
-    </tbody>
-    <tfoot class="js-tfoot">
-    <tr>
-      <td colspan="2" rowspan="5">
-        <div class="portfolio_graph">
-          <img src="img/graph.png" alt="">
-        </div>
-      </td>
-      <td colspan="2">
-        <span>Exchange</span>
-      </td>
-      <td>
-        <span>Price</span>
-      </td>
-      <td colspan="2">
-        <span>Volume</span>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <img src="../assets/img/kraken-logo-small.png" alt="">
-      </td>
-      <td>
-        <span><b>$</b> 4.36</span>
-      </td>
-      <td>
-        <span><b>$</b> 10 010 000</span>
-      </td>
-      <td>
-        <a href="#" class="btn btn-trade">Trade</a>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <img src="../assets/img/kraken-logo-small.png" alt="">
-      </td>
-      <td>
-        <span><b>$</b> 4.36</span>
-      </td>
-      <td>
-        <span><b>$</b> 10 010 000</span>
-      </td>
-      <td>
-        <a href="#" class="btn btn-trade">Trade</a>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <img src="../assets/img/kraken-logo-small.png" alt="">
-      </td>
-      <td>
-        <span><b>$</b> 4.36</span>
-      </td>
-      <td>
-        <span><b>$</b> 10 010 000</span>
-      </td>
-      <td>
-        <a href="#" class="btn btn-trade">Trade</a>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="2">
-        <img src="../assets/img/kraken-logo-small.png" alt="">
-      </td>
-      <td>
-        <span><b>$</b> 4.36</span>
-      </td>
-      <td>
-        <span><b>$</b> 10 010 000</span>
-      </td>
-      <td>
-        <a href="#" class="btn btn-trade">Trade</a>
-      </td>
-    </tr><tr>
-      <td colspan="7"></td>
-    </tr>
-
-    </tfoot>
   </table>
   <!-- /.portfolio_item -->
 </template>
 
 <script>
 import Vuex from 'vuex'
+import { EventBus } from './eventbus'
 import formAddRecordPortfolio from './formAddRecordPortfolio'
+import formEditOperationPortfolio from './formEditOperationPortfolio'
 import popoverOperationDelete from './popoverOperationDelete'
 import popoverOperationEdit from './popoverOperationEditPortfolio'
 import popoverCoinDelete from './popoverCoinDelete'
+import PortfolioExchangeMarkets from './PortfolioExchangeMarkets'
 const storeEvent = Vuex.createNamespacedHelpers('portfolio')
 export default {
   name: 'PortfolioListItem',
-  components: { formAddRecordPortfolio, popoverOperationDelete, popoverOperationEdit, popoverCoinDelete },
+  components: { formAddRecordPortfolio, popoverOperationDelete, popoverOperationEdit, popoverCoinDelete, PortfolioExchangeMarkets, formEditOperationPortfolio },
   props: {
     portfolio: Object,
     item: Object,
@@ -238,6 +184,7 @@ export default {
   },
   data () {
     return {
+      collapseOpen: false
     }
   },
   computed: {
@@ -260,7 +207,8 @@ export default {
           return coin
         }
       })
-
+      this.onDisable(`removeCoinForm-${this.coin.id}`)
+      this.collapseOpen = !this.collapseOpen
       this.$store.dispatch('portfolio/changePortfolio', portfolioChanged)
     },
     onEnable (index) {
@@ -269,38 +217,35 @@ export default {
     onDisable (index) {
       this.$root.$emit('bv::hide::popover', index)
     },
-    editOperation (index, payload) {
-      let portfolioChanged = JSON.parse(JSON.stringify(this.portfolio))
-      /**
-       * //TODO Изменять общее число монет при изменении операции. Нужно ли?
-       * */
-      /**
-       * Фильтруем объект портфолио на предмет текущей монеты
-       * */
-      portfolioChanged.coin.filter(coin => {
-        if (coin.id === this.item.id) {
-          // /**
-          //  * Сначала вычитаем значение quantity до внесенных изменений из общего числа
-          //  * */
-          // let prevAmount = this.portfolio.coin.find((item) => {
-          //   if (this.item.id === item.id) return item
-          // })
-          // coin.amount = payload.type === 'Sold' ? coin.amount - prevAmount.operations[index].quantity : coin.amount + prevAmount.operations[index].quantity
-          /**
-           * Затем перезаписываем операцию
-           * */
-          coin.operations[index] = payload
-          // /**
-          //  * И плюсуем количество монет к общему числу
-          //  * */
-          // coin.amount = coin.amount + payload.quantity
-        }
-        return coin
-      })
-
-      this.$store.dispatch('portfolio/changePortfolio', portfolioChanged)
-      this.onDisable(`editConfirmForm-${index}-${this.item.id}`)
-    },
+    // editOperation (index, payload) {
+    //   let portfolioChanged = JSON.parse(JSON.stringify(this.portfolio))
+    //   /**
+    //    * Фильтруем объект портфолио на предмет текущей монеты
+    //    * */
+    //   portfolioChanged.coin.filter(coin => {
+    //     if (coin.id === this.item.id) {
+    //       // /**
+    //       //  * Сначала вычитаем значение quantity до внесенных изменений из общего числа
+    //       //  * */
+    //       // let prevAmount = this.portfolio.coin.find((item) => {
+    //       //   if (this.item.id === item.id) return item
+    //       // })
+    //       // coin.amount = payload.type === 'Sold' ? coin.amount - prevAmount.operations[index].quantity : coin.amount + prevAmount.operations[index].quantity
+    //       /**
+    //        * Затем перезаписываем операцию
+    //        * */
+    //       coin.operations[index] = payload
+    //       // /**
+    //       //  * И плюсуем количество монет к общему числу
+    //       //  * */
+    //       // coin.amount = coin.amount + payload.quantity
+    //     }
+    //     return coin
+    //   })
+    //
+    //   this.$store.dispatch('portfolio/changePortfolio', portfolioChanged)
+    //   this.onDisable(`editConfirmForm-${index}-${this.item.id}`)
+    // },
     deleteOperation (operation, index) {
       let portfolioChanged = JSON.parse(JSON.stringify(this.portfolio))
 
@@ -310,14 +255,13 @@ export default {
       portfolioChanged.coin.filter(coin => {
         if (coin.id === this.item.id) {
           /**
-           * Если операция продажи, то вычитаем необходимое количестов монет
+           * //TODO нужно ли высчитывать количество монет при удалении операции.
            * */
-          coin.amount = parseFloat(coin.amount) - parseFloat(coin.operations[index].quantity)
+          // coin.amount = parseFloat(coin.amount) - parseFloat(coin.operations[index].quantity)
           coin.operations.splice(index, 1)
         }
         return coin
       })
-
       this.$store.dispatch('portfolio/changePortfolio', portfolioChanged)
       this.onDisable(`deleteConfirmForm-${index}-${this.item.id}`)
     },
@@ -341,12 +285,31 @@ export default {
     },
     countValue (amount, coinID) {
       if (this.getCoinByID(coinID)) {
-        return (parseFloat(this.getCoinByID(coinID)['price']) * parseFloat(amount))
+        return (parseFloat(this.getCoinByID(coinID)['market_price']) * parseFloat(amount))
       }
     },
     countOperationValue (operation) {
       return (parseFloat(operation.price_per_coin) * parseFloat(operation.quantity))
+    },
+    toggleCollapseCoin (e) {
+      if (e === this.coin.ticker) {
+        this.collapseOpen = !this.collapseOpen
+        /**
+         * Шлем в чарт сообщение о закрытии\открытии
+         * */
+        EventBus.$emit('chart:doughnut:check', e, this.collapseOpen)
+        this.$root.$emit('bv::toggle::collapse', `coin-toggle--${e}`)
+      }
+    },
+    toggleCollapseCoin2 (e) {
+      if (e === this.coin.ticker) {
+        this.collapseOpen = !this.collapseOpen
+        this.$root.$emit('bv::toggle::collapse', `coin-toggle--${e}`, !this.collapseOpen)
+      }
     }
+  },
+  created () {
+    EventBus.$on('chart:doughnut:grow', this.toggleCollapseCoin)
   }
 }
 </script>
@@ -418,54 +381,13 @@ export default {
           color: #8f96a1;
           letter-spacing: -0.2px;
         }
-        &::before {
-          content: "";
+        &--pseudo{
           position: absolute;
           width: 4px;
-          height: 98%;
+          height: 100%;
           left: 0px;
           top: 0px;
           z-index: 11;
-        }
-        &--BTC {
-          &::before {
-            background-color: #8f5bc0;
-          }
-        }
-        &--MON {
-          &::before {
-            background-color: #c28f58;
-          }
-        }
-        &--OPA {
-          &::before {
-            background-color: #429db0;
-          }
-        }
-        &--EOS {
-          &::before {
-            background-color: #ffa635;
-          }
-        }
-        &--XMR {
-          &::before {
-            background-color: #6982fc;
-          }
-        }
-        &--DASH {
-          &::before {
-            background-color: #ff6d71;
-          }
-        }
-        &--NEO {
-          &::before {
-            background-color: #bcbdbc;
-          }
-        }
-        &--ETH {
-          &::before {
-            background-color: #85b222;
-          }
         }
       }
       &-amount {
@@ -629,6 +551,11 @@ export default {
     .tbody {
       position: relative;
       background-color: #fff;
+      transition: all .3s ease;
+      height: 100%;
+      &.collapsed{
+        display: none;
+      }
       &::before {
         content: "";
         position: absolute;
@@ -638,8 +565,7 @@ export default {
         height: 10px;
         background-image: linear-gradient(180deg, #e0e6ed 0%, rgba(224, 230, 237, 0) 100%);
       }
-      &::after {
-        content: "";
+      &--pseudo{
         position: absolute;
         width: 4px;
         height: 100%;
@@ -647,46 +573,6 @@ export default {
         top: 1px;
         //background-color: #bcbdbc;
         z-index: 11;
-      }
-      &--BTC {
-        &::after {
-          background-color: #8f5bc0;
-        }
-      }
-      &--MON {
-        &::after {
-          background-color: #c28f58;
-        }
-      }
-      &--OPA {
-        &::after {
-          background-color: #429db0;
-        }
-      }
-      &--EOS {
-        &::after {
-          background-color: #ffa635;
-        }
-      }
-      &--XMR {
-        &::after {
-          background-color: #6982fc;
-        }
-      }
-      &--DASH {
-        &::after {
-          background-color: #ff6d71;
-        }
-      }
-      &--NEO {
-        &::after {
-          background-color: #bcbdbc;
-        }
-      }
-      &--ETH {
-        &::after {
-          background-color: #85b222;
-        }
       }
       tr {
         &:first-child {
@@ -718,11 +604,13 @@ export default {
         &:last-child {
           td {
             &:first-child {
-              padding: 0px 12px 30px 28px;
-              //background-color: #e8edf2;
+              padding: 0;
               text-align: right;
             }
           }
+        }
+        td.form_td{
+          padding: 0px 12px 0px 58px!important;
         }
         td {
           padding: 15px 24px 13px 12px;
@@ -862,9 +750,7 @@ export default {
       }
 
     }
-    tfoot {
-      background-color: #fff;
-      tr {
+      tr.t-foot {
         td {
           padding: 12px 12px 12px 12px;
           color: #707986;
@@ -938,6 +824,5 @@ export default {
           z-index: 11;
         }
       }
-    }
   }
 </style>

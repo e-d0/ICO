@@ -9,8 +9,8 @@
       </div>
       <div class="portfolio_list-head-cell portfolio_list-head-percent">
         <span>%</span>
-        <span class="arrow arrow-up"></span>
-        <span class="arrow arrow-down arrow--active"></span>
+        <span :class="['arrow', 'arrow-up',{'arrow--active': sortValue === 'asc'}]" @click.prevent="sortByTotalValue('asc')"></span>
+        <span :class="['arrow', 'arrow-down',{'arrow--active': sortValue === 'desc'}]" @click.prevent="sortByTotalValue('desc')"></span>
       </div>
       <div class="portfolio_list-head-cell portfolio_list-head-price">
         <span>{{ $t('portfolio.Total_Value') }}</span>
@@ -26,8 +26,8 @@
       </div>
     </div>
     <!-- /.portfolio_list-head -->
-    <template v-if="portfolio.coin"
-              v-for="(item, index) in portfolio.coin"
+    <template v-if="portfolioCoins"
+              v-for="(item, index) in portfolioCoins"
               >
       <portfolio-list-item :key="index"
                            :item="item"
@@ -49,18 +49,48 @@ export default {
   props: {
     portfolio: Object
   },
+  data () {
+    return {
+      portfolioCoins: null,
+      sortValue: null
+    }
+  },
   computed: {
     ...storeEvent.mapGetters({
       getCoinByID: 'getCoinByID'
     })
   },
+  watch: {
+    portfolio: function (val) {
+      if (this.sortValue !== null) {
+        this.portfolioCoins = val.coin
+        this.sortByTotalValue(this.sortValue)
+      } else {
+        this.portfolioCoins = val.coin
+      }
+    }
+  },
   methods: {
+    sortByTotalValue (val) {
+      this.sortValue = val
+      let coins = this.portfolioCoins.slice()
+      this.portfolioCoins = coins.sort((obj1, obj2) => {
+        if (val === 'asc') {
+          if (this.countValue(obj1) < this.countValue(obj2)) return 1
+          if (this.countValue(obj1) > this.countValue(obj2)) return -1
+        } else {
+          if (this.countValue(obj1) > this.countValue(obj2)) return 1
+          if (this.countValue(obj1) < this.countValue(obj2)) return -1
+        }
+        return 0
+      })
+    },
     /**
      * Считаем стоимость каждой монеты отдельно
      * */
     countValue (item) {
       if (this.getCoinByID(item.id)) {
-        return (parseFloat(this.getCoinByID(item.id)['price']) * parseFloat(item.amount))
+        return (parseFloat(this.getCoinByID(item.id)['market_price']) * parseFloat(item.amount))
       }
     },
     totalPercent (coin) {
@@ -75,6 +105,9 @@ export default {
         return coinPercent.toFixed(0)
       }
     }
+  },
+  created () {
+    if (this.portfolio.coin) this.portfolioCoins = this.portfolio.coin
   }
 }
 </script>

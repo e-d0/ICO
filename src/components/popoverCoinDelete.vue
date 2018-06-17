@@ -9,7 +9,7 @@
       <div>
         <div>{{ $t('portfolio.remove_coin', { ticker: coin.ticker }  ) }}</div>
         <a href="#" @click.prevent="$emit('confirm')" size="sm" class="btn submit" variant="primary">{{ $t('form.Remove')}}</a>
-        <a href="#" @click.prevent="$emit('close')" size="sm" class="btn submit" variant="primary">{{ $t('form.Cancel')}}</a>
+        <a href="#" @click.prevent="$emit('close')" size="sm" class="btn submit cancel" variant="primary">{{ $t('form.Cancel')}}</a>
       </div>
     </div>
   </b-popover>
@@ -49,6 +49,19 @@ export default {
       font-weight: 500;
       line-height: 14px;
       letter-spacing: -0.23px;
+      &.cancel{
+        box-shadow: 0 2px 0 #4d515c;
+        background-color: #8f96a1;
+        &:hover,
+        &:focus,
+        &:active{
+          position: relative;
+          text-decoration: none;
+          background-color: #8f96a1;
+          color: #fff!important;
+          box-shadow: 0 2px 0 #4d515c, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+        }
+      }
       &:hover,
       &:focus,
       &:active{

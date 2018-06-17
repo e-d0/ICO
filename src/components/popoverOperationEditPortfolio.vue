@@ -7,11 +7,11 @@
              :ref="`editConfirmForm-${index}-${coinId}`"
              :index="index">
 
-        <div class="popover-edit">
+        <div class="popover-edit" v-if="currentCoin">
           <div class="popover_close">
             <a href="#" @click.prevent="$emit('close')"></a>
           </div>
-          <div v-if="currentCoin" :class="['popover-edit_header', `popover-edit_header--${currentCoin.ticker}`]">
+          <div  :class="['popover-edit_header', `popover-edit_header--${currentCoin.ticker}`]">
             <span>{{ $t('form.edit') }}</span>
             <span class="popover-edit_name">{{ currentCoin.title }} · <b>{{ currentCoin.ticker }}</b></span>
           </div>
@@ -59,18 +59,7 @@
                         <label :for="[`edit-form-price-${coinId}`]"> {{ $t('portfolio.Price') }}</label>
                         <div class="edit-form_price-input-wrapper">
                           <input type="text" name="price" v-model="price" :id="[`edit-form-price-${coinId}`]" placeholder="">
-                          <div class="current">{{ selectedCurrency.ticker }}</div>
-                          <!--<select v-if="currencies"-->
-                                  <!--size="1"-->
-                                  <!--name="name[]"-->
-                                  <!--id="priceSelectEditOperation"-->
-                                  <!--:required="true"-->
-                                  <!--v-model="selectedCurrency">-->
-                            <!--<option v-for="currency in currencies"-->
-                                    <!--:key="currency.id"-->
-                                    <!--:value="currency"-->
-                            <!--&gt;{{ currency.ticker }}</option>-->
-                          <!--</select>-->
+                          <div class="current" v-if="selectedCurrency">{{ selectedCurrency.ticker }}</div>
                         </div>
                       </div>
                     </div>
@@ -116,6 +105,7 @@
                 <!--</div>-->
               <!--</fieldset>-->
               <div class="edit-form_buttons">
+
                    <button @click.prevent="save()" class="btn btn-primary" type="submit" name="button">{{ $t('form.Save')}}</button>
               </div>
             </form>

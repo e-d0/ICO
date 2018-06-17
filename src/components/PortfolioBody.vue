@@ -16,7 +16,11 @@
               </label>
             </template>
           </div>
-          <!-- /.portfolio-view_filter -->
+
+          <!--<donutPortfolioWrapper :dataObj="chartData(stringifiedPortfolio)"-->
+                                 <!--:portfolio="portfolio"-->
+                                 <!--:totalCost="totalCost()"></donutPortfolioWrapper>-->
+            <!-- /.portfolio-view_filter -->
           <div class="portfolio-view_public">
             <a>{{ $t('portfolio.public_portfolio') }}<sup class="tooltip-mark"></sup></a>
             <div class="portfolio-view_toggle">
@@ -32,7 +36,7 @@
           <div class="portfolio_bottom-line">
             <div class="portfolio_cost">
               <span class="portfolio_cost-price">{{ $t('portfolio.Acquisition_Cost') }}
-                <sup class="tooltip-mark" data-toggle="tooltip" data-placement="right" :data-original-title="[$t('portfolio.renew')]"></sup>
+                <sup class="tooltip-mark" v-b-tooltip.hover.html.right="tipData"></sup>
               </span>
               <span class="portfolio_cost-usd" v-if="totalCost()" v-html="currencyConverter(totalCost(), currentCurrency.ticker )"></span>
               <span class="portfolio_cost-btc" v-if="totalCost()" v-html="currencyConvertUSDToBTC(totalCost())"></span>
@@ -74,16 +78,23 @@
 import formAddDeleteCoin from './formAddDeleteCoin'
 import PortfolioHistory from './PortfolioHistory'
 import PortfolioList from './PortfolioList'
+import chartDonutPortfolio from './chartDonutPortfolio'
+import donutPortfolioWrapper from './donutPortfolioWrapper'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('portfolio')
 export default {
   name: 'PortfolioBody',
-  components: { formAddDeleteCoin, PortfolioHistory, PortfolioList },
+  components: { formAddDeleteCoin, PortfolioHistory, PortfolioList, chartDonutPortfolio, donutPortfolioWrapper },
   props: {
     portfolio: Object
   },
   data () {
     return {
+      tipData: {
+        title: `<div class="tooltip-inner-custom">${this.$t('portfolio.renew')}</div>`,
+        template: `<div class="tooltip custom" role="tooltip"> <div class="arrow"></div> <div class="tooltip-inner"></div> </div>`,
+        html: true
+      },
       currencyStorage: null
     }
   },
@@ -96,9 +107,59 @@ export default {
       currencies: 'currencies',
       getCurrencyByTicker: 'getCurrencyByTicker',
       currentCurrency: 'currentCurrency'
-    })
+    }),
+    stringifiedPortfolio: function () {
+      if (this.portfolio) {
+        return JSON.parse(JSON.stringify(this.portfolio))
+      }
+    }
+  },
+  watch: {
+    portfolio: function () {
+      console.log('PORTFOLIO CHANGED')
+      if (this.stringifiedPortfolio) {
+        this.chartData(this.stringifiedPortfolio)
+      }
+    }
   },
   methods: {
+    chartData (portfolio) {
+      if (portfolio !== undefined) {
+        let sum = this.totalCost()
+        let colors = []
+        let labels = []
+        /**
+         * Заполняем массив с данными для чарта бублика- цвет и названия монет
+         * */
+        portfolio.coin.forEach((element) => {
+          if (this.getCoinObject(element.id) !== undefined) {
+            colors.push(this.getCoinObject(element.id).color)
+            labels.push(this.getCoinObject(element.id).ticker)
+          }
+        })
+        /**
+         * Заполняем массив с данными для чарта бублика: отношение в процентах к общему количеству
+         * */
+        let percentage = portfolio.coin.map((current) => {
+          if (this.getCoinObject(current.id)) {
+            let coinPriceTotal = parseFloat(current.amount) * this.getCoinObject(current.id).market_price * current.amount
+            return (coinPriceTotal * 100 / parseFloat(sum)).toFixed(2)
+          }
+        })
+        /**
+         * Формируем в один объект
+         * */
+        let dataObj = {
+          labels: labels,
+          data: percentage,
+          colors: colors
+        }
+        return dataObj
+      }
+    },
+    getCoinObject (id) {
+      return this.getCoinByID(id)
+    },
     ...storeEvent.mapActions(['setCurrentCurrency']),
     totalChange () {
       let total = 0
@@ -137,7 +198,7 @@ export default {
      * */
     countValue (item) {
       if (this.getCoinByID(item.id)) {
-        return (parseFloat(this.getCoinByID(item.id)['price']) * parseFloat(item.amount))
+        return (parseFloat(this.getCoinByID(item.id)['market_price']) * parseFloat(item.amount))
       }
     },
     /**
@@ -298,7 +359,6 @@ export default {
       flex-direction: column;
       span /deep/ b{
         line-height: 20px;
-        /* Text style for "$" */
         font-size: 18px;
         font-weight: normal;
       }
@@ -407,14 +467,17 @@ export default {
       .btn {
         position: relative;
         padding: 11px 11px 11px 32px;
-        background-image: linear-gradient(180deg, #358c29 0%, #45af36 100%);
+        /*background-image: linear-gradient(180deg, #358c29 0%, #45af36 100%);*/
         text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 0 #3b962f;
         color: #ffffff;
         font-family: @main-font;
         font-weight: 500;
         font-size: 13px;
         line-height: 11px;
         letter-spacing: -0.22px;
+        border-radius: 4px;
+        background-color: #45af37;
         &::before {
           content: "";
           position: absolute;

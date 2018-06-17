@@ -1,25 +1,30 @@
 <template>
   <div class="portfolio_history">
     <h3>{{ $t('portfolio.change_history') }}</h3>
-    <ul v-if="operations" class="history_items">
-      <li v-for="(operation, index) in operations" :key="index" :class="[`history_item history_item--${operation.type}`]">
-        <div class="history_item-data">
-          <span class="history_item-name" v-if="operation.coin_id">{{ getCoinByID(operation.coin_id).title }}</span>
-          <span class="history_item-amount">
-            <template v-if="operation.type !== 'swapped'">
-              {{operation.type === 'sold' ? '-' : '+' }}{{ operation.quantity }} <small> {{ getCoinByID(operation.coin_id).ticker }}</small>
-              (<span class="history_item-amount-usd" v-html="currencyConverter(operation.price_per_coin , currentCurrency.ticker)"></span>)
-            </template>
-            <template v-else>
-              {{ operation.quantity }} <small>{{ getCoinByID(operation.coin_id).ticker }}</small>(<span class="history_item-amount-usd" v-html="( currencyConverter(operation.price_per_coin , currentCurrency.ticker) )"> </span>) - {{countSwapped(operation)}} <small> {{ getCoinByID(operation.deal_currency).ticker }}</small>
-            </template>
+    <template  v-if="operations">
+      <ul class="history_items">
+        <li v-for="(operation, index) in sortedDates(operations)" v-if="operations && operations.length > 0 && index <= limitationList" :key="index" :class="[`history_item history_item--${operation.type}`]">
+          <div class="history_item-data" v-if="getCoinByID(operation.coin_id)">
+            <span class="history_item-name">{{ getCoinByID(operation.coin_id).title }}</span>
+            <span class="history_item-amount">
+              <template v-if="operation.type !== 'swapped'">
+                {{operation.type === 'sold' ? '-' : '+' }}{{ operation.quantity }} <small> {{ getCoinByID(operation.coin_id).ticker }}</small>
+                (<span class="history_item-amount-usd" v-html="currencyConverter(operation.price_per_coin , currentCurrency.ticker)"></span>)
+              </template>
+              <template v-else>
+                {{ operation.quantity }} <small>{{ getCoinByID(operation.coin_id).ticker }}</small>(<span class="history_item-amount-usd" v-html="( currencyConverter(operation.price_per_coin , currentCurrency.ticker) )"> </span>) - {{countSwapped(operation)}} <small> {{ getCoinByID(operation.deal_currency).ticker }}</small>
+              </template>
 
-            </span>
-          <span class="history_item-time"> {{ $t(`portfolio.${operation.type}`) }} {{ moment(operation.date).fromNow() }}</span>
-        </div>
-      </li>
-      <!-- /.history-item -->
-    </ul>
+              </span>
+            <span class="history_item-time"> {{ $t(`portfolio.${operation.type}`) }} {{ moment(operation.date).fromNow() }}</span>
+          </div>
+        </li>
+        <!-- /.history-item -->
+      </ul>
+    </template>
+    <button  class="history-btn" @click="updateLimitation()">
+      show {{(limitationList) >= (operations.length) ? 'less' : 'more' }} records
+    </button>
     <!-- /.history-items -->
   </div>
   <!-- /.portfilio_history -->
@@ -32,6 +37,11 @@ export default {
   name: 'PortfolioHistory',
   props: {
     portfolio: Object
+  },
+  data () {
+    return {
+      limitationList: 6
+    }
   },
   computed: {
     operations: function () {
@@ -53,13 +63,20 @@ export default {
     })
   },
   methods: {
+    updateLimitation () {
+      if (this.limitationList <= this.operations.length) {
+        this.limitationList = this.limitationList + 6
+      } else {
+        this.limitationList = 6
+      }
+    },
     /**
      * Сортировка массива дат. 1я ближайшая
      * */
     sortedDates (arrEvents) {
       return arrEvents.sort((obj1, obj2) => {
-        if (obj1.date > obj2.date) return -1
         if (obj1.date < obj2.date) return 1
+        if (obj1.date > obj2.date) return -1
         return 0
       })
     },
@@ -74,6 +91,23 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  .history-btn{
+    color: #1991eb;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 14px;
+    letter-spacing: -0.07px;
+    border:none;
+    background: none;
+    border-bottom: 1px dotted #1991eb;
+    padding: 0;
+    margin-top: 10px;
+    cursor: pointer;
+    outline: none;
+    &:hover{
+      border-bottom: 1px solid #1991eb;
+    }
+  }
   .portfolio_history {
     padding: 20px 24px;
     margin-top: 40px;

@@ -1,7 +1,6 @@
 <template>
   <div :class="['portfolio_add_record_form', { 'toggled': toggled }]">
     <a href="#" @click.prevent="toggled = !toggled"  v-b-toggle="`formEditRecord-${selectedCoin.id}`" class="btn btn-add-record">{{ $t('portfolio.Add_Record') }}</a>
-    <!--<form action="#" class="add-record-form add-record-form&#45;&#45;hidden">-->
     <b-collapse :id="`formEditRecord-${selectedCoin.id}`">
       <form action="#" class="add-record-form ">
 
@@ -43,8 +42,8 @@
           </div>
 
           <div class="add-record-form_price-links">
-            <a href="#" class="add-record-form_price-ico">{{ $t('portfolio.ICO_PRICE') }} </a>
-            <a href="#" class="add-record-form_price-market">{{ $t('portfolio.MARKET_PRICE') }} </a>
+            <a href="#" @click.prevent="marketPrice = false" :class="['add-record-form_price-ico',{'active': marketPrice === false }]">{{ $t('portfolio.ICO_PRICE') }} </a>
+            <a href="#" @click.prevent="marketPrice = true" :class="['add-record-form_price-market',{'active': marketPrice === true }]">{{ $t('portfolio.MARKET_PRICE') }} </a>
           </div>
         </div>
         </template>
@@ -53,7 +52,7 @@
           <div class="add-record-form_name">
             <label :for="[`record-coin-name--${selectedCoin.id}`]">{{ $t('portfolio.coin') }}</label>
             <select  v-if="coins" v-model="coinToChange" size="1" name="name[]" :id="[`record-coin-name--${selectedCoin.id}`]">
-              <option v-for="coin in coins"
+              <option v-for="coin in filteredCoins()"
                       :key="coin.id"
                       :value="coin">{{ coin.ticker }}</option>
             </select>
@@ -79,6 +78,7 @@
 
 <script>
 import Vuex from 'vuex'
+import { round } from './mathHelpers'
 const storeEvent = Vuex.createNamespacedHelpers('portfolio')
 export default {
   name: 'formAddRecordPortfolio',
@@ -94,6 +94,7 @@ export default {
   },
   data () {
     return {
+      marketPrice: true,
       toggled: false,
       operations: [
         {name: 'Buy', done: 'bought'},
@@ -124,25 +125,48 @@ export default {
      * Цена монеты, в которой раскрыта форма
      * */
     selectedCoinPrice: function () {
-      return this.getCoinByID(this.selectedCoin.id).price
+      if (this.marketPrice) {
+        return this.getCoinByID(this.selectedCoin.id)['market_price']
+      } else {
+        return this.getCoinByID(this.selectedCoin.id)['ico_price']
+      }
+    },
+    /**
+     * Цена монеты, в которой раскрыта форма
+     * */
+    coinToChangePrice: function () {
+      if (this.marketPrice) {
+        return this.getCoinByID(this.coinToChange.id)['market_price']
+      } else {
+        return this.getCoinByID(this.coinToChange.id)['ico_price']
+      }
     },
     /**
      * Цена операции из поля ввод
      * */
     price: {
       get () {
-        if (this.selectedCurrency &&
-          this.selectedCoin !== (null && 0)) {
-          let operation = this.quantity / this.selectedCurrency.price * this.selectedCoinPrice
-          let decimals = this.selectedCurrency.ticker !== 'USD' ? 7 : 2
-          return Number(Math.round(operation + `e${decimals}`) + `e-${decimals}`)
-        }
-        return 0
+        return this.priceStorage
       },
+      /**
+       * Пересчитываем количество при вводе нового значения цены
+       * */
       set (newValue) {
         if (newValue) {
-          this.quantity = newValue / (this.selectedCoinPrice * this.selectedCurrency.price)
-          this.priceStorage = newValue
+          let operation
+          if (newValue !== 0) {
+            /**
+             * Умножаем введенное значение цены на цену за покупаемую монету
+             * и делим результат на цену текущей монеты
+             * */
+            let multipl = (parseFloat(newValue) * parseFloat(this.selectedCurrency.price))
+            operation = (multipl / parseFloat(this.selectedCoinPrice))
+          } else {
+            operation = Number(newValue)
+          }
+
+          this.quantity = round(operation, 7)
+          this.priceStorage = Number(newValue)
         }
       }
     },
@@ -154,7 +178,8 @@ export default {
         this.selectedCoin !== (null && 0)) {
         let operation
         if (this.selectedOperation.name === 'Change') {
-          operation = Number(Math.round(((this.selectedCoinPrice / this.coinToChange.price) * this.quantity) + `e${7}`) + `e-${7}`)
+          let equasion = ((this.selectedCoinPrice / this.coinToChangePrice) * this.quantity)
+          operation = round(equasion, 7)
           return `${operation} ${this.coinToChange.ticker}`
         } else {
           operation = this.selectedCoinPrice * this.quantity
@@ -166,13 +191,55 @@ export default {
   },
   watch: {
     /**
-     * На лету подставляем глобальное значение валюты из фильтра валют
+     * На лету подставляем глобальное значение валюты из фильтра валют,
+     * и пересчитываем все значения
      * */
-    currentCurrency: function (val) {
-      this.selectedCurrency = val
+    currentCurrency: function (newValue) {
+      this.selectedCurrency = newValue
+      let operation = this.quantity * parseFloat(this.currencyConverter(this.selectedCoinPrice, newValue.ticker, false))
+      let decimals = newValue.ticker !== 'USD' ? 7 : 2
+      this.priceStorage = round(operation, decimals)
+    },
+    /**
+     * На лету подставляем значение количества,
+     * и пересчитываем все значения
+     * */
+    quantity: function (val) {
+      if (this.selectedCurrency &&
+        this.selectedCoin !== null) {
+        let operation = val / this.selectedCurrency.price * this.selectedCoinPrice
+        let decimals = this.selectedCurrency.ticker !== 'USD' ? 7 : 2
+        this.priceStorage = round(operation, decimals)
+      }
+    },
+    /**
+     * На лету подставляем значение текущей цены,
+     * и пересчитываем все значения
+     * */
+    marketPrice: function () {
+      if (this.selectedCurrency &&
+        this.selectedCoin !== null) {
+        let operation = this.quantity / this.selectedCurrency.price * this.selectedCoinPrice
+        let decimals = this.selectedCurrency.ticker !== 'USD' ? 7 : 2
+        this.priceStorage = round(operation, decimals)
+      }
     }
   },
   methods: {
+    /**
+     * Показываем все монеты , кроме текущей
+     * */
+    filteredCoins () {
+      if (this.portfolio) {
+        let coins = JSON.parse(JSON.stringify(this.coins))
+        coins = coins.filter(coin => {
+          if (this.selectedCoin.id !== coin.id) {
+            return coin
+          }
+        })
+        return coins
+      }
+    },
     /**
      * Отправка операции на сервер
      * */
@@ -210,7 +277,8 @@ export default {
           /**
            * Если операция продажи, то вычитаем необходимое количестов монет
            * */
-          coin.amount = this.selectedOperation.name === 'Sell' ? parseFloat(coin.amount) - parseFloat(this.quantity) : parseFloat(coin.amount) + parseFloat(this.quantity)
+          let operationAmount = this.selectedOperation.name === 'Sell' ? parseFloat(coin.amount) - parseFloat(this.quantity) : parseFloat(coin.amount) + parseFloat(this.quantity)
+          coin.amount = round(operationAmount, 7)
           coin.operations.push(operation)
         }
         return coin
@@ -238,7 +306,7 @@ export default {
         deal_currency: this.coinToChange.id,
         price: priceOfTheDeal,
         price_per_coin: this.selectedCoinPrice,
-        price_per_coin_swapped: this.coinToChange.price,
+        price_per_coin_swapped: this.coinToChangePrice,
         quantity: this.quantity,
         type: this.selectedOperation.done
       }
@@ -248,7 +316,7 @@ export default {
           /**
            * Вычитаем необходимое количестов монет из исходных монет
            * */
-          coin.amount = parseFloat(coin.amount) - parseFloat(this.quantity)
+          coin.amount = round(parseFloat(coin.amount) - parseFloat(this.quantity), 7)
           coin.operations.push(operationSelectedCoin)
         }
         return coin
@@ -258,18 +326,19 @@ export default {
        * Количество добавляемых едениц к целевой монете равно : отношение цены исходной монеты к монете обмена, умноженное на количество монет на обмен
        * Округляем до 7 знаков в большую сторону
        * */
-      let quantityToAdd = Number(Math.round(((this.selectedCoinPrice / this.coinToChange.price) * this.quantity) + `e${7}`) + `e-${7}`)
+      let quantityToAdd = round(((this.selectedCoinPrice / this.coinToChangePrice) * this.quantity), 7)
       /**
        * Формируем операцию для монеты на которую хотим обменять
        * Вторая операция необходима, так как обмен совершен внутри портфолио.
        * Операция будет сохраняться с расчетом на текущую монету
        * В поле deal_currency хранится идентификатор монеты на которую был совершен обмен
+       * Дата подставляется из операции выбранной монеты, чтобы время обмена было полностью идентичны.
        * */
       let operationCoinToChange = {
-        date: this.$moment().toISOString(),
+        date: operationSelectedCoin.date,
         deal_currency: this.selectedCoin.id,
         price: priceOfTheDeal,
-        price_per_coin: this.coinToChange.price,
+        price_per_coin: this.coinToChangePrice,
         price_per_coin_swapped: this.selectedCoinPrice,
         quantity: quantityToAdd,
         type: this.selectedOperation.done
@@ -281,7 +350,7 @@ export default {
             /**
              * Добавляем необходимое количестов монет к монете обмена
              * */
-            coin.amount = parseFloat(coin.amount) + quantityToAdd
+            coin.amount = round((parseFloat(coin.amount) + quantityToAdd), 7)
             coin.operations.push(operationCoinToChange)
           }
           return coin
@@ -500,7 +569,7 @@ export default {
         &-input-wrapper {
           display: flex;
         }
-        &-ico {
+        &-ico, &-market {
           margin-right: 16px;
           color: @main-color;
           font-family: @main-font;
@@ -510,14 +579,15 @@ export default {
           text-transform: uppercase;
           text-decoration: underline;
           text-decoration-style: dashed;
-        }
-        &-market {
-          color: #8f96a1;
-          font-family: @main-font;
-          font-weight: 700;
-          font-size: 10px;
-          line-height: 16px;
-          text-transform: uppercase
+          &.active,&:hover{
+            color: #8f96a1;
+            font-family: @main-font;
+            font-weight: 700;
+            font-size: 10px;
+            line-height: 16px;
+            text-transform: uppercase;
+            text-decoration: underline;
+          }
         }
         input {
           padding: 12px;

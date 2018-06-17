@@ -1,54 +1,17 @@
 import axios from 'axios'
+import { prettifyNumber, round } from '../../components/mathHelpers'
 
 const state = {
   currencies: [],
   currentCurrency: {},
   currentPortfolio: {},
   coins: [],
-  portfolios: []
-}
-
-/**
- * Функция преобразует числа от миллиона в буквенный читаемый формат
- * param (value) Number/string
- * return String
- * */
-let prettifyNumber = (value) => {
-  let million = 1000000
-  let billion = 1000000000
-  let trillion = 1000000000000
-
-  let digitsAfterSign = 2
-  let letter
-  if (value < million) {
-    return String(value)
-  }
-
-  if (value >= million && value <= billion) {
-    letter = ' M'
-  }
-
-  if (value >= billion && value <= trillion) {
-    letter = ' B'
-  } else {
-    letter = ' T'
-  }
-
-  return round((value / million), digitsAfterSign) + letter
-}
-
-/**
- * Функция округляет до необходимого количества знаков
- * с помощью math.round. Используется экспонента для округления
- * param (value) Number/string
- * param (decimals) Number
- * return Number
- * */
-let round = (value, decimals) => {
-  return Number(Math.round(value + `e${decimals}`) + `e-${decimals}`)
+  portfolios: [],
+  tradeMarkets: []
 }
 
 const getters = {
+  tradeMarkets: state => state.tradeMarkets,
   currencies: state => state.currencies,
   currentCurrency: state => state.currentCurrency,
   currentPortfolio: state => state.currentPortfolio,
@@ -150,6 +113,18 @@ const actions = {
       })
     })
   },
+  getTradeMarkets (context) {
+    return new Promise((resolve, reject) => {
+      axios.get(context.rootGetters.api_url + '/markets').then((oResponse) => {
+        console.log('tradeMarkets get at promise action getTradeMarkets', oResponse.data)
+        context.commit('getTradeMarkets', oResponse.data)
+        resolve(oResponse.data)
+      }, error => {
+        handleXHRerrors(error)
+        reject(error)
+      })
+    })
+  },
   getPortfolios (context, payload) {
     axios.get(context.rootGetters.api_url + '/portfolios').then((oResponse) => {
       context.commit('getPortfolios', oResponse.data)
@@ -209,6 +184,10 @@ const mutations = {
   getCoins: (state, objCoin) => {
     state.coins = objCoin
     console.log('write object coins to State', objCoin)
+  },
+  getTradeMarkets: (state, objMarkets) => {
+    state.tradeMarkets = objMarkets
+    console.log('write object tradeMarkets to State', objMarkets)
   },
   getCurrencies: (state, objCurrencies) => {
     state.currencies = objCurrencies

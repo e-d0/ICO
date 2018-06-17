@@ -80,8 +80,8 @@ if (lang) {
 new Vue({
   el: '#app',
   router,
-  components: { App },
   store,
+  components: { App },
   i18n,
   template: '<App/>'
 })

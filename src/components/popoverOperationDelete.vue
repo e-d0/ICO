@@ -6,11 +6,11 @@
              :ref="`deleteConfirmForm-${index}-${id}`"
              :index="index">
     <div class="deleteConfirmForm">
-      <div @click="$emit('close')" class="btn close"></div>
+      <!--<div @click="$emit('close')" class="btn close"></div>-->
       <div>
         <div>{{ $t('portfolio.remove_operation') }}?</div>
         <a href="#" @click.prevent="$emit('confirm')" size="sm" class="btn submit" variant="primary">{{ $t('form.Remove')}}</a>
-        <a href="#" @click.prevent="$emit('close')" size="sm" class="btn submit" variant="primary">{{ $t('form.Cancel')}}</a>
+        <a href="#" @click.prevent="$emit('close')" size="sm" class="btn submit cancel" variant="primary">{{ $t('form.Cancel')}}</a>
       </div>
     </div>
   </b-popover>
@@ -30,7 +30,7 @@ export default {
 
 <style lang="less" scoped>
   .deleteConfirmForm{
-    padding: 28px 12px 12px 12px;
+    padding: 12px;
     box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.35);
     .btn.submit{
       font-family: 'Roboto', sans-serif;
@@ -49,6 +49,19 @@ export default {
       line-height: 14px;
       letter-spacing: -0.23px;
       margin-top: 10px;
+      &.cancel{
+        box-shadow: 0 2px 0 #4d515c;
+        background-color: #8f96a1;
+        &:hover,
+        &:focus,
+        &:active{
+          position: relative;
+          text-decoration: none;
+          background-color: #8f96a1;
+          color: #fff!important;
+          box-shadow: 0 2px 0 #4d515c, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+        }
+      }
       &:hover,
       &:focus,
       &:active{

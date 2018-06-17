@@ -8,8 +8,8 @@
       <div class="add-coin-form_wrapper">
         <div class="add-coin-form_name">
           <label for="coin-name">{{ $t('portfolio.coin') }}</label>
-          <select  v-if="coins" v-model="selectedCoin" size="1" name="name[]" id="coin-name">
-            <option v-for="coin in coins"
+          <select  v-if="filteredCoins()" v-model="selectedCoin" size="1" name="name[]" id="coin-name">
+            <option v-for="coin in filteredCoins()"
                     :key="coin.id"
                     :value="coin">{{ coin.ticker }}</option>
           </select>
@@ -33,12 +33,12 @@
               <option v-for="currency in currencies"
                       :key="currency.id"
                       :value="currency"
-                       >{{ currency.ticker }}</option>
+              >{{ currency.ticker }}</option>
             </select>
           </div>
           <div class="add-coin-form_price-links">
-            <a href="#" class="add-coin-form_price-ico">{{ $t('portfolio.ICO_PRICE') }} </a>
-            <a href="#" class="add-coin-form_price-market">{{ $t('portfolio.MARKET_PRICE') }} </a>
+            <a href="#" @click.prevent="marketPrice = false" :class="['add-coin-form_price-ico',{'active': marketPrice === false }]">{{ $t('portfolio.ICO_PRICE') }} </a>
+            <a href="#" @click.prevent="marketPrice = true" :class="['add-coin-form_price-market',{'active': marketPrice === true }]">{{ $t('portfolio.MARKET_PRICE') }} </a>
           </div>
         </div>
         <div class="add-coin-form_total">
@@ -58,19 +58,25 @@
 </template>
 
 <script>
+import { round } from './mathHelpers'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('portfolio')
-
 export default {
   name: 'formAddDeleteCoin',
   props: {
+    /**
+       * Глобальный объект портфолио
+       * */
     portfolio: Object
   },
   data () {
     return {
       selectedCoin: null,
+      marketPrice: true,
+      toggled: false,
       selectedCurrency: null,
-      priceStorage: 0,
+      coinToChange: null,
+      priceStorage: Number(0),
       quantity: 0,
       total: 0
     }
@@ -84,35 +90,91 @@ export default {
       currentCurrency: 'currentCurrency',
       currencies: 'currencies'
     }),
+    /**
+       * Цена монеты, в которой раскрыта форма
+       * */
+    selectedCoinPrice: function () {
+      if (this.selectedCoin) {
+        if (this.marketPrice) {
+          return this.getCoinByID(this.selectedCoin.id)['market_price']
+        } else {
+          return this.getCoinByID(this.selectedCoin.id)['ico_price']
+        }
+      }
+    },
+    /**
+       * Цена операции из поля ввод
+       * */
     price: {
       get () {
-        if (this.selectedCurrency &&
-            this.selectedCoin !== (null && 0)) {
-          let operation = this.quantity / this.selectedCurrency.price * this.selectedCoin.price
-          let decimals = this.selectedCurrency.ticker !== 'USD' ? 7 : 2
-          return Number(Math.round(operation + `e${decimals}`) + `e-${decimals}`)
-        }
-        return 0
+        if (isNaN(this.priceStorage)) return 0
+        return this.priceStorage
       },
+      /**
+         * Пересчитываем количество при вводе нового значения цены
+         * */
       set (newValue) {
         if (newValue) {
-          this.quantity = newValue / (this.selectedCoin.price * this.selectedCurrency.price)
-          this.priceStorage = newValue
+          let operation
+          if (newValue !== 0) {
+            /**
+               * Умножаем введенное значение цены на цену за покупаемую монету
+               * и делим результат на цену текущей монеты
+               * */
+            let multipl = (parseFloat(newValue) * parseFloat(this.selectedCurrency.price))
+            operation = (multipl / parseFloat(this.selectedCoinPrice))
+            this.quantity = round(operation, 7)
+            this.priceStorage = Number(newValue)
+          } else {
+            this.quantity = 0
+            this.priceStorage = 0
+          }
         }
       }
     },
     countTotal: function () {
       if (this.selectedCurrency &&
         this.selectedCoin !== (null && 0)) {
-        let operation = this.selectedCoin.price * this.quantity
+        let operation = this.selectedCoinPrice * this.quantity
         return this.currencyConverter(operation, this.selectedCurrency.ticker)
       }
       return 0
     }
   },
   watch: {
-    currentCurrency: function (val) {
-      this.selectedCurrency = val
+    /**
+       * На лету подставляем глобальное значение валюты из фильтра валют,
+       * и пересчитываем все значения
+       * */
+    currentCurrency: function (newValue) {
+      this.selectedCurrency = newValue
+      let operation = this.quantity * parseFloat(this.currencyConverter(this.selectedCoinPrice, newValue.ticker, false))
+      let decimals = newValue.ticker !== 'USD' ? 7 : 2
+      this.priceStorage = round(operation, decimals)
+    },
+    /**
+       * На лету подставляем значение количества,
+       * и пересчитываем все значения
+       * */
+    quantity: function (val) {
+      if (this.selectedCurrency &&
+          this.selectedCoin !== null) {
+        let operation = val / this.selectedCurrency.price * this.selectedCoinPrice
+        let decimals = this.selectedCurrency.ticker !== 'USD' ? 7 : 2
+        this.priceStorage = round(operation, decimals)
+      }
+    },
+    /**
+       * На лету подставляем значение текущей цены,
+       * и пересчитываем все значения
+       * */
+    marketPrice: function () {
+      if (this.selectedCurrency &&
+          this.selectedCoin !== null) {
+        let operation = this.quantity / this.selectedCurrency.price * this.selectedCoinPrice
+        let decimals = this.selectedCurrency.ticker !== 'USD' ? 7 : 2
+        this.priceStorage = round(operation, decimals)
+      }
     }
   },
   methods: {
@@ -123,7 +185,7 @@ export default {
           date: this.$moment().toISOString(),
           deal_currency: this.selectedCurrency.id,
           price: this.currencyConverter(this.price, 'USD', false),
-          price_per_coin: this.selectedCoin.price,
+          price_per_coin: this.selectedCoinPrice,
           quantity: this.quantity,
           type: 'bought'
         }
@@ -131,7 +193,7 @@ export default {
         if (portfolioChanged.coin.some(coin => coin.id === this.selectedCoin.id)) {
           portfolioChanged.coin.filter(coin => {
             if (coin.id === this.selectedCoin.id) {
-              coin.amount = parseFloat(coin.amount) + parseFloat(this.quantity)
+              coin.amount = round(parseFloat(coin.amount) + parseFloat(this.quantity), 7)
               coin.operations.push(operation)
             }
             return coin
@@ -149,22 +211,44 @@ export default {
         this.priceStorage = 0
         this.quantity = 0
         this.total = 0
+        this.selectedCoin = this.filteredCoins()['1'] ? this.filteredCoins()['1'] : this.filteredCoins()['0']
       }
     },
+    /**
+     * Фильтруем монеты ,которые уже есть в портфолио
+     * */
+    filteredCoins () {
+      if (this.portfolio) {
+        let portfolio = this.portfolio
+        let coins = JSON.parse(JSON.stringify(this.coins))
+        coins = coins.filter(coin => {
+          if (!portfolio.coin.some(item => item.id === coin.id)) {
+            return coin
+          }
+        })
+        return coins
+      }
+    },
+    /**
+       * Получаем список валют через хранилище
+       * */
     setDefaultCurrency () {
       this.$store.dispatch('portfolio/getCurrencies').then((response) => {
         /**
-         * Заполняем по умолчанию
-         * */
+           * Заполняем по умолчанию
+           * */
         this.selectedCurrency = response['0']
       }, error => {
         console.log(error)
       })
     },
+    /**
+       * Получаем список монет через хранилище
+       * */
     async setDefaultCoin () {
       let coinsTemp = await this.$store.dispatch('portfolio/getCoins')
       if (coinsTemp) {
-        this.selectedCoin = coinsTemp['0']
+        this.selectedCoin = this.filteredCoins()['0'] ? this.filteredCoins()['0'] : null
       }
     }
   },
@@ -172,6 +256,9 @@ export default {
     this.setDefaultCoin()
   },
   mounted () {
+    /**
+       * Страховка на случай, если не получено значение валюты из глобального фильтра
+       * */
     this.selectedCurrency = this.currentCurrency ? this.currentCurrency : this.setDefaultCurrency()
   }
 }
@@ -408,7 +495,7 @@ export default {
         &-input-wrapper {
           display: flex;
         }
-        &-ico {
+        &-ico, &-market {
           margin-right: 16px;
           color: @main-color;
           font-family: @main-font;
@@ -418,14 +505,15 @@ export default {
           text-transform: uppercase;
           text-decoration: underline;
           text-decoration-style: dashed;
-        }
-        &-market {
-          color: #8f96a1;
-          font-family: @main-font;
-          font-weight: 700;
-          font-size: 10px;
-          line-height: 16px;
-          text-transform: uppercase
+          &.active,&:hover{
+            color: #8f96a1;
+            font-family: @main-font;
+            font-weight: 700;
+            font-size: 10px;
+            line-height: 16px;
+            text-transform: uppercase;
+            text-decoration: underline;
+          }
         }
         input {
           padding: 12px;

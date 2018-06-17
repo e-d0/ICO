@@ -168,14 +168,17 @@ export default {
       .btn {
         position: relative;
         padding: 11px 11px 11px 32px;
-        background-image: linear-gradient(180deg, #358c29 0%, #45af36 100%);
-        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+        /*background-image: linear-gradient(180deg, #358c29 0%, #45af36 100%);*/
         color: #ffffff;
         font-family: @main-font;
         font-weight: 500;
         font-size: 13px;
         line-height: 11px;
         letter-spacing: -0.22px;
+        box-shadow: 0 2px 0 #3b962f;
+        border-radius: 4px;
+        background-color: #45af37;
+        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
         &::before {
           content: "";
           position: absolute;
