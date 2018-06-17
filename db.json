@@ -455,7 +455,10 @@
       "market_cap": "3232345.43",
       "24H_volume": "3150000000",
       "status": "trading",
-      "ico_price": "578.23"
+      "ico_price": "578.23",
+      "roi_week": "3.5",
+      "roi_month": "4.53",
+      "date": "2018-06-30T09:53:00.000Z"
     },
     {
       "id": 3,
@@ -467,8 +470,11 @@
       "24_change": "3.43",
       "24H_volume": "3150000000",
       "market_cap": "792345.67",
-      "status": "trading",
-      "ico_price": "578.23"
+      "status": "ico",
+      "ico_price": "578.23",
+      "roi_week": "+2.52",
+      "roi_month": "-1.53",
+      "date": "2018-06-30T09:53:00.000Z"
     },
     {
       "id": 4,
@@ -481,7 +487,10 @@
       "24H_volume": "223323000",
       "market_cap": "682345.43",
       "status": "trading",
-      "ico_price": "578.23"
+      "ico_price": "578.23",
+      "roi_week": "1.52",
+      "roi_month": "3.53",
+      "date": "2018-06-30T09:53:00.000Z"
     },
     {
       "id": 5,
@@ -494,7 +503,10 @@
       "24H_volume": "133000000",
       "market_cap": "3232345.434",
       "status": "trading",
-      "ico_price": "578.23"
+      "ico_price": "578.23",
+      "roi_week": "1.52",
+      "roi_month": "6.53",
+      "date": "2018-06-30T09:53:00.000Z"
     },
     {
       "id": 6,
@@ -507,7 +519,10 @@
       "24H_volume": "2467000000000",
       "market_cap": "3982345.40",
       "status": "trading",
-      "ico_price": "578.23"
+      "ico_price": "578.23",
+      "roi_week": "3.52",
+      "roi_month": "-6.53",
+      "date": "2018-06-30T09:53:00.000Z"
     }
   ],
   "portfolios": [

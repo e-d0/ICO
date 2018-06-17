@@ -63,6 +63,7 @@
     "24HCHANGE": "24H change",
     "changes_chart": "Portfolio Changes <br> Chart",
     "name": "name",
+    "date": "date",
     "Amount": "Amount",
     "24change": "24 change",
     "Total_Value": "Total Value",
@@ -71,6 +72,7 @@
     "Operation": "Operation",
     "Quantity": "Quantity",
     "Price": "Price",
+    "Current_price": "Current price",
     "Price_per_coin": "Price per coin",
     "price_per_coin_swapped": "Price per coin swapped",
     "bought": "Bought",
@@ -89,6 +91,10 @@
     "remove_operation": "Remove operation",
     "remove_coin": "Are you sure you want to delete {ticker} from your portfolio? All operation history will be lost.",
     "remove_coin_short": "Remove Coin",
-    "change_history": "Change history"
+    "change_history": "Change history",
+    "Stats": "Stats",
+    "Based_on_added": "Based on added",
+    "since_last_week": "Since Last week",
+    "since_last_month": "Since Last month"
   }
 }
