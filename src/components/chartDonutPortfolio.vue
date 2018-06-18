@@ -173,15 +173,15 @@ export default {
   mounted () {
     this.renderChart(this.datacollection, this.options)
     var dChart = document.getElementById('chartDonutPortfolio')
-    var origRadius = dChart.outerRadius;
-    var minRadius = origRadius * 0.9;
+    var origRadius = dChart.outerRadius
+    var minRadius = origRadius * 0.9
     console.log('dChart data = ', dChart)
-//decrease radius
-    var meta = dChart.getDatasetMeta(0);
-    console.log('meta data = ',meta)
-    meta.data.forEach(function(item){
-      item._model.outerRadius = minRadius;
-    });
+    // decrease radius
+    var meta = dChart.getDatasetMeta(0)
+    console.log('meta data = ', meta)
+    meta.data.forEach(function (item) {
+      item._model.outerRadius = minRadius
+    })
   }
 }
 </script>

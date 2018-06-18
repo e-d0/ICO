@@ -82,7 +82,7 @@
         </tr>
         <small :class="[`tbody--pseudo`]" :style="{backgroundColor: coin.color}"></small>
         <template v-if="item" v-for="(operation, index) in item.operations">
-          <tr  :key="index">
+          <tr :key="index">
 
           <template v-if="operation.type === 'swapped'">
             <td>
@@ -134,7 +134,7 @@
             </span>
           </td>
           </tr>
-          <tr>
+          <tr :key="index+item.operations.length">
             <td class="form_td" colspan="12">
               <b-collapse :id="`formEditRecord--${index}--${item.id}`">
                 <form-edit-operation-portfolio :index="index"

@@ -122,11 +122,11 @@ export default {
   },
   methods: {
     ...storeEvent.mapActions(['setCurrentCurrency']),
-    getCoins () {
-      this.$store.dispatch('portfolio/getCoins')
-    },
     isPositive (item) {
       return item > 0 ? 'positive' : 'negative'
+    },
+    getCoins () {
+      this.$store.dispatch('portfolio/getCoins')
     },
     setInitCurrency () {
       this.getCoins()

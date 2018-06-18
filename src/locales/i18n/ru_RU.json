@@ -96,5 +96,24 @@
     "Based_on_added": "Основанно на добавленных",
     "since_last_week": "С Последней недели",
     "since_last_month": "С Последнего месяца"
+  },
+  "favourite": {
+    "favorite_ico": "Избранные ICO",
+    "active": "активное",
+    "upcoming": "грядущее",
+    "ended": "законившиеся",
+    "trading": "На Торгах",
+    "ICO_TOKEN_PRICE": "ЦЕНА ЗА ICO ТОКЕН",
+    "started": "НАЧАЛО",
+    "ends": "ОКОНЧАНИЕ",
+    "discuss": "Обсудить на форуме",
+    "reviews": "Отзывы",
+    "add_to_cal": "Добавить в ICO calendar",
+    "add_to_cal_already": "Уже добавлено в ваш ICO календарь",
+    "ico_details": "Подробнее об ICO",
+    "your_review": "ваш отзыв",
+    "platform": "платформа",
+    "ico_canceled": "ICO ОТМЕНЕНО",
+    "soft_reached": "SOFT CAP ДОСТИГНУТ ЗА"
   }
 }

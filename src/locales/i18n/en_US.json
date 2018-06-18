@@ -96,5 +96,24 @@
     "Based_on_added": "Based on added",
     "since_last_week": "Since Last week",
     "since_last_month": "Since Last month"
+  },
+  "favourite": {
+    "favorite_ico": "Favorite ICO",
+    "active": "active",
+    "upcoming": "Upcoming",
+    "ended": "ended",
+    "trading": "trading",
+    "ICO_TOKEN_PRICE": "ICO TOKEN PRICE",
+    "started": "STARTED",
+    "ends": "ENDS",
+    "discuss":"Discuss on forum",
+    "reviews": "Reviews",
+    "add_to_cal": "Add to ICO calendar",
+    "add_to_cal_already": "Added to your ICO calendar",
+    "ico_details": "ICO Details",
+    "your_review": "your review",
+    "platform": "platform",
+    "ico_canceled": "ICO CANCELED",
+    "soft_reached": "SOFT CAP REACHED IN"
   }
 }
