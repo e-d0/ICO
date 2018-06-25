@@ -155,7 +155,7 @@
         </tr>
         <tr>
           <td class="exchange" colspan="12">
-            <PortfolioExchangeMarkets></PortfolioExchangeMarkets>
+            <PortfolioExchangeMarkets :coin="item" ></PortfolioExchangeMarkets>
           </td>
         </tr>
       </tbody>

@@ -3,7 +3,7 @@
     <div class="exchange_wrapper row">
       <div class="col-md-5">
         <div class="exchange_graph">
-          <img src="../assets/img/graph.png" alt="">
+          <chart-exchange :items = exchangeDataset></chart-exchange>
         </div>
       </div>
       <div class="col-md-7">
@@ -28,19 +28,97 @@
 </template>
 
 <script>
-import { prettifyNumber } from './mathHelpers'
+import { prettifyNumber, round } from './mathHelpers'
+import chartExchange from './chartExchange'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('portfolio')
 export default {
   name: 'PortfolioExchangeMarkets',
+  components: { chartExchange },
+  props: {
+    coin: Object
+  },
   computed: {
     ...storeEvent.mapGetters({
       tradeMarkets: 'tradeMarkets'
-    })
+    }),
+    exchangeDataset: function () {
+      if (this.coin) {
+        let markets = this.tradeMarkets.slice()
+
+        let allMarketsValueByCoin = []
+        markets.find(market => {
+          market['coins_month_changes'].find(coin => {
+            if (coin.coin_id === this.coin.id) {
+              /**
+               * клонируем массив, чтобы избежать прямой мутации данных
+               * из хранилища
+               * */
+              let changes = coin['month_price_change'].slice()
+              /**
+               * сортируем по дате и добавляем в массив
+               * */
+              allMarketsValueByCoin.push(this.sortedByDates(changes))
+            } else {
+              console.log('no coins at markets was found')
+            }
+          })
+        }
+        )
+        /**
+         * Считаем среднюю цену за день по всем рынкам.
+         * Складываем значение цены монеты от каждого рынка за день
+         * и делим на количество рынков.
+         * */
+        let objDataset = {}
+        if (allMarketsValueByCoin.length) {
+          objDataset['data'] = this.countAveragePriceDayPerMarket(allMarketsValueByCoin)
+          objDataset['labels'] = this.getDatesFromArray(allMarketsValueByCoin)
+        }
+        console.log(objDataset)
+        return objDataset
+      }
+    }
   },
   methods: {
     prettifyNumber (val) {
       return prettifyNumber(val)
+    },
+    /**
+     * Сортировка массива дат. 1я ближайшая
+     * */
+    sortedByDates (arrEvents) {
+      return arrEvents.sort((obj1, obj2) => {
+        if (obj1.date > obj2.date) return 1
+        if (obj1.date < obj2.date) return -1
+        return 0
+      })
+    },
+    /**
+     * Считаем среднюю цену за день по всем рынкам.
+     * Складываем значение цены монеты от каждого рынка за день
+     * и делим на количество рынков.
+     * */
+    countAveragePriceDayPerMarket (allMarketsValueByCoin) {
+      let priceArr = []
+      for (let i = 0; i < 1; i++) {
+        for (let j = 0; j < allMarketsValueByCoin[i].length; j++) {
+          let tempPriceStorage = 0
+          for (let k = 0; k < allMarketsValueByCoin.length; k++) {
+            tempPriceStorage = round(parseFloat(tempPriceStorage) + parseFloat(allMarketsValueByCoin[k][j]['price']), 2)
+          }
+          let averagePrice = round(tempPriceStorage / allMarketsValueByCoin[i].length, 2)
+          priceArr.push(averagePrice)
+        }
+      }
+      return priceArr
+    },
+    getDatesFromArray (allMarketsValueByCoin) {
+      let datesArr = []
+      for (let i = 0; i < allMarketsValueByCoin[0].length; i++) {
+        datesArr.push(this.$moment(allMarketsValueByCoin[0][i]['date']).format('DD/MM'))
+      }
+      return datesArr
     }
   },
   created () {
@@ -57,6 +135,8 @@ export default {
     }
     .exchange_graph {
       text-align: left;
+      position: relative;
+      /*padding-right: 30px;*/
     }
     &_header{
       background-color: #fff;
