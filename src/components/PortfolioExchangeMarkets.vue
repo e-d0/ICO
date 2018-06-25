@@ -3,14 +3,14 @@
     <div class="exchange_wrapper row">
       <div class="col-md-5">
         <div class="exchange_graph">
-          <chart-exchange :items = exchangeDataset></chart-exchange>
+          <chart-exchange v-if="exchangeDataset" :items = exchangeDataset></chart-exchange>
         </div>
       </div>
       <div class="col-md-7">
         <div class="exchange_header row">
-          <div class="col-md-4">Exchange</div>
-          <div class="col-md-2">Price</div>
-          <div class="col-md-6">Volume</div>
+          <div class="col-md-4">{{ $t('portfolio.Exchange') }}</div>
+          <div class="col-md-2">{{ $t('portfolio.Price') }}</div>
+          <div class="col-md-6">{{ $t('portfolio.Volume') }}</div>
         </div>
         <template v-if="tradeMarkets">
           <div v-for="(market, index) in tradeMarkets" :key="index" class="exchange_body row">
@@ -43,7 +43,7 @@ export default {
       tradeMarkets: 'tradeMarkets'
     }),
     exchangeDataset: function () {
-      if (this.coin) {
+      if (this.coin !== undefined && this.tradeMarkets.length > 0) {
         let markets = this.tradeMarkets.slice()
 
         let allMarketsValueByCoin = []
@@ -97,7 +97,7 @@ export default {
     /**
      * Считаем среднюю цену за день по всем рынкам.
      * Складываем значение цены монеты от каждого рынка за день
-     * и делим на количество рынков.
+     * и делим на количество записей.
      * */
     countAveragePriceDayPerMarket (allMarketsValueByCoin) {
       let priceArr = []
@@ -119,10 +119,13 @@ export default {
         datesArr.push(this.$moment(allMarketsValueByCoin[0][i]['date']).format('DD/MM'))
       }
       return datesArr
+    },
+    async getMarkets () {
+      await this.$store.dispatch('portfolio/getTradeMarkets')
     }
   },
   created () {
-    this.$store.dispatch('portfolio/getTradeMarkets')
+    this.getMarkets()
   }
 }
 </script>

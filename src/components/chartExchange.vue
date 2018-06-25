@@ -85,7 +85,7 @@ export default {
         }
       },
       datacollection: {
-        labels: this.items ? this.items.labels : [],
+        labels: [],
         datasets: [
           {
             fill: true,
@@ -105,13 +105,25 @@ export default {
             pointHoverBorderWidth: 2,
             pointRadius: 0,
             pointHitRadius: 5,
-            data: this.items ? this.items.data : []
+            data: []
           }
         ]
       }
     }
   },
+  created () {
+    /**
+     * Заполняем данными необходимые поля
+     * */
+    if (this.items !== undefined) {
+      this.datacollection.labels = this.items.labels
+      this.datacollection.datasets['0'].data = this.items.data
+    }
+  },
   mounted () {
+    /**
+     * Плагин для чартов. Необходим для расширения функционала чарта.
+     * */
     this.addPlugin({
       id: 'pointOnStart',
       beforeRender: function (chart) {
