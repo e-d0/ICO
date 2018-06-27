@@ -52,10 +52,18 @@
             </div>
             <!-- /.portfolio_deviation -->
             <div class="portfolio_changes">
-              <a href="#" v-html="$t('portfolio.changes_chart')"></a>
+              <a href="#"
+                 v-b-toggle="`chartPortfolio`"
+                 @click.prevent=""
+                 v-html="$t('portfolio.changes_chart')"></a>
             </div>
           </div>
           <!-- /.portfolio_bottom-line -->
+          <PortfolioChartWrapper :portfolio="portfolio"/>
+
+          <!--<b-collapse v-if="portfolio" :id="`chartPortfolio`" class="">-->
+            <!--<chart-portfolio></chart-portfolio>-->
+          <!--</b-collapse>-->
           <b-collapse id="formAddDeleteCoin" class="">
             <form-add-delete-coin :portfolio.sync="portfolio" ></form-add-delete-coin>
           </b-collapse>
@@ -78,13 +86,13 @@
 import formAddDeleteCoin from './formAddDeleteCoin'
 import PortfolioHistory from './PortfolioHistory'
 import PortfolioList from './PortfolioList'
-import chartDonutPortfolio from './chartDonutPortfolio'
-import donutPortfolioWrapper from './donutPortfolioWrapper'
 import Vuex from 'vuex'
+import PortfolioChartWrapper from './PortfolioChartWrapper'
+
 const storeEvent = Vuex.createNamespacedHelpers('portfolio')
 export default {
   name: 'PortfolioBody',
-  components: { formAddDeleteCoin, PortfolioHistory, PortfolioList, chartDonutPortfolio, donutPortfolioWrapper },
+  components: {PortfolioChartWrapper, formAddDeleteCoin, PortfolioHistory, PortfolioList},
   props: {
     portfolio: Object
   },
@@ -116,7 +124,6 @@ export default {
   },
   watch: {
     portfolio: function () {
-      console.log('PORTFOLIO CHANGED')
       if (this.stringifiedPortfolio) {
         this.chartData(this.stringifiedPortfolio)
       }
@@ -204,8 +211,8 @@ export default {
     /**
      * Загрузить все портфели в хранилище
      * */
-    getCoins () {
-      this.$store.dispatch('portfolio/getCoins')
+    async getCoins () {
+      await this.$store.dispatch('portfolio/getCoins')
     },
     getCurrencies () {
     },
@@ -235,6 +242,15 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  #chartPortfolio{
+    width: 100%;
+  }
+  .prtfolio_chart-header{
+    color: #525c6c;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 24px;
+  }
   .tooltip-mark {
     display: inline-block;
     margin-left: 4px;

@@ -247,7 +247,7 @@ export default {
        * */
     async setDefaultCoin () {
       let coinsTemp = await this.$store.dispatch('portfolio/getCoins')
-      if (coinsTemp) {
+      if (coinsTemp && this.filteredCoins()) {
         this.selectedCoin = this.filteredCoins()['0'] ? this.filteredCoins()['0'] : null
       }
     }

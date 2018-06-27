@@ -1,6 +1,7 @@
 <script>
 import { Line } from 'vue-chartjs'
 import Chart from 'chart.js'
+
 export default {
   extends: Line,
   name: 'chartExchange',
@@ -92,6 +93,7 @@ export default {
             lineTension: 0.1,
             backgroundColor: 'rgba(248, 252, 245, 0.6)',
             borderColor: '#45af37',
+            borderWidth: 2,
             borderCapStyle: 'butt',
             borderDash: [],
             borderDashOffset: 10,
