@@ -1,7 +1,7 @@
 <template>
     <div class="chart_portfolio__wrapper">
         <h4>Portfolio Chart</h4>
-        <chart-portfolio :operations.sync="operations"></chart-portfolio>
+        <chart-portfolio ref="chartsPortfolio" :options="options" :chart-id="options.chartId" :chart-data="datacollection"></chart-portfolio>
         <div class="row">
             <div class="col-md-6 chart_portfolio__labels">
                 <span class="chart_label bought">{{ $t('portfolio.bought') }}</span>
@@ -16,10 +16,11 @@
 </template>
 <script>
 import ChartPortfolio from './chartPortfolio'
+const vueInstance = this
 /**
  * Тестовый набор операций
  * */
-let operations = [
+const operations = [
   {
     date: '2018-06-17T02:36:04.632Z',
     portfolio_cost: '3213489',
@@ -151,12 +152,271 @@ export default {
   name: 'PortfolioChartWrapper',
   data () {
     return {
-      operations: operations
+      items: operations,
+      options: {
+        chartId: 'chartPortfolio',
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: {
+          padding: {
+            left: 0,
+            right: 40,
+            top: 20,
+            bottom: 0
+          }
+        },
+        scales: {
+          yAxes: [{
+            type: 'linear',
+            position: 'left',
+            xAlign: 'left',
+            ticks: {
+              padding: 50,
+              fontColor: 'rgba(112, 121, 134, 0.6)',
+              maxTicksLimit: 5,
+              xAlign: 'left',
+              callback: function (label, index, labels) {
+                return '$ ' + label
+              }
+            },
+            gridLines: {
+              drawTicks: false,
+              drawOnChartArea: true,
+              display: true,
+              drawBorder: false
+              // offsetGridLines: true,
+              // zeroLineColor: 'rgb(255, 0, 0)'
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              fontColor: 'rgba(112, 121, 134, 0.6)',
+              maxRotation: 0,
+              borderColor: 'rgba(51, 63, 82, .3)',
+              minRotation: 0,
+              padding: 10
+            },
+            gridLines: {
+              tickMarkLength: 10,
+              drawTicks: false,
+              display: false,
+              drawBorder: true
+            }
+          }]
+        },
+        tooltips: {
+          enabled: false,
+          position: 'nearest',
+          mode: 'index',
+          displayColors: false,
+          custom: (tooltipModel) => {
+            // Tooltip Element
+            let tooltipEl = document.getElementById('chartjs-tooltip')
+
+            // Create element on first render
+            if (!tooltipEl) {
+              tooltipEl = document.createElement('div')
+              tooltipEl.id = 'chartjs-tooltip'
+              tooltipEl.innerHTML = '<table></table>'
+              document.body.appendChild(tooltipEl)
+            }
+
+            // Hide if no tooltip
+            if (tooltipModel.opacity === 0) {
+              tooltipEl.style.opacity = 0
+              return
+            }
+
+            // Set caret Position
+            tooltipEl.classList.remove('above', 'below', 'no-transform')
+            if (tooltipModel.yAlign) {
+              tooltipEl.classList.add(tooltipModel.yAlign)
+            } else {
+              tooltipEl.classList.add('no-transform')
+            }
+
+            if (tooltipModel.xAlign) {
+              tooltipEl.classList.add(tooltipModel.xAlign)
+            } else {
+              tooltipEl.classList.add('no-transform')
+            }
+
+            // Set Text
+            if (tooltipModel.body && tooltipModel.dataPoints.length > 0) {
+              let pointItem = tooltipModel.dataPoints['0']
+              let operations = this.findOperationByIndex(pointItem.index)
+              let titleLines = tooltipModel.title || []
+
+              /**
+               * Получаем данные из выбранной точки
+               * */
+
+              let innerHtml = '<thead>'
+
+              titleLines.forEach(function (title) {
+                innerHtml += '<tr><th colspan="2" class="tip-header">' + title + '</th></tr>'
+              })
+              innerHtml += '</thead><tbody>'
+
+              operations.forEach(function (operation, i) {
+                let color = vueInstance.a.methods.colorSwitcher(operation.type)
+                let style = 'background:' + color
+                style += '; border-width: 2px'
+                style += '; display: inline-block;'
+                style += '; width: 8px;'
+                style += '; height: 8px;'
+                style += '; border-radius: 4px;'
+                let span = '<span style="' + style + '"></span>'
+                // var span = '<span class="chartjs-tooltip-key" style="' + style + '"></span>'
+                innerHtml += '<tr><td>' + span
+                innerHtml += `<span>&nbsp;${operation.type}&nbsp;</span></td><td>`
+                if (operation.type === 'swapped') {
+                  innerHtml += `<span style="line-height: 10px;">  ${operation.value}<br> <small >IN ${operation.swapped_in} </small></span>`
+                } else {
+                  innerHtml += `<span>  ${operation.value}</span>`
+                }
+                innerHtml += '</td></tr>'
+              })
+
+              innerHtml += '</tbody>'
+              innerHtml += '<span class="chart-custom-arrow"></span>'
+
+              let tableRoot = tooltipEl.querySelector('table')
+              tableRoot.innerHTML = innerHtml
+            }
+
+            // `this` will be the overall tooltip
+            console.log('>>>>>>>>>>', this.$refs.chartsPortfolio.$refs.canvas)
+            let position = this.$refs.chartsPortfolio.$refs.canvas.getBoundingClientRect()
+
+            // Display, position, and set styles for font
+            tooltipEl.style.opacity = 1
+            tooltipEl.style.backgroundColor = '#fff'
+            tooltipEl.style.left = position.left + tooltipModel.caretX + 'px'
+            /**
+             * Отступ с учетом стрелки под тултипом(каретки)
+             * */
+            tooltipEl.style.left = position.left + tooltipModel.caretX + 'px'
+            tooltipEl.style.top = position.top + tooltipModel.caretY - tooltipEl.clientHeight - 10 + 'px'
+            tooltipEl.style.fontSize = tooltipModel.bodyFontSize + 'px'
+            tooltipEl.style.color = '#525c6c'
+            tooltipEl.style.boxShadow = '-8px 8px 24px rgba(0, 0, 0, 0.2)'
+            tooltipEl.style.padding = '10px 12px 12px 12px'
+          }
+        },
+        legend: {
+          display: false
+        }
+      },
+      datacollection: {
+        labels: [],
+        /**
+         * Передаем операции для обработки плагином чарта
+         * для раскрашивания точек на графике
+         * */
+        operations: operations,
+        datasets: [
+          {
+            fill: true,
+            lineTension: 0.07,
+            backgroundColor: 'rgba(224, 230, 237, 0.6)',
+            borderColor: '#45af37',
+            borderCapStyle: 'butt',
+            borderDash: [],
+            borderWidth: 2,
+            borderDashOffset: 10,
+            borderJoinStyle: 'miter',
+            pointBorderColor: '#fff',
+            pointBackgroundColor: '#45af37',
+            pointBorderWidth: 2,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#45af37',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2,
+            pointRadius: 5,
+            pointHitRadius: 5,
+            pointHitDetectionRadius: 30,
+            data: []
+          }
+        ],
+        max: '',
+        min: ''
+        // avg: ''
+      }
     }
   },
   components: {ChartPortfolio},
   props: {
     portfolio: {}
+  },
+  methods: {
+    findOperationByIndex (index) {
+      if (this.items !== undefined) return this.items[index].operations
+    },
+    dates () {
+      if (this.items) {
+        let dates = this.sortedDates(this.items).map(item => {
+          return this.$moment(item.date).format('DD/MM')
+        }
+        )
+        return dates
+      }
+    },
+    portfolioCost () {
+      if (this.items) {
+        let values = this.sortedDates(this.items).map(item => {
+          return item.portfolio_cost
+        }
+        )
+        return values
+      }
+    },
+    /**
+     * Сортировка массива дат. 1я ближайшая
+     * */
+    sortedDates (arrEvents) {
+      return arrEvents.sort((obj1, obj2) => {
+        if (obj1.date > obj2.date) return 1
+        if (obj1.date < obj2.date) return -1
+        return 0
+      })
+    },
+    colorSwitcher (type) {
+      let color
+      switch (type) {
+        case 'sold':
+          color = '#ff3657'
+          break
+        case 'bought':
+          color = '#45af37'
+          break
+        case 'swapped':
+          color = '#1991eb'
+          break
+        default:
+          color = '#fff'
+      }
+      return color
+    },
+    findMaxValue (array) {
+      return Math.max.apply(Math, array)
+    },
+    findMinValue (array) {
+      return Math.min.apply(Math, array)
+    }
+  },
+  created () {
+    /**
+     * Заполняем данными необходимые поля
+     * */
+    // if (this.items !== undefined) {
+    //   this.datacollection.labels = ['23/05', '25/05', '25/05', '28/05', '05/06', '06/06', '07/06', '08/06', '10/06', '21/06']
+    //   this.datacollection.datasets['0'].data = [2.17, 1.65, 1.74, 2.66, 3.08, 2.36, 1.96, 2.29, 1.47, 2.91]
+    // }
+    this.datacollection.labels = this.dates()
+    this.datacollection.datasets['0'].data = this.portfolioCost()
+    this.datacollection.min = this.findMinValue(this.datacollection.datasets['0'].data)
+    this.datacollection.max = this.findMaxValue(this.datacollection.datasets['0'].data)
   }
 }
 </script>

@@ -718,7 +718,7 @@
       "coin": [
         {
           "id": 4,
-          "amount": 21.5,
+          "amount": 23.5,
           "operations": [
             {
               "date": "2018-06-17T02:36:04.632Z",
@@ -744,12 +744,20 @@
               "price_per_coin": "7334.2",
               "quantity": 1,
               "type": "bought"
+            },
+            {
+              "date": "2018-06-27T15:46:52.727Z",
+              "deal_currency": 1,
+              "price": "14668.4",
+              "price_per_coin": "7334.2",
+              "quantity": 2,
+              "type": "bought"
             }
           ]
         },
         {
           "id": 5,
-          "amount": 4,
+          "amount": 32.406725,
           "operations": [
             {
               "date": "2018-06-17T02:36:14.418Z",
@@ -767,12 +775,21 @@
               "price_per_coin_swapped": "7334.2",
               "quantity": 1,
               "type": "swapped"
+            },
+            {
+              "date": "2018-06-27T16:04:39.170Z",
+              "deal_currency": 6,
+              "price": "12334.2",
+              "price_per_coin": "434.2",
+              "price_per_coin_swapped": "12334.2",
+              "quantity": 28.406725,
+              "type": "swapped"
             }
           ]
         },
         {
           "id": 6,
-          "amount": "4",
+          "amount": 3,
           "operations": [
             {
               "date": "2018-06-17T02:39:37.758Z",
@@ -781,6 +798,15 @@
               "price_per_coin": "12334.2",
               "quantity": "4",
               "type": "bought"
+            },
+            {
+              "date": "2018-06-27T16:04:39.170Z",
+              "deal_currency": 5,
+              "price": "12334.2",
+              "price_per_coin": "12334.2",
+              "price_per_coin_swapped": "434.2",
+              "quantity": 1,
+              "type": "swapped"
             }
           ]
         }

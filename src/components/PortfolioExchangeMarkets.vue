@@ -3,7 +3,7 @@
     <div class="exchange_wrapper row">
       <div class="col-md-5">
         <div class="exchange_graph">
-          <chart-exchange v-if="exchangeDataset" :items = exchangeDataset></chart-exchange>
+          <chart-exchange v-if="exchangeDataset" :chart-id="chartId()" :items = "exchangeDataset"></chart-exchange>
         </div>
       </div>
       <div class="col-md-7">
@@ -83,6 +83,9 @@ export default {
   methods: {
     prettifyNumber (val) {
       return prettifyNumber(val)
+    },
+    chartId () {
+      return `exchangeChart-${this.coin.id}`
     },
     /**
      * Сортировка массива дат. 1я ближайшая
