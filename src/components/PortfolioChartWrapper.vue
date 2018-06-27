@@ -1,7 +1,12 @@
 <template>
     <div class="chart_portfolio__wrapper">
         <h4>Portfolio Chart</h4>
-        <chart-portfolio ref="chartsPortfolio" :options="options" :chart-id="options.chartId" :chart-data="datacollection"></chart-portfolio>
+        <chart-portfolio ref="chartsPortfolio"
+                         :options="options"
+                         :chart-id="options.chartId"
+                         :chart-data="datacollection"
+                         :width ="930"
+                         :height="241"></chart-portfolio>
         <div class="row">
             <div class="col-md-6 chart_portfolio__labels">
                 <span class="chart_label bought">{{ $t('portfolio.bought') }}</span>
@@ -194,7 +199,7 @@ export default {
       },
       options: {
         chartId: 'chartPortfolio',
-        responsive: true,
+        responsive: false,
         maintainAspectRatio: false,
         layout: {
           padding: {
