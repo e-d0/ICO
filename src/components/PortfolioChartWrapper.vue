@@ -9,7 +9,16 @@
                 <span class="chart_label swapped">{{ $t('portfolio.swapped') }}</span>
             </div>
             <div class="col-md-6 chart_portfolio__filter">
-
+                <label v-for="(item, index) in chartFilter" :key="index">
+                  <input name="chart_portfolio__filter"
+                         :class="[ {'selected' : item.value === chartFilterValue.value } ]"
+                         :value="item"
+                         type="radio"
+                         v-model="chartFilterValue"
+                         >
+                  <b>{{ item.title }}</b>
+                </label>
+              <!-- /.portfolio-view -->
             </div>
         </div>
     </div>
@@ -153,6 +162,36 @@ export default {
   data () {
     return {
       items: operations,
+      chartFilter: [
+        {
+          title: '24H',
+          value: '24H'
+        },
+        {
+          title: '1 WEEK',
+          value: '1 WEEK'
+        },
+        {
+          title: '30 DAYS',
+          value: '30 DAYS'
+        },
+        {
+          title: '1 YEAR',
+          value: '1 YEAR'
+        },
+        {
+          title: '1 YEAR TO DATE',
+          value: '1 YEAR TO DATE'
+        },
+        {
+          title: 'ALL TIME',
+          value: 'ALL TIME'
+        }
+      ],
+      chartFilterValue: {
+        title: '24H',
+        value: '24H'
+      },
       options: {
         chartId: 'chartPortfolio',
         responsive: true,
@@ -160,7 +199,7 @@ export default {
         layout: {
           padding: {
             left: 0,
-            right: 40,
+            right: 0,
             top: 20,
             bottom: 0
           }
@@ -194,7 +233,7 @@ export default {
               maxRotation: 0,
               borderColor: 'rgba(51, 63, 82, .3)',
               minRotation: 0,
-              padding: 10
+              padding: 20
             },
             gridLines: {
               tickMarkLength: 10,
@@ -286,7 +325,6 @@ export default {
             }
 
             // `this` will be the overall tooltip
-            console.log('>>>>>>>>>>', this.$refs.chartsPortfolio.$refs.canvas)
             let position = this.$refs.chartsPortfolio.$refs.canvas.getBoundingClientRect()
 
             // Display, position, and set styles for font
@@ -348,6 +386,11 @@ export default {
   components: {ChartPortfolio},
   props: {
     portfolio: {}
+  },
+  watch: {
+    chartFilterValue (val) {
+      console.log('SEND REQUEST TO SERVER', val.value)
+    }
   },
   methods: {
     findOperationByIndex (index) {
@@ -424,6 +467,7 @@ export default {
     @import "../assets/less/vars";
     .chart_portfolio {
     &__wrapper{
+      margin-bottom: 40px;
         h4{
           height: 24px;
           color: #525c6c;
@@ -465,6 +509,50 @@ export default {
           }
         }
 
+      }
+      &__filter {
+        display: flex;
+        justify-content: flex-end;
+        label {
+          text-align: center;
+          margin-bottom: 0;
+          .selected + b{
+            background: #707986;
+            color: #ffffff;
+            opacity: 0.9;
+          }
+          &:first-child {
+            b {
+              border-radius: 2px 0 0 2px;
+            }
+          }
+          &:last-child {
+            b {
+              border-radius: 0 2px 2px 0;
+            }
+          }
+          input[type=checkbox] {
+            display: none;
+            position: relative;
+            top: 2px;
+          }
+          b {
+            cursor: pointer;
+            display: block;
+            padding: 6px 9px;
+            margin-left: -1px;
+            color: #525c6c;
+            background-color: #fff;
+            border: 1px solid #c5d0de;
+            font-family: "RobotoMedium";
+            font-weight: 500;
+            font-size: 11px;
+            line-height: 12px;
+            height: 24px;
+            text-transform: uppercase;
+            letter-spacing: -0.05px;
+          }
+        }
       }
     }
 </style>

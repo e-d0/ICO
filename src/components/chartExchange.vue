@@ -11,8 +11,8 @@ export default {
   data () {
     return {
       options: {
-        responsive: true,
-        maintainAspectRatio: true,
+        responsive: false,
+        maintainAspectRatio: false,
         // onHover: function (e) {
         //   let item = this.getElementsAtEvent(e)
         //   console.log(item)
@@ -20,8 +20,8 @@ export default {
         layout: {
           padding: {
             left: 0,
-            right: 40,
-            top: 20,
+            right: 50,
+            top: 40,
             bottom: 0
           }
         },

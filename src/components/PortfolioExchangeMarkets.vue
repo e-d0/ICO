@@ -1,12 +1,16 @@
 <template>
   <div class="container exchange">
     <div class="exchange_wrapper row">
-      <div class="col-md-5">
+      <div class="col-md-4">
         <div class="exchange_graph">
-          <chart-exchange v-if="exchangeDataset" :chart-id="chartId()" :items = "exchangeDataset"></chart-exchange>
+          <chart-exchange v-if="exchangeDataset"
+                          :chart-id="chartId()"
+                          :items = "exchangeDataset"
+                          :height = "214"
+                          :width = "295"></chart-exchange>
         </div>
       </div>
-      <div class="col-md-7">
+      <div class="col-md-8">
         <div class="exchange_header row">
           <div class="col-md-4">{{ $t('portfolio.Exchange') }}</div>
           <div class="col-md-2">{{ $t('portfolio.Price') }}</div>

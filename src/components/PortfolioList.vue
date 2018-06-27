@@ -116,7 +116,7 @@ export default {
   @import "../assets/less/vars";
 .portfolio{
   &_list {
-    margin-top: 26px;
+    margin-top: 40px;
     box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
     border-radius: 4px;
   }
