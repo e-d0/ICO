@@ -41,18 +41,22 @@ const operations = [
     operations: [
       {
         type: 'sold',
-        value: '2.36 BTC',
+        value: '2.36',
+        ticker: 'BTC',
         swapped_in: ''
       },
       {
         type: 'bought',
-        value: '1.76 ETH',
+        value: '1.76',
+        ticker: 'ETH',
         swapped_in: ''
       },
       {
         type: 'swapped',
-        value: '4.76 ETH',
-        swapped_in: '3 BTC'
+        value: '4.76',
+        ticker: 'ETH',
+        swapped_in: '3',
+        swapped_in_ticker: 'BTC'
       }
     ]
   },
@@ -62,17 +66,21 @@ const operations = [
     operations: [
       {
         type: 'bought',
-        value: '0.76 ETH',
+        value: '0.76',
+        ticker: 'ETH',
         swapped_in: ''
       },
       {
         type: 'swapped',
-        value: '2.76 ETH',
-        swapped_in: '3 BTC'
+        value: '2.76',
+        ticker: 'ETH',
+        swapped_in_ticker: 'BTC',
+        swapped_in: '3'
       },
       {
         type: 'sold',
-        value: '0.36 BTC',
+        value: '0.36',
+        ticker: 'BTC',
         swapped_in: ''
       }
     ]
@@ -83,18 +91,22 @@ const operations = [
     operations: [
       {
         type: 'bought',
-        value: '0.76 ETH',
+        value: '0.76',
+        ticker: 'ETH',
         swapped_in: ''
       },
       {
         type: 'sold',
-        value: '0.36 BTC',
+        value: '0.36',
+        ticker: 'BTC',
         swapped_in: ''
       },
       {
         type: 'swapped',
-        value: '2.76 ETH',
-        swapped_in: '3 BTC'
+        value: '2.76',
+        ticker: 'ETH',
+        swapped_in: '3',
+        swapped_in_ticker: 'BTC'
       }
     ]
   },
@@ -104,17 +116,21 @@ const operations = [
     operations: [
       {
         type: 'swapped',
-        value: '2.76 ETH',
-        swapped_in: '3 BTC'
+        value: '2.76',
+        ticker: 'ETH',
+        swapped_in_ticker: 'BTC',
+        swapped_in: '3'
       },
       {
         type: 'bought',
-        value: '0.76 ETH',
+        value: '0.76',
+        ticker: 'ETH',
         swapped_in: ''
       },
       {
         type: 'sold',
-        value: '0.36 BTC',
+        value: '0.36',
+        ticker: 'BTC',
         swapped_in: ''
       }
     ]
@@ -125,18 +141,22 @@ const operations = [
     operations: [
       {
         type: 'sold',
-        value: '0.36 BTC',
+        value: '0.36',
+        ticker: 'BTC',
         swapped_in: ''
       },
       {
         type: 'bought',
-        value: '0.76 ETH',
+        value: '0.76',
+        ticker: 'ETH',
         swapped_in: ''
       },
       {
         type: 'swapped',
-        value: '2.76 ETH',
-        swapped_in: '3 BTC'
+        value: '2.76',
+        ticker: 'ETH',
+        swapped_in_ticker: 'BTC',
+        swapped_in: '3'
       }
     ]
   },
@@ -146,17 +166,21 @@ const operations = [
     operations: [
       {
         type: 'swapped',
-        value: '2.76 ETH',
-        swapped_in: '3 BTC'
+        value: '2.76',
+        ticker: 'ETH',
+        swapped_in_ticker: 'BTC',
+        swapped_in: '3'
       },
       {
         type: 'bought',
-        value: '0.76 ETH',
+        value: '0.76',
+        ticker: 'ETH',
         swapped_in: ''
       },
       {
         type: 'sold',
-        value: '0.36 BTC',
+        value: '0.36',
+        ticker: 'BTC',
         swapped_in: ''
       }
     ]
@@ -315,9 +339,9 @@ export default {
                 innerHtml += '<tr><td>' + span
                 innerHtml += `<span>&nbsp;${operation.type}&nbsp;</span></td><td>`
                 if (operation.type === 'swapped') {
-                  innerHtml += `<span style="line-height: 10px;">  ${operation.value}<br> <small >IN ${operation.swapped_in} </small></span>`
+                  innerHtml += `<span style="line-height: 10px;">  ${operation.value} ${operation.ticker}<br> <small >IN ${operation.swapped_in} ${operation.swapped_in_ticker}</small></span>`
                 } else {
-                  innerHtml += `<span>  ${operation.value}</span>`
+                  innerHtml += `<span>  ${operation.value} ${operation.ticker}</span>`
                 }
                 innerHtml += '</td></tr>'
               })
@@ -399,7 +423,17 @@ export default {
   },
   methods: {
     findOperationByIndex (index) {
-      if (this.items !== undefined) return this.items[index].operations
+      if (this.items !== undefined) return this.sortOperations(this.items[index].operations)
+    },
+    /**
+     * Сортировка операций по наибольшему значению в операции.
+     * */
+    sortOperations (arr) {
+      return arr.sort((obj1, obj2) => {
+        if (obj1.value > obj2.value) return -1
+        if (obj1.value < obj2.value) return 1
+        return 0
+      })
     },
     dates () {
       if (this.items) {
@@ -457,10 +491,6 @@ export default {
     /**
      * Заполняем данными необходимые поля
      * */
-    // if (this.items !== undefined) {
-    //   this.datacollection.labels = ['23/05', '25/05', '25/05', '28/05', '05/06', '06/06', '07/06', '08/06', '10/06', '21/06']
-    //   this.datacollection.datasets['0'].data = [2.17, 1.65, 1.74, 2.66, 3.08, 2.36, 1.96, 2.29, 1.47, 2.91]
-    // }
     this.datacollection.labels = this.dates()
     this.datacollection.datasets['0'].data = this.portfolioCost()
     this.datacollection.min = this.findMinValue(this.datacollection.datasets['0'].data)
