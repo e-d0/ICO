@@ -26,8 +26,8 @@
       </div>
     </div>
     <!-- /.portfolio_list-head -->
-    <template v-if="portfolioCoins"
-              v-for="(item, index) in portfolioCoins"
+    <template v-if="coins"
+              v-for="(item, index) in coins"
               >
       <portfolio-list-item :key="index"
                            :item="item"
@@ -43,6 +43,7 @@
 import PortfolioListItem from './PortfolioListItem'
 import Vuex from 'vuex'
 const storeEvent = Vuex.createNamespacedHelpers('portfolio')
+
 export default {
   name: 'PortfolioList',
   components: { PortfolioListItem },
@@ -51,30 +52,28 @@ export default {
   },
   data () {
     return {
-      portfolioCoins: null,
       sortValue: null
     }
   },
   computed: {
     ...storeEvent.mapGetters({
       getCoinByID: 'getCoinByID'
-    })
-  },
-  watch: {
-    portfolio: function (val) {
+    }),
+    coins: function () {
       if (this.sortValue !== null) {
-        this.portfolioCoins = val.coin
-        this.sortByTotalValue(this.sortValue)
+        return this.sortByTotalValue(this.sortValue)
       } else {
-        this.portfolioCoins = val.coin
+        return this.portfolio.coin
       }
     }
+  },
+  watch: {
   },
   methods: {
     sortByTotalValue (val) {
       this.sortValue = val
-      let coins = this.portfolioCoins.slice()
-      this.portfolioCoins = coins.sort((obj1, obj2) => {
+      let coins = this.portfolio.coin.slice()
+      coins = coins.sort((obj1, obj2) => {
         if (val === 'asc') {
           if (this.countValue(obj1) < this.countValue(obj2)) return 1
           if (this.countValue(obj1) > this.countValue(obj2)) return -1
@@ -84,6 +83,7 @@ export default {
         }
         return 0
       })
+      return coins
     },
     /**
      * Считаем стоимость каждой монеты отдельно
@@ -107,7 +107,6 @@ export default {
     }
   },
   created () {
-    if (this.portfolio.coin) this.portfolioCoins = this.portfolio.coin
   }
 }
 </script>

@@ -819,7 +819,7 @@
       "coin": [
         {
           "id": 5,
-          "amount": 3,
+          "amount": 26,
           "operations": [
             {
               "date": "2018-06-08T13:31:04.613Z",
@@ -827,6 +827,14 @@
               "price": "1302.6",
               "price_per_coin": "434.2",
               "quantity": 3,
+              "type": "bought"
+            },
+            {
+              "date": "2018-06-30T05:14:26.337Z",
+              "deal_currency": 1,
+              "price": "9986.6",
+              "price_per_coin": "434.2",
+              "quantity": "23",
               "type": "bought"
             }
           ]
@@ -847,7 +855,7 @@
         },
         {
           "id": 2,
-          "amount": 3,
+          "amount": 35,
           "operations": [
             {
               "date": "2018-06-16T05:07:00.313Z",
@@ -855,6 +863,14 @@
               "price": "3.54",
               "price_per_coin": "984.2",
               "quantity": 3,
+              "type": "bought"
+            },
+            {
+              "date": "2018-06-30T05:15:09.876Z",
+              "deal_currency": 1,
+              "price": "31494.4",
+              "price_per_coin": "984.2",
+              "quantity": "32",
               "type": "bought"
             }
           ]
@@ -881,7 +897,7 @@
         },
         {
           "id": 3,
-          "amount": "14.5",
+          "amount": 124.5,
           "operations": [
             {
               "type": "sold",
@@ -896,6 +912,22 @@
               "price": "50.24",
               "quantity": "1",
               "price_per_coin": "1233.80"
+            },
+            {
+              "date": "2018-06-30T05:13:25.745Z",
+              "deal_currency": 1,
+              "price": "8342",
+              "price_per_coin": "834.2",
+              "quantity": "10",
+              "type": "bought"
+            },
+            {
+              "date": "2018-06-30T05:13:34.098Z",
+              "deal_currency": 1,
+              "price": "83420",
+              "price_per_coin": "834.2",
+              "quantity": "100",
+              "type": "bought"
             }
           ]
         }

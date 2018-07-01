@@ -17,9 +17,9 @@
             </template>
           </div>
 
-          <!--<donutPortfolioWrapper :dataObj="chartData(stringifiedPortfolio)"-->
-                                 <!--:portfolio="portfolio"-->
-                                 <!--:totalCost="totalCost()"></donutPortfolioWrapper>-->
+          <donutPortfolioWrapper :dataObj="chartData(stringifiedPortfolio)"
+                                 :portfolio="portfolio"
+                                 :totalCost="totalCost()"></donutPortfolioWrapper>
             <!-- /.portfolio-view_filter -->
           <div class="portfolio-view_public">
             <a>{{ $t('portfolio.public_portfolio') }}<sup class="tooltip-mark"></sup></a>
@@ -86,13 +86,14 @@
 import formAddDeleteCoin from './formAddDeleteCoin'
 import PortfolioHistory from './PortfolioHistory'
 import PortfolioList from './PortfolioList'
+import donutPortfolioWrapper from './donutPortfolioWrapper'
 import Vuex from 'vuex'
 import PortfolioChartWrapper from './PortfolioChartWrapper'
 
 const storeEvent = Vuex.createNamespacedHelpers('portfolio')
 export default {
   name: 'PortfolioBody',
-  components: {PortfolioChartWrapper, formAddDeleteCoin, PortfolioHistory, PortfolioList},
+  components: {PortfolioChartWrapper, formAddDeleteCoin, PortfolioHistory, PortfolioList, donutPortfolioWrapper},
   props: {
     portfolio: Object
   },

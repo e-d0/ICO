@@ -64,7 +64,7 @@ export default {
                * */
               allMarketsValueByCoin.push(this.sortedByDates(changes))
             } else {
-              console.log('no coins at markets was found')
+              // console.log('no coins at markets was found')
             }
           })
         }
@@ -79,7 +79,7 @@ export default {
           objDataset['data'] = this.countAveragePriceDayPerMarket(allMarketsValueByCoin)
           objDataset['labels'] = this.getDatesFromArray(allMarketsValueByCoin)
         }
-        console.log(objDataset)
+        // console.log(objDataset)
         return objDataset
       }
     }

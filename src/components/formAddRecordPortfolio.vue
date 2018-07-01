@@ -1,7 +1,7 @@
 <template>
   <div :class="['portfolio_add_record_form', { 'toggled': toggled }]">
-    <a href="#" @click.prevent="toggled = !toggled"  v-b-toggle="`formEditRecord-${selectedCoin.id}`" class="btn btn-add-record">{{ $t('portfolio.Add_Record') }}</a>
-    <b-collapse :id="`formEditRecord-${selectedCoin.id}`">
+    <a href="#" @click.prevent="toggled = !toggled" class="btn btn-add-record">{{ $t('portfolio.Add_Record') }}</a>
+    <b-collapse :id="`formEditRecord-${selectedCoin.id}`" v-model="toggled" >
       <form action="#" class="add-record-form ">
 
       <div class="add-record-form_wrapper">

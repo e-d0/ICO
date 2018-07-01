@@ -38,7 +38,7 @@
         <th class="portfolio_item-cell portfolio_item-volume" v-if="coin">
           <div class="portfolio_item-volume-wrapper">
             <span v-html=" currencyConverter(coin['24H_volume'], currentCurrency.ticker ) "></span>
-            <a href="#" @click.prevent="collapseOpen = !collapseOpen" class="portfolio_item-dropdown js-thead-show"></a>
+            <a href="#" @click.prevent="localCollapse()" class="portfolio_item-dropdown js-thead-show"></a>
           </div>
         </th>
       </tr>
@@ -117,8 +117,8 @@
           </template>
           <td>
             <!--<a href="#" :id="`editConfirmForm-${index}-${item.id}`" @click.prevent="onEnable(`editConfirmForm-${index}-${item.id}`)" class="edit">{{ $t(`form.edit`) }}</a>-->
-            <a href="#" v-b-toggle="`formEditRecord--${index}--${item.id}`" @click.prevent="" class="edit">{{ $t(`form.edit`) }}</a>
-            <a href="#" :id="`deleteConfirmForm-${index}-${item.id}`" @click.prevent="onEnable(`deleteConfirmForm-${index}-${item.id}`)" class="delete">{{ $t(`form.delete`) }}</a>
+            <button @click="toggleEditOperation(`formEditRecord--${index}${item.id}`)" class="edit">{{ $t(`form.edit`) }}</button>
+            <button :id="`deleteConfirmForm-${index}-${item.id}`" @click="onEnable(`deleteConfirmForm-${index}-${item.id}`)" class="delete">{{ $t(`form.delete`) }}</button>
             <span>
 
                 <popover-operation-delete :index="index"
@@ -136,7 +136,7 @@
           </tr>
           <tr :key="index+item.operations.length">
             <td class="form_td" colspan="12">
-              <b-collapse :id="`formEditRecord--${index}--${item.id}`">
+              <b-collapse :id="`formEditRecord--${index}${item.id}`">
                 <form-edit-operation-portfolio :index="index"
                                                :selectedCoin="item"
                                                :portfolio="portfolio"
@@ -198,7 +198,28 @@ export default {
       if (this.getCoinByID(this.item.id)) { return this.getCoinByID(this.item.id) }
     }
   },
+  watch: {
+    /**
+     * Смотрим за объектом portfolio и если он изменился,
+     * то закрываем все раскрытые меню и обнуляем донут чарт
+     * */
+    portfolio (newVal, oldVal) {
+      if (newVal.id !== oldVal.id) {
+        this.collapseOpen = false
+        EventBus.$emit('chart:doughnut:check', 'All', false)
+      }
+    }
+  },
   methods: {
+    /**
+     * Открыть форму изменения операции
+     * */
+    toggleEditOperation (id) {
+      this.$root.$emit('bv::toggle::collapse', id)
+    },
+    /**
+     * Удалить монету
+     * */
     removeCoin () {
       let portfolioChanged = JSON.parse(JSON.stringify(this.portfolio))
 
@@ -211,41 +232,21 @@ export default {
       this.collapseOpen = !this.collapseOpen
       this.$store.dispatch('portfolio/changePortfolio', portfolioChanged)
     },
+    /**
+     * Показать поповер
+     * */
     onEnable (index) {
       this.$root.$emit('bv::show::popover', index)
     },
+    /**
+     * Скрыть поповер
+     * */
     onDisable (index) {
       this.$root.$emit('bv::hide::popover', index)
     },
-    // editOperation (index, payload) {
-    //   let portfolioChanged = JSON.parse(JSON.stringify(this.portfolio))
-    //   /**
-    //    * Фильтруем объект портфолио на предмет текущей монеты
-    //    * */
-    //   portfolioChanged.coin.filter(coin => {
-    //     if (coin.id === this.item.id) {
-    //       // /**
-    //       //  * Сначала вычитаем значение quantity до внесенных изменений из общего числа
-    //       //  * */
-    //       // let prevAmount = this.portfolio.coin.find((item) => {
-    //       //   if (this.item.id === item.id) return item
-    //       // })
-    //       // coin.amount = payload.type === 'Sold' ? coin.amount - prevAmount.operations[index].quantity : coin.amount + prevAmount.operations[index].quantity
-    //       /**
-    //        * Затем перезаписываем операцию
-    //        * */
-    //       coin.operations[index] = payload
-    //       // /**
-    //       //  * И плюсуем количество монет к общему числу
-    //       //  * */
-    //       // coin.amount = coin.amount + payload.quantity
-    //     }
-    //     return coin
-    //   })
-    //
-    //   this.$store.dispatch('portfolio/changePortfolio', portfolioChanged)
-    //   this.onDisable(`editConfirmForm-${index}-${this.item.id}`)
-    // },
+    /**
+     * Удалить операцию
+     * */
     deleteOperation (operation, index) {
       let portfolioChanged = JSON.parse(JSON.stringify(this.portfolio))
 
@@ -265,13 +266,22 @@ export default {
       this.$store.dispatch('portfolio/changePortfolio', portfolioChanged)
       this.onDisable(`deleteConfirmForm-${index}-${this.item.id}`)
     },
+    /**
+     * Цена за монету, на которую меняем
+     * */
     pricePerCoinSwapped (operation) {
       return `<small>${this.$t('portfolio.IN')} </small>${this.currencyConverter(operation.price_per_coin_swapped, this.currentCurrency.ticker)}`
     },
+    /**
+     * Тикер обменной монеты
+     * */
     swappedCoinTicker (operation) {
       let coin = this.getCoinByID(operation.deal_currency)
       return coin.ticker
     },
+    /**
+     * Считает количество монет, полученных при обмене
+     * */
     countSwappedCoinQuantity (operation) {
       let count = operation.price / operation.price_per_coin_swapped
       let decimals = 4
@@ -283,32 +293,47 @@ export default {
     isPositive (coin) {
       return coin['24_change'] > 0 ? 'positive' : 'negative'
     },
+    /**
+     * Посчитать стоимость. Количество на цену за еденицу
+     * */
     countValue (amount, coinID) {
       if (this.getCoinByID(coinID)) {
         return (parseFloat(this.getCoinByID(coinID)['market_price']) * parseFloat(amount))
       }
     },
+    /**
+     * Посчитать цену операции.
+     * */
     countOperationValue (operation) {
       return (parseFloat(operation.price_per_coin) * parseFloat(operation.quantity))
     },
-    toggleCollapseCoin (e) {
+    /**
+     * Скрыть\Показать информацию о монете. Локальный триггер
+     * */
+    localCollapse () {
+      this.collapseOpen = !this.collapseOpen
+      if (this.getCoinByID(this.item.id)) {
+        EventBus.$emit('chart:doughnut:check', this.getCoinByID(this.item.id)['ticker'], this.collapseOpen)
+      }
+    },
+    /**
+     * Скрыть\Показать информацию о монете. Глобальный триггер с события
+     * */
+    toggleCollapseCoin (e, value) {
       if (e === this.coin.ticker) {
-        this.collapseOpen = !this.collapseOpen
+        this.collapseOpen = value
         /**
          * Шлем в чарт сообщение о закрытии\открытии
          * */
-        EventBus.$emit('chart:doughnut:check', e, this.collapseOpen)
-        this.$root.$emit('bv::toggle::collapse', `coin-toggle--${e}`)
-      }
-    },
-    toggleCollapseCoin2 (e) {
-      if (e === this.coin.ticker) {
-        this.collapseOpen = !this.collapseOpen
-        this.$root.$emit('bv::toggle::collapse', `coin-toggle--${e}`, !this.collapseOpen)
+        console.log('event>>>>>>', e, value)
+        this.$root.$emit('bv::toggle::collapse', `coin-toggle--${e}`, value)
       }
     }
   },
   created () {
+    /**
+     * Весим событие, при котором срабатывает функция открывающая\закрывающая инфу о коине
+     * */
     EventBus.$on('chart:doughnut:grow', this.toggleCollapseCoin)
   }
 }
@@ -712,6 +737,10 @@ export default {
             line-height: 12px;
             text-decoration: underline;
             text-decoration-style: dashed;
+            border: none;
+            background: none;
+            outline: none;
+            cursor: pointer;
             &::before {
               content: "";
               position: absolute;
@@ -733,6 +762,11 @@ export default {
             font-weight: 400;
             font-size: 10px;
             line-height: 14px;
+            border: none;
+            background: none;
+            outline: none;
+            cursor: pointer;
+            padding-right: 0px;
             &::before {
               content: "";
               position: absolute;
