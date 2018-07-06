@@ -45,9 +45,10 @@
           <div v-if="dayItem"
                v-for="(hour,ind) in generateHours(dayItem)"
                :key="ind"
-               v-bind:class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']">
+               :class="['timeline_item','timeline_item-scale' ,'timeline_item-scale--calendar']">
                 <calendar-hour :hour="hour"
                           :index="updatedIndex(dayInd, ind)"
+                          :events="allEventsByHours(dayItem)[ind]"
                           :date="updatedDayCell(hour)"></calendar-hour>
           </div>
         </div>
@@ -60,7 +61,7 @@
 
 <script>
 import CalendarHour from './CalendarHour'
-import { generateHours, EventBus } from './eventbus'
+import { generateHours, EventBus, isSameOnlyDate } from './eventbus'
 import Vuex from 'vuex'
 import TWEEN from '@tweenjs/tween.js'
 import moment from 'moment'
@@ -76,14 +77,16 @@ export default {
     return {
       moment: this.$moment,
       emptyHoursArray: generateHours(),
-      offset: 0
+      offset: 0,
+      eventsStorage: []
     }
   },
   computed: {
     ...storeEvent.mapGetters({
       events: 'events',
       filteredEvents: 'filteredEvents',
-      dates: 'dates'
+      dates: 'dates',
+      groupedByHoursWithEvents: 'groupedByHoursWithEvents'
     })
   },
   filters: {
@@ -92,7 +95,46 @@ export default {
       return moment(value).format('dddd')
     }
   },
+  watch: {
+    filteredEvents: function (newVal, oldVal) {
+      this.eventsStorage = newVal
+    }
+  },
   methods: {
+    /**
+     * Фильтр по текущему дню
+     * */
+    filteredByDayEvents: function (date) {
+      return this.eventsStorage.filter(item => isSameOnlyDate(item.date, date))
+    },
+    /**
+     * Сортировка массива дат
+     * */
+    sortedDates (arrEvents) {
+      return arrEvents.sort((obj1, obj2) => {
+        if (obj1.date > obj2.date) return -1
+        if (obj1.date < obj2.date) return 1
+        return 0
+      })
+    },
+    /**
+     * Все события, сгруппированные по часам
+     * */
+    allEventsByHours (date) {
+      /**
+       * проверка, совпадает ли дата события и дата объекта ячейки
+       * */
+      if ((this.filteredEvents !== undefined && this.filteredEvents.length) && this.filteredEvents.length) {
+        let events = this.groupedByHoursWithEvents(this.filteredByDayEvents(date))
+        // if (events.length > 0) { console.log('EVENTS END', events) }
+        return events
+      } else {
+        return []
+      }
+    },
+    /**
+     * Отступ линии времени
+     * */
     timeOffset: function () {
       this.offset = this.calcTimeOffset()
     },

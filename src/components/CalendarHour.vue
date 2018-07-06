@@ -26,7 +26,7 @@
 
 <script>
 import event from './itemEvent'
-import { EventBus, isSameDay } from './eventbus'
+import { EventBus } from './eventbus'
 import Vuex from 'vuex'
 import FormAddEvent from './formAddEvent'
 import modal from './modalBody'
@@ -47,9 +47,13 @@ export default {
   props: {
     date: Date,
     hour: Date,
-    index: Number
+    index: Number,
+    events: Array
   },
   methods: {
+    /**
+     * Проверка, есть ли выбранный элемент в массиве событий
+     * */
     checkCurrentEvent () {
       if (this.allEvents[this.currentEvent.toString()] === undefined) {
         this.currentEvent = 0
@@ -58,13 +62,22 @@ export default {
         return this.allEvents[this.currentEvent.toString()]
       }
     },
+    /**
+     * Проверка текущего индекса событий
+     * */
     countEvents () {
       let counter = parseInt(this.allEvents.length - (this.currentEvent + 1))
       return counter === 0 ? parseInt(this.allEvents.length - 1).toString() : counter.toString()
     },
+    /**
+     * Проверка на последний элемент
+     * */
     isLastElem () {
       return this.currentEvent + 1 === this.allEvents.length
     },
+    /**
+     * Переключатель счетчика
+     * */
     nextEvent () {
       if (this.currentEvent < this.allEvents.length - 1) {
         this.currentEvent++
@@ -101,6 +114,9 @@ export default {
     dateFormat (date) {
       return this.$moment(date).format('H:mm')
     },
+    /**
+     * Для драг дропа. Событие, при котором элемент проноситься юзером над данной клеткой часа
+     * */
     dragenter (e) {
       if (this.$el.contains(e.target)) {
         this.$emit('highlight', this.index)
@@ -110,10 +126,16 @@ export default {
         }
       }
     },
+    /**
+     * Для драг дропа. Событие начало перетаскивания event`а юзером
+     * */
     dragItem (e, item, date, type) {
       this.$emit('highlight', this.index)
       EventBus.$emit('item-dragstart', e, item, date, type)
     },
+    /**
+     * Для драг дропа. Событие : юзер отпустил(дроп) итем в клетку часа.
+     * */
     onDrop (e) {
       this.$emit('highlight', -1)
       EventBus.$emit('item-drop', e, this.date, this.type, this.index)
@@ -124,19 +146,17 @@ export default {
     ...storeEvent.mapGetters({
       filteredEvents: 'filteredEvents'
     }),
+    /**
+     * Проверка - событий в клете часа не одно
+     * */
     isMulti: function () {
       if (this.allEvents !== undefined && this.allEvents.length) return this.allEvents.length > 1
     },
+    /**
+     * Массив событий для отрисовки
+     * */
     allEvents () {
-      /**
-       * проверка, совпадает ли дата события и дата объекта ячейки
-       * //TODO Раскоментировать краткое выражение перед сдачей
-       * */
-      if ((this.filteredEvents !== undefined && this.filteredEvents.length) && this.filteredEvents.length) {
-        return this.sortedDates(this.filteredEvents.filter(item => isSameDay(item.date, this.date)))
-      } else {
-        return []
-      }
+      return this.events !== undefined ? this.sortedDates(this.events) : []
     }
   },
   created () {}

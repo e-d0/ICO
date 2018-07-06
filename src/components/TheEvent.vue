@@ -64,11 +64,14 @@ export default {
     getTypeNameByCode () {
       return this.$store.getters['event/getTypeNameByCode'](this.item.tempType)
     },
+    /**
+     * Событие для родителя. Переключить следующий event
+     * */
     nextEvent () {
       this.$parent.$emit('update:current')
     },
     returnDate: function (el) {
-      return this.isStart ? this.$moment(el.starts).format('HH:mm') : this.$moment(el.ends).format('HH:mm')
+      return this.$moment(el.date).format('HH:mm')
     },
     onClose () {
       this.popoverShow = false

@@ -34,17 +34,22 @@ export default {
      * */
     timeOffset () {
       const intervals = [0, 15, 30, 45, 60]
-      const startsDate = this.$moment(this.item.starts).format('m')
+      let dopOffset = 0
+      if (this.multi) {
+        dopOffset = this.$moment(this.item.date).hours() - this.$moment(this.date).hours()
+      }
+
+      const startsDate = this.$moment(this.item.date).format('m')
       const start = Number.parseInt(startsDate)
 
       let offsetTop = 0
       for (let i = intervals.length; i >= 0; --i) {
-        if (intervals[i] <= start) {
+        if (intervals[i] <= start && intervals[i + 1] >= start) {
           offsetTop = intervals[i]
           break
         }
       }
-      return (100 / 60) * offsetTop
+      return ((100 / 60) * offsetTop) + (100 * dopOffset)
     },
     onDrag (e) {
       console.log('start item-dragstart', e.gesture)
