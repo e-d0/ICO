@@ -15,8 +15,8 @@
 
           <div class="timeline_top-line">
             <div class="timeline_date">
-              <span class="timeline_date-month">{{ $t('calendar.Today') }} <b>{{ moment().format('D MMMM')}}</b></span>
-              <span class="timeline_date-day">{{ moment().format('dddd')}} ,{{ moment().format('H:mm')}},
+              <span class="timeline_date-month">{{ $t('calendar.Today') }}, <b>{{ moment().format('D MMMM')}}</b></span>
+              <span class="timeline_date-day">{{ moment().format('dddd')}} , {{ moment().format('hh:mm A')}}
               (<form-time-zone></form-time-zone>)
               </span>
             </div>
@@ -366,10 +366,11 @@ export default {
       &-month {
         margin-bottom: 7px;
         color: #333f52;
-        font-family: @main-font;
+        font-family: @medium;
         font-size: 20px;
         font-weight: 500;
         line-height: 20px;
+        letter-spacing: -0.07px;
       }
       &-day {
         color: #707986;
@@ -416,7 +417,7 @@ export default {
       }
       &-date {
         color: #333f52;
-        font-family: @main-font;
+        font-family: @medium;
         line-height: 18px;
         font-size: 16px;
         font-weight: 700;
@@ -440,7 +441,6 @@ export default {
         &--calendar {
           background-color: #fafbfc;
           min-width: 168px;
-          /*min-width: 125px;*/
           border-right: 1px solid #e0e6ed;
         }
         &--calendar-today {
@@ -540,10 +540,10 @@ export default {
       &-time {
         margin-bottom: 2px;
         color: #ffffff;
-        font-family: @main-font;
+        font-family: @medium;
         font-size: 12px;
-        font-weight: 500;
         line-height: 14px;
+        letter-spacing: -0.05px;
       }
       &-name {
         text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);

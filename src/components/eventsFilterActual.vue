@@ -124,6 +124,8 @@ export default {
     box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
     border-radius: 4px;
     background-color: #fafbfc;
+    font-family: @condenced;
+    font-weight: bold;
     legend {
       margin-bottom: 0;
       color: #525c6c;
@@ -159,9 +161,8 @@ export default {
       }
       &-name {
         color: #333f52;
-        font-family: @main-font;
+        font-family: @medium;
         font-size: 14px;
-        font-weight: 500;
         line-height: 16px;
         white-space: nowrap;
       }

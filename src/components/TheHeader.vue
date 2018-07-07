@@ -13,12 +13,8 @@
                 <li class="main-nav_item"><a href="#"  v-html="$t('links.OurRatings')"></a></li>
                 <li class="main-nav_item"><a href="#" v-html="$t('links.Exchanges')"></a></li>
                 <li class="main-nav_item"><a href="#" v-html="$t('links.Forum')"></a></li>
-                <li class="main-nav_item">
-                  <ul class="main-nav_faq">
-                    <li class="main-nav_faq-item"><a href="vk" v-html="$t('links.Team')"></a></li>
-                    <li class="main-nav_faq-item"><a href="#" v-html="$t('links.FAQ')"></a></li>
-                  </ul>
-                </li>
+                <li class="main-nav_item main-nav_faq-item"><a href="vk" v-html="$t('links.Team')"></a></li>
+                <li class="main-nav_item main-nav_faq-item"><a href="#" v-html="$t('links.FAQ')"></a></li>
               </ul>
               <ul class="main-nav_user-menu main-nav_user-menu--hidden">
                 <li class="main-nav_user-search">
@@ -64,7 +60,7 @@
                     <input type="text" placeholder="" name="search">
                   </form>
                 </div>
-                <ul>
+                <ul class="user_info">
                   <li class="user_name">achubais.1965</li>
                   <li class="user_notification">
                     <ul class="user_notification-wrapper">
@@ -141,7 +137,8 @@ export default {
     .main-nav {
       display: flex;
       justify-content: space-between;
-      align-items: center;;
+      align-items: center;
+      padding: 25px 0;
       .logo {
         margin-right: 64px;
       }
@@ -153,44 +150,59 @@ export default {
       }
       &_menu {
         display: flex;
-        justify-content: space-between;
         flex-grow: 2;
-        margin-right: 30px;
+        flex-wrap: wrap;
+        max-width: 58%;
       }
       &_item {
+        width: 78px;
+        margin-right: 38px;
+        &:first-child {
+          //margin-right: 60px;
+        }
         a {
           display: block;
-          padding: 20px 10px 20px;
+          padding: 0 10px;
           color: @accent-color;
-          font-family: @main-font;
+          font-family: @medium;
           font-size: 16px;
           font-weight: 500;
           line-height: 20px;
           white-space: nowrap;
+          text-decoration: underline;
+          text-decoration-color: rgba(68, 175, 54, 0.25);
+          &:hover {
+            color: @accent-hover-color;
+            text-decoration-color: rgba(68, 175, 54, 0.85);
+          }
         }
         &--active {
-          position: relative;
+          //position: relative;
           &::before {
-            content: "";
-            position: absolute;;
-            width: 100%;
-            height: 4px;
-            background-color: @accent-color;
+            //content: "";
+            //position: absolute;;
+            //width: 100%;
+            //height: 4px;
+            //background-color: @accent-color;
           }
         }
       }
       &_faq {
         display: block;
-        padding: 20px 10px 20px;
         &-item {
           a {
-            padding: 0 0 0 0;
-            color: #525c6c;
+            padding: 5px 10px 0 10px;
+            color: #8f96a1;
             font-family: @main-font;
-            font-size: 14px;
+            font-size: 16px;
             font-weight: 400;
             line-height: 20px;
             letter-spacing: -0.1px;
+            text-decoration-color: rgba(143, 150, 161, 0.25);
+            &:hover {
+              color: rgba(82, 92, 108, 0.85);
+              text-decoration-color: rgba(143, 150, 161, 0.85);
+            }
           }
         }
       }
@@ -221,21 +233,26 @@ export default {
         input {
           padding: 8px 40px 8px 15px;
           max-width: 180px;
-          color: #333f52;
-          font-family: @main-font;
           font-size: 14px;
           font-weight: 400;
           line-height: 18px;
           border-radius: 4px;
           border: 1px solid #c5d0de;
           background-color: #ffffff;
+          color: #333f52;
+          font-family: 'Roboto', sans-serif;
+          outline: none;
         }
       }
+      .user_info {
+        margin-left: 63px;
+      }
       &_user-language {
+        position: relative;
         margin-left: 28px;
         .language {
           position: absolute;
-          top: 29px;
+          top: -10px;
         }
       }
       &_user-login {
@@ -247,75 +264,68 @@ export default {
           margin-left: 10px;
           margin-right: 0;
         }
-        &_name {
+        &_username-container {
           margin-left: 60px;
-          text-align: right;
+        }
+        &_name {
           margin-bottom: 2px;
+          white-space: nowrap;
         }
         &_notification {
+          display: flex;
+          /*justify-content: flex-end;*/
+          //align-items: center;
           &-wrapper {
+            flex-direction: row;
             display: flex;
             justify-content: flex-end;
-            align-items: center;
+            width: 100%;
           }
           &-bell {
             margin-left: 20px;
-            a {
-              position: relative;
-              display: inline-block;
+            position: relative;
+            width: 16px;
+            height: 16px;
+            &::before {
+              content: "";
+              position: absolute;
               width: 16px;
               height: 16px;
-              font-size: 0;
-              &::before {
-                content: "";
-                position: absolute;
-                width: 16px;
-                height: 16px;
-                right: 0px;
-                top: 3px;
-                background-image: @img-bell;
-                background-position: center;
-                background-repeat: no-repeat;
-                z-index: 11;
-              }
+              right: 0px;
+              top: 1px;
+              background-image: @img-bell;
+              background-position: center;
+              background-repeat: no-repeat;
+              z-index: 11;
             }
           }
           &-message {
-            a {
-              position: relative;
-              display: inline-block;
+            position: relative;
+            width: 16px;
+            height: 16px;
+            &::before {
+              content: "";
+              position: absolute;
               width: 16px;
               height: 16px;
-              font-size: 0;
-              &::before {
-                content: "";
-                position: absolute;
-                width: 16px;
-                height: 16px;
-                right: 0px;
-                top: 3px;
-                background-image: @img-message-icon;
-                background-position: center;
-                background-repeat: no-repeat;
-                z-index: 11;
-              }
+              right: 0px;
+              top: 2px;
+              background-image: @img-message-icon;
+              background-position: center;
+              background-repeat: no-repeat;
+              z-index: 11;
             }
           }
           &-num {
+            align-self: center;
             margin-left: 6px;
-            a {
-              display: inline-block;
-              text-align: center;
-              //vertical-align: middle;
-              width: 16px;
-              height: 16px;
-              border-radius: 8px;
-              background-color: #ff3657;
-              font-size: 11px;
-              font-weight: 500;
-              line-height: 18px;
-              color: #fff;
-            }
+            padding: 2px 4px 1px 4px;
+            border-radius: 8px;
+            background-color: #ff3657;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 11px;
+            color: #fff;
           }
         }
       }
@@ -411,7 +421,7 @@ export default {
           display: block;
           padding: 18px 20px 18px 52px;
           color: #fafbfc;
-          font-family: @main-font;
+          font-family: @medium ;
           font-size: 14px;
           font-weight: 500;
           line-height: 20px;

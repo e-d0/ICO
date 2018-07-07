@@ -4,35 +4,6 @@
       <fieldset>
         <legend class="dropdown" v-b-toggle="'formEventsFilter'">{{ $t('form.eventFilterTitle') }}</legend>
         <b-collapse id="formEventsFilter" visible>
-          <!--<multiselect class="" type="text"-->
-                                      <!--:value="names"-->
-                                      <!--:options="events"-->
-                                      <!--:multiple="true"-->
-                                      <!--:close-on-select="false"-->
-                                      <!--:clear-on-select="true"-->
-                                      <!--:hide-selected="true"-->
-                                      <!--:preserve-search="true"-->
-                                      <!--placeholder=""-->
-                                      <!--label="name"-->
-                                      <!--track-by="name"-->
-                                      <!--:preselect-first="false"-->
-                                      <!--@input="setFiltersNames">-->
-          <!--<template slot="tag" slot-scope="props">-->
-            <!--<span></span>-->
-          <!--</template>-->
-        <!--</multiselect>-->
-
-          <!--<div class="multiselect__tags-wrap">-->
-            <!--<template v-for="(item, index) in chosenNamesStorage" >-->
-              <!--<span class="badge badge-success _custom" :key="index">-->
-                    <!--<span class="custom__remove " v-on:click.prevent="removeEventName(item)">-->
-                      <!--&#215;-->
-                    <!--</span>-->
-                    <!--<span class="badge__name">{{ item.name}}</span>-->
-                  <!--</span>-->
-            <!--</template>-->
-          <!--</div>-->
-
           <ul class="choosing-form_list">
             <li v-for="(item,index) in types" :key="index">
               <label class="checkbox" :for="'name-'+index">
@@ -126,9 +97,6 @@ export default {
     /**
      * Привязываем значения input имени к хранилищу vuex.
      * */
-    // setFiltersNames (context) {
-    //   this.$store.dispatch('event/setFiltersNames', context)
-    // },
     ...storeEvent.mapActions(['setFiltersNames']),
     /**
      * Получаем типы событий с сервера через store, используя промис.
@@ -249,6 +217,9 @@ export default {
       box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
       border-radius: 4px;
       background-color: #ffffff;
+      font-family: @condenced;
+      font-weight: bold;
+      letter-spacing: 1.3px;
       form {
         legend {
           margin-bottom: 20px;

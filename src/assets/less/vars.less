@@ -1,8 +1,29 @@
 //цвета фона и всего сайта
 
 @body-bg :#eff3f6;
+
 @main-color :#1991eb;
+@link-color :#1991eb;
+
+
+@link-hover-color: rgba(25, 145, 235, 0.85);
+@link-active-color: #1876bd;
+
+
 @accent-color :#44af36;
+@accent-hover-color : rgba(69, 175, 55, 0.85);
+@accent-active-color: #3b962f;
+
+@main-text-color : #525c6c;
+@dark : #333f52;
+@gray : #707986;
+@light-grey : #8f96a1;
+@light-light-grey: #c5d0de;
+@super-light-grey: #ced8e3;
+
+@purple: #b64ad4;
+@red: #ff3657;
+@orange: #f7981c;
 
 @pre-ico: #f7981b;
 @KYC: #59b6b2;
@@ -13,7 +34,9 @@
 @path-fonts: '../fonts';
 
 @main-font :'Roboto', sans-serif;
-@condenced : 'Roboto Condenced', sans-serif;
+@condenced : 'Roboto Condensed', sans-serif;
+@medium : 'Roboto Medium', sans-serif;
+
 
 //.svg(@img) {
     //background-image: data-uri("../img/svg+xml;charset=UTF-8,", @img);
@@ -52,8 +75,10 @@
 @img-cross: data-uri('../img/cross.svg');
 @img-discuss-icon: data-uri('../img/discuss-icon.svg');
 @img-discuss-icon-white: data-uri('../img/discuss-icon-white.svg');
+@img-discuss-icon-hover: data-uri('../img/discuss-icon-hover.svg');
 @img-to-rate-icon: data-uri('../img/to-rate-icon.svg');
 @img-to-rate-icon-white: data-uri('../img/to-rate-icon-white.svg');
+@img-to-rate-icon-hover: data-uri('../img/to-rate-icon-hover.svg');
 @img-chain: data-uri('../img/chain.svg');
 @img-slider-image: data-uri('../img/slider-image.png');
 @img-managment-icon: data-uri('../img/menegment-icon.svg');
@@ -73,6 +98,8 @@
 @img-blue-checkbox: data-uri('../img/blue-checkbox.svg');
 @img-orange-checkbox: data-uri('../img/orange-checkbox.svg');
 @img-purple-checkbox: data-uri('../img/purple-checkbox.svg');
+@img-checkbox-hover: data-uri('../img/checkbox-hover.svg');
+@img-radio-hover: data-uri('../img/radio-hover.svg');
 @img-flip-logo: data-uri('../img/flip-logo.png');
 @img-ins-logo: data-uri('../img/ins-logo.png');
 @img-calendar: data-uri('../img/calendar.svg');
@@ -136,8 +163,8 @@
 //@img-add-favourite: data-uri('../img/add-favourite.svg');
 @img-radio-inactive: data-uri('../img/radio-inactive.svg');
 @img-check-inactive: data-uri('../img/check-inactive.svg');
-//@img-thumbs-down-red-review: data-uri('../img/thumbs-down-red-review.svg');
-//@img-thumbs-up-green-review: data-uri('../img/thumbs-up-green-review.svg');
+@img-thumbs-down-red-review: data-uri('../img/thumbs-down-red-review.svg');
+@img-thumbs-up-green-review: data-uri('../img/thumbs-up-green-review.svg');
 @img-share: data-uri('../img/share.svg');
 @img-star: data-uri('../img/star.svg');
 @img-star-active: data-uri('../img/star_active.svg');
@@ -158,6 +185,7 @@
 @img-sign-up-success: data-uri('../img/sign-up-success.svg');
 @img-comment-img: data-uri('../img/comment-img.svg');
 @img-profile-icon: data-uri('../img/profile-icon.svg');
+@img-add-to-portfolio: data-uri('../img/add-to-portfolio.svg');
 
 //======================SPRITES==================//
 @img-user-pop: data-uri('../img/user-pop.svg');
@@ -165,9 +193,16 @@
 
 //@img-aurora-logo: data-uri('../img/aurora-logo.svg');
 
+
+
+
+
+
+
+
 /* font-family: "RobotoRegular"; */
 @font-face {
-  font-family: "RobotoRegular";
+  font-family: "Roboto";
   src: url("@{path-fonts}/RobotoRegular/RobotoRegular.eot");
   src: url("@{path-fonts}/RobotoRegular/RobotoRegular.eot?#iefix")format("embedded-opentype"),
   url("@{path-fonts}/RobotoRegular/RobotoRegular.woff") format("woff"),
@@ -177,37 +212,37 @@
 }
 /* font-family: "RobotoLight"; */
 @font-face {
-  font-family: "RobotoLight";
+  font-family: "Roboto";
   src: url("@{path-fonts}/RobotoLight/RobotoLight.eot");
   src: url("@{path-fonts}/RobotoLight/RobotoLight.eot?#iefix")format("embedded-opentype"),
   url("@{path-fonts}/RobotoLight/RobotoLight.woff") format("woff"),
   url("@{path-fonts}/RobotoLight/RobotoLight.ttf") format("truetype");
   font-style: normal;
-  font-weight: normal;
+  font-weight: 200;
 }
 /* font-family: "RobotoMedium"; */
 @font-face {
-  font-family: "RobotoMedium";
+  font-family: "Roboto Medium";
   src: url("@{path-fonts}/RobotoMedium/RobotoMedium.eot");
   src: url("@{path-fonts}/RobotoMedium/RobotoMedium.eot?#iefix")format("embedded-opentype"),
   url("@{path-fonts}/RobotoMedium/RobotoMedium.woff") format("woff"),
   url("@{path-fonts}/RobotoMedium/RobotoMedium.ttf") format("truetype");
   font-style: normal;
-  font-weight: normal;
+  font-weight: 500;
 }
 /* font-family: "RobotoBold"; */
 @font-face {
-  font-family: "RobotoBold";
+  font-family: "Roboto";
   src: url("@{path-fonts}/RobotoBold/RobotoBold.eot");
   src: url("@{path-fonts}/RobotoBold/RobotoBold.eot?#iefix")format("embedded-opentype"),
   url("@{path-fonts}/RobotoBold/RobotoBold.woff") format("woff"),
   url("@{path-fonts}/RobotoBold/RobotoBold.ttf") format("truetype");
   font-style: normal;
-  font-weight: normal;
+  font-weight: bold;
 }
 
 @font-face {
-  font-family: "RobotoCondensedRegular";
+  font-family: "Roboto Condensed";
   src: url("@{path-fonts}/RobotoCondensedRegular/RobotoCondensedRegular.eot");
   src: url("@{path-fonts}/RobotoCondensedRegular/RobotoCondensedRegular.eot?#iefix")format("embedded-opentype"),
   url("@{path-fonts}/RobotoCondensedRegular/RobotoCondensedRegular.woff") format("woff"),
@@ -217,23 +252,23 @@
 }
 
 @font-face {
-  font-family: "RobotoCondensedLight";
+  font-family: "Roboto Condensed";
   src: url("@{path-fonts}/RobotoCondensedLight/RobotoCondensedLight.eot");
   src: url("@{path-fonts}/RobotoCondensedLight/RobotoCondensedLight.eot?#iefix")format("embedded-opentype"),
   url("@{path-fonts}/RobotoCondensedLight/RobotoCondensedLight.woff") format("woff"),
   url("@{path-fonts}/RobotoCondensedLight/RobotoCondensedLight.ttf") format("truetype");
   font-style: normal;
-  font-weight: normal;
+  font-weight: 300;
 }
 
 @font-face {
-  font-family: "RobotoCondensedBold";
+  font-family: "Roboto Condensed";
   src: url("@{path-fonts}/RobotoCondensedBold/RobotoCondensedBold.eot");
   src: url("@{path-fonts}/RobotoCondensedBold/RobotoCondensedBold.eot?#iefix")format("embedded-opentype"),
   url("@{path-fonts}/RobotoCondensedBold/RobotoCondensedBold.woff") format("woff"),
   url("@{path-fonts}/RobotoCondensedBold/RobotoCondensedBold.ttf") format("truetype");
   font-style: normal;
-  font-weight: normal;
+  font-weight: bold;
 }
 
 /* diff from repo */
