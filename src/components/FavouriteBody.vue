@@ -215,7 +215,7 @@ export default {
             color: #525c6c;
             background-color: #fff;
             border: 1px solid #c5d0de;
-            font-family: @main-font;
+            font-family: @medium;
             font-weight: 500;
             font-size: 11px;
             line-height: 12px;
@@ -258,7 +258,7 @@ export default {
         padding: 32px 0;
         h1 {
           color: #333f52;
-          font-family: @main-font;
+          font-family: @medium;
           font-size: 20px;
           font-weight: 500;
           line-height: 18px;

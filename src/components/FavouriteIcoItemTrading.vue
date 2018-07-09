@@ -166,8 +166,8 @@ export default {
         position: absolute;
         left: -10px;
         border: 10px solid transparent;
-        border-top-width: 14px;
-        border-bottom-width: 14px;
+        border-top-width: 13.5px;
+        border-bottom-width: 13.5px;
         border-top-color: #f7981b;
         border-bottom-color: #f7981b;
         border-left-width: 0;
@@ -181,7 +181,7 @@ export default {
         color: #ffffff;
         font-family: 'Roboto', sans-serif;
         font-size: 18px;
-        font-weight: 900;
+        font-weight: 700;
         line-height: 15px;
         white-space: nowrap;
       }
@@ -269,7 +269,7 @@ export default {
         &_title {
           margin-bottom: 4px;
           display: flex;
-          justify-catalogue: space-between;
+          justify-content: space-between;
           align-items: center;
           h2 {
             color: #333f52;
@@ -283,7 +283,7 @@ export default {
           margin-bottom: 5px;
           span {
             margin-right: 3px;
-            padding: 3px 5px 1px;
+            padding: 3px 5px;
             border-radius: 4px;
             border: 1px solid #cbd5e2;
             background-color: #ffffff;
@@ -310,7 +310,7 @@ export default {
           &-pl {
             margin-right: 16px;
             color: #8f96a1;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 11px;
             font-weight: 500;
             line-height: 11px;
@@ -322,8 +322,9 @@ export default {
             color: #333f52;
             font-size: 14px;
             line-height: 16px;
-            text-transform: uppercase;            font-family: @main-font;
-            font-weight: 500;
+            text-transform: uppercase;
+            font-family: @main-font;
+            font-weight: 700;
           }
         }
         &_time-wrapper {
@@ -338,7 +339,7 @@ export default {
           width: 100%;
           th {
             color: #8f96a1;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 11px;
             font-weight: 500;
             line-height: 11px;
@@ -347,7 +348,7 @@ export default {
           }
           td {
             color: #707986;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 16px;
             font-weight: 500;
             line-height: 20px;
@@ -444,12 +445,12 @@ export default {
           display: flex;
           flex-direction: column;
           flex-grow: 2;
-          margin-bottom: 10px;
+          margin-bottom: 13px;
           width: 75%;
           &-type {
             margin-bottom: 5px;
             color: #8f96a1;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 11px;
             font-weight: 500;
             line-height: 11px;
@@ -481,7 +482,7 @@ export default {
                 color: @accent-color;
               }
               color: #707986;
-              font-family: @main-font;
+              font-family: @medium;
               font-size: 12px;
               font-weight: 400;
               line-height: 12px;
@@ -492,7 +493,7 @@ export default {
             }
             &-percent {
               color: #8f96a1;
-              font-family: @main-font;
+              font-family: @medium;
               font-size: 12px;
               font-weight: 400;
               line-height: 12px;
@@ -582,7 +583,7 @@ export default {
           &-token {
             margin-bottom: 6px;
             color: #8f96a1;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 11px;
             font-weight: 500;
             line-height: 11px;
@@ -620,7 +621,7 @@ export default {
           &-en {
             margin-bottom: 7px;
             color: #8f96a1;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 11px;
             font-weight: 500;
             line-height: 11px;
@@ -638,11 +639,11 @@ export default {
           }
           &-time-remain,
           &-time-left {
-            padding: 2px 4px 2px;
+            padding: 3px 4px;
             border-radius: 2px;
             background-color: #c5d0de;
             color: #ffffff;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 11px;
             font-weight: 500;
             line-height: 11px;
@@ -674,7 +675,7 @@ export default {
           a {
             margin-right: 30px;
             position: relative;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 12px;
             font-weight: 500;
             line-height: 14px;
@@ -691,14 +692,14 @@ export default {
               border-radius: 8px;
               background-color: #5bb0d5;
               color: #ffffff;
-              font-family: @main-font;
+              font-family: @medium;
               font-size: 9px;
               font-weight: 500;
               line-height: 9px;
             }
           }
           .to-discuss {
-            padding-left: 24px;
+            padding-left: 21px;
             color: #525c6c;
             font-size: 12px;
             font-weight: 500;
@@ -737,7 +738,7 @@ export default {
             }
           }
           .to-rate {
-            padding-left: 24px;
+            padding-left: 21px;
             color: #525c6c;
             font-size: 12px;
             font-weight: 500;
@@ -771,7 +772,7 @@ export default {
             }
           }
           .add-calendar {
-            padding-left: 24px;
+            padding-left: 21px;
             color: #525c6c;
             font-size: 12px;
             font-weight: 500;
@@ -836,7 +837,7 @@ export default {
             position: relative;
             padding: 18px 0px 13px 16px;
             color: #ffffff;
-            font-family: @main-font;
+            font-family: @medium;
             font-size: 14px;
             font-weight: 500;
             line-height: 14px;
