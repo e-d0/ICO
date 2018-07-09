@@ -187,7 +187,7 @@ export default {
             color: #525c6c;
             background-color: #fff;
             border: 1px solid #c5d0de;
-            font-family: @main-font;
+            font-family: @medium;
             font-weight: 500;
             font-size: 11px;
             line-height: 12px;
@@ -243,7 +243,7 @@ export default {
             h1 {
                 margin-bottom: 4px;
                 color: #333f52;
-                font-family: @main-font;
+                font-family: @medium;
                 font-size: 20px;
                 font-weight: 500;
                 line-height: 18px;
@@ -266,17 +266,18 @@ export default {
                 background-color: #e0e6ed;
                 border-bottom: 2px solid #c5d0de;
                 &-cell {
-                    padding: 18px 12px 14px;
+                    padding: 14px 12px 12px;
                     border-right: 1px solid #e9ecee;
                     &:last-child {
                         border-right: none;
                     }
                     &--name {
-                        padding-left: 22px;
-                        width: 23%;
+                        padding-left: 21px;
+                        width: 22.5%;
                     }
                     &--24h {
-                        width: 11%;
+                        width: 10.5%;
+                        text-align: left;
                       b {
                         padding: 2px 8px 2px;
                         color: #8f96a1;
@@ -291,7 +292,6 @@ export default {
                       span {
                         position: relative;
                         margin: auto;
-                        padding-left: 18px;
                         color: #707986;
                         font-family: @main-font;
                         font-weight: 400;
@@ -310,17 +310,21 @@ export default {
                       }
                     }
                     &--roi {
-                        width: 12%;
+                        width: 13%;
+                        text-align: left;
                     }
                     &--date {
                         width: 15%;
+                        text-align: left;
                     }
                     &--price {
                         width: 13%;
+                        text-align: left;
                     }
                     span {
                         color: #525c6c;
                         font-family: @main-font;
+                        text-transform: capitalize;
                         font-size: 13px;
                         font-weight: 400;
                         line-height: 12px;
@@ -356,16 +360,17 @@ export default {
             &-name {
                 position: relative;
                 padding: 0px 10px 0 22px;
+                height: 52px;
                 span {
                     color: #333f52;
-                    font-family: @main-font;
+                    font-family: @medium;
                     font-weight: 500;
                     font-size: 14px;
                     line-height: 14px;
                     letter-spacing: -0.2px;
                 }
                 b {
-                    font-family: @main-font;
+                    font-family: @medium;
                     font-weight: 500;
                     color: #8f96a1;
                     letter-spacing: -0.2px;
@@ -421,7 +426,7 @@ export default {
             &-date {
                 span {
                     color: #707986;
-                    font-family: @main-font;
+                    font-family: @medium;
                     font-size: 16px;
                     font-weight: 500;
                     line-height: 16px;
@@ -435,7 +440,7 @@ export default {
                     display: block;
                     white-space: nowrap;
                     color: #333f52;
-                    font-family: @main-font;
+                    font-family: @medium;
                     font-weight: 500;
                     font-size: 16px;
                     line-height: 16px;
@@ -446,11 +451,13 @@ export default {
                 &-btc {
                     opacity: 0.6;
                     color: #8f96a1;
-                    font-family: @main-font;
+                    font-family: @medium;
                     font-weight: 500;
                     font-size: 9px;
                     line-height: 12px;
                     text-transform: uppercase;
+                    position: relative;
+                    top: -3px;
                 }
             }
         }
