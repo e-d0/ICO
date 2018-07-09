@@ -119,7 +119,7 @@ export default {
   .current-events {
     margin-top: 28px;
     margin-bottom: 36px;
-    padding: 20px 24px;
+    padding: 16px 24px 30px 24px;
     border-top: 4px solid #5bb0d5;
     box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
     border-radius: 4px;
@@ -136,11 +136,14 @@ export default {
       text-transform: uppercase;
     }
     .radio-buttons {
-      margin-top: 18px;
-      margin-bottom: 18px;
+      margin-top: 16px;
+      margin-bottom: 19px;
+      label {
+        margin-bottom: 0;
+      }
     }
     &_item {
-      margin-top: 20px;
+      margin-top: 18px;
       &-data {
         display: flex;
         justify-content: space-between;
@@ -167,7 +170,7 @@ export default {
         white-space: nowrap;
       }
       &-event {
-        padding: 3px 4px 2px;
+        padding: 3px 4px;
         color: #ffffff;
         font-family: @main-font;
         font-size: 11px;

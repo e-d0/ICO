@@ -321,17 +321,16 @@ export default {
       margin-right: 40px;
       &_btn{
         padding: 10px 17px 9px;
+        font-family: @medium;
         -webkit-box-shadow: 0 2px 0 #8f96a1;
         box-shadow: 0 2px 0 #8f96a1;
         border-radius: 2px;
-        /*background-color: #44af36;*/
         background-color: #fff;
-        /*color: #fff;*/
         color: #8f96a1;
         position: relative;
         right: 0;
         margin-bottom: 20px;
-        font-size: 14px;
+        font-size: 13px;
         font-weight: 500;
         line-height: 14px;
       }

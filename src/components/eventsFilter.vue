@@ -212,7 +212,7 @@ export default {
   .filter {
     margin-top: 32px;
     .events-filter {
-      padding: 20px 24px 0px;
+      padding: 24px 24px 0px;
       border-top: 4px solid #c5d0de;
       box-shadow: 0 2px 4px rgba(51, 51, 51, 0.1);
       border-radius: 4px;
@@ -238,7 +238,7 @@ export default {
         }
         .choosing-form_list {
           /*margin-top: 12px;*/
-          margin-bottom: 15px;
+          margin-bottom: 9px;
           li {
             display: flex;
             margin-bottom: 5px;
@@ -246,6 +246,7 @@ export default {
               span {
                 color: #333f52;
                 z-index: 0;
+                padding-left: 24px;
               }
             }
             span {

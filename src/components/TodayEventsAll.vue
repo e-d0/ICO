@@ -193,7 +193,7 @@ export default {
       &-time {
         color: #8f96a1;
         font-family: @main-font;
-        font-size: 14px;
+        font-size: 12px;
         font-weight: 400;
         line-height: 16px;
         text-transform: uppercase;
@@ -285,7 +285,7 @@ export default {
         letter-spacing: -0.05px;
       }
       &-event {
-        padding: 3px 4px 2px;
+        padding: 3px 4px;
         color: #ffffff;
         font-family: 'Roboto', sans-serif;
         font-size: 11px;
