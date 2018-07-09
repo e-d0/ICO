@@ -14,7 +14,7 @@
           <a href="#" :class="['switch_btn','switch','btn_right',{ active: showWeek === false }]" @click.prevent="showWeek = false">{{ $t('calendar.Month') }}</a>
 
         <!--<a href="#" class="btn" @click="openAddFormModal()">+ Добавить ico</a>-->
-          <b-btn v-b-toggle.formICO variant="primary">+ {{ $t('calendar.AddICO') }}</b-btn>
+          <b-btn v-b-toggle.formICO :class="['add_ico']" variant="primary"> {{ $t('calendar.AddICO') }}</b-btn>
 
       </div>
 
@@ -191,7 +191,10 @@ export default {
     width: 100%;
     margin-top: 32px;
   }
-
+  .calendar.calendar__month .timeline_top-line{
+    padding-right: 2px;
+    padding-left: 2px;
+  }
   .timeline_top-line{
     /*width: 75%;*/
     width: 100%;
@@ -304,7 +307,7 @@ export default {
       &-month {
         margin-bottom: 7px;
         color: #333f52;
-        font-family: @main-font;
+        font-family: @medium;
         font-size: 20px;
         font-weight: 500;
         line-height: 20px;
@@ -381,6 +384,8 @@ export default {
         border-radius: 4px;
         background-color: @accent-color;
         color: #fff;
+        outline: none;
+        font-family: @medium;
         &:active,
         &:focus,
         &:hover{
@@ -388,6 +393,21 @@ export default {
           background-color: #45af37;
           color: #fff;
           box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+        }
+        &.add_ico{
+          font-family: @medium;
+          background-image: @img-plus_2;
+          background-position: 12px 50%;
+          background-repeat: no-repeat;
+          padding-left: 32px;
+          &:active,
+          &:focus,
+          &:hover{
+            text-decoration: none;
+            background-color: #45af37;
+            color: #fff;
+            box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
+          }
         }
       }
     }

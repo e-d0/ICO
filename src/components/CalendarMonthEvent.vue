@@ -72,9 +72,8 @@ export default {
       height: 24px;
       text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
       color: #ffffff;
-      font-family: Roboto;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: bold;
       line-height: 14px;
       letter-spacing: -0.05px;
       cursor: pointer;

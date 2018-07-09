@@ -12,6 +12,9 @@
       :theme-styles="themeStyles"
       :formats='formats'
       is-inline>
+      <span slot='header-title' slot-scope='{ monthLabel, yearLabel }'>
+    {{ monthLabel }} <small>&#8226;</small> {{ yearLabel }}
+  </span>
     </v-date-picker>
   </div>
 </template>
@@ -36,7 +39,8 @@ export default {
         headerTitle: {
           fontWeight: 'bold',
           textTransform: 'capitalize',
-          fontSize: '16px'
+          fontSize: '16px',
+          fontFamily: 'Roboto Medium'
         },
         headerArrows: {
           color: '#b5bbc2',
@@ -45,7 +49,7 @@ export default {
         header: {
           borderColor: '#404c59',
           borderWidth: '0 0 1px 0',
-          padding: '12px 16px 12px 20px'
+          padding: '12px 20px 12px 24px'
         },
         headerHorizontalDivider: {
           borderTop: '1px solid #e0e6ed',
@@ -53,7 +57,11 @@ export default {
         },
         weekdays: {
           borderWidth: '0 1px',
-          padding: '14px 10px 0 10px'
+          padding: '14px 16px 0 16px',
+          fontFamily: 'Roboto Medium'
+        },
+        dayCellNotInMonth: {
+          color: 'rgb(225, 228, 231)'
         },
         dayContent: params => ({
           ...(params.isHovered && {
@@ -64,7 +72,8 @@ export default {
         weeks: {
           backgroundColor: '#ffffff',
           borderRadius: '4px',
-          padding: '8px 12px 12px 12px'
+          padding: '8px 16px 16px 16px',
+          fontFamily: 'Roboto Medium'
         }
       },
       attrs:
@@ -96,7 +105,7 @@ export default {
           })
         },
       formats: {
-        title: 'MMMM YYYY'
+        title: `MMMM YYYY`
       },
       selectedDate: {
         start: this.$moment().startOf('day').toDate(),

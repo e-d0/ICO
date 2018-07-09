@@ -143,6 +143,10 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  .calendar__month .calendar--body:after{
+    content: none;
+    padding: 0px 3px 6px 2px;
+  }
   .events__month{
     width: 100%;
     flex-basis: 100%;
@@ -150,6 +154,7 @@ export default {
     border-radius: 8px;
     background-color: #ffffff;
     overflow-x: auto;
+    margin: 0px 2px 5px 2px;
     &--header-days{
       display: flex;
       justify-content: flex-start;
@@ -180,10 +185,10 @@ export default {
           width: 100%;
           height: 5px;
           z-index: 1;
-          -webkit-box-shadow: 0px 4px 5px rgb(236, 236, 236);
-          box-shadow: 0px 4px 5px rgb(236, 236, 236);
+          -webkit-box-shadow: 0px 4px 4px rgb(236, 236, 236);
+          box-shadow: 0px 4px 4px rgb(236, 236, 236);
         }
-        :first-child{
+        &:first-child{
           border-left: none;
         }
       }
@@ -197,7 +202,7 @@ export default {
         width: 100%;
       }
       &__week:last-child .calendar__day {
-        border-bottom: 1px solid #ddd;
+        border-bottom: none;
       }
       &__week:first-child .calendar__day {
         border-top: none;
@@ -216,8 +221,13 @@ export default {
         text-align: right;
 
       }
+      &__day:first-child{
+        /*border-right: 1px solid #ddd;*/
+        border-left: none;
+      }
       &__day:last-child{
-        border-right: 1px solid #ddd;
+        /*border-right: 1px solid #ddd;*/
+        border-right: none;
       }
       &__day .day--label{
         font-size: 16px;
@@ -230,6 +240,7 @@ export default {
         position: relative;
         left: 0;
         color: #9499a8;
+        font-family: @medium;
       }
       &__day .past{
         opacity: .6;
