@@ -33,7 +33,7 @@ export default {
     padding: 12px;
     box-shadow: 8px 8px 32px rgba(0, 0, 0, 0.35);
     .btn.submit{
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Roboto Medium', sans-serif;
       padding: 6px 8px 4px 6px;
       -webkit-box-shadow: 0 2px 0 #3b962f;
       box-shadow: 0 2px 0 #3b962f;

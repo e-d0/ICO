@@ -374,6 +374,12 @@ export default {
           font-weight: 500;
           font-size: 14px;
           line-height: 14px;
+          box-shadow: 0 2px 0 #3b962f;
+          &:hover,&:active{
+            box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3) !important;
+            background-color: #45af37;
+            text-shadow: none;
+          }
         }
       }
       &_name {
@@ -395,7 +401,7 @@ export default {
           z-index: 11;
         }
         select {
-          max-width: 264px;
+          width: 264px;
           padding: 10px 32px 8px 12px;
           color: #525c6c;
           font-family: @main-font;
@@ -530,7 +536,8 @@ export default {
         }
         select {
           margin-left: -1px;
-          padding: 0px 32px 0px 12px;
+          width: 73px;
+          padding: 0px 12px 0px 12px;
           color: #525c6c;
           font-family: @main-font;
           font-weight: 400;

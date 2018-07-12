@@ -308,6 +308,8 @@ export default {
     height: 100%;
   }
   .calendar__today{
+    margin-top: 32px;
+    margin-bottom: 32px;
    .timeline {
     margin-top: 32px;
     margin-bottom: 32px;
@@ -371,6 +373,9 @@ export default {
         font-weight: 500;
         line-height: 20px;
         letter-spacing: -0.07px;
+        b{
+          font-weight: 500;
+        }
       }
       &-day {
         color: #707986;
@@ -420,7 +425,7 @@ export default {
         font-family: @medium;
         line-height: 18px;
         font-size: 16px;
-        font-weight: 700;
+        font-weight: 500;
         letter-spacing: -0.06px;
       }
       &-day {

@@ -47,6 +47,8 @@ export default {
           xAxes: [{
             ticks: {
               fontColor: 'rgba(112, 121, 134, 0.6)',
+              fontFamily: 'Roboto Medium',
+              fontSize: 9,
               maxTicksLimit: 2.5,
               maxRotation: 0,
               minRotation: 0
@@ -66,6 +68,7 @@ export default {
           bodyFontColor: '#8f96a1',
           footerFontColor: '#8f96a1',
           bodyFontSize: 12,
+          bodyFontFamily: 'Roboto Medium',
           displayColors: false,
           yAlign: 'center',
           xAlign: 'left',

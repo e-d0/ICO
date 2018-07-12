@@ -132,21 +132,22 @@ export default {
     }
       .btn.submit{
         font-family: 'Roboto', sans-serif;
-        padding: 6px 8px 4px 6px;
+        padding: 7px 12px 7px 12px;
         -webkit-box-shadow: 0 2px 0 #3b962f;
         box-shadow: 0 2px 0 #3b962f;
-        border-radius: 2px;
-        background-color: #44af36;
         color: #fff;
         position: relative;
         cursor: pointer;
-        height: 22px;
         text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
         font-size: 12px;
         font-weight: 500;
         line-height: 12px;
         letter-spacing: -0.06px;
         margin-top: 10px;
+        /* Style for "Rectangle" */
+        height: 26px;
+        border-radius: 4px;
+        background-color: #45af37;
         &:hover,
         &:focus,
         &:active{

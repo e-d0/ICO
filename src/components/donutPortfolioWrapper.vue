@@ -6,7 +6,7 @@
       <span class="coin__totalPrice"><small>$ </small>{{ totalCoinPrice(coinStorage.id) }}</span><br>
       <span :class="['coin__change',`coin__change--${ isPositive (coinStorage['24_change']) }` ]">{{ coinStorage['24_change'] }}%</span>
     </div>
-    <chart-donut-portfolio :dataObj="dataObj" ></chart-donut-portfolio>
+    <chart-donut-portfolio :dataObj="dataObj" :height="300" :width="290"></chart-donut-portfolio>
   </div>
 </template>
 

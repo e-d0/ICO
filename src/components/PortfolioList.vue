@@ -143,6 +143,7 @@ export default {
     &-name {
       padding: 18px 12px 14px 22px;
       width: 20%;
+      text-transform: capitalize;
     }
     &-amount {
       width: 20%;

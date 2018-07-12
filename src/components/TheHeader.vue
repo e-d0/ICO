@@ -124,14 +124,23 @@ export default {
       padding: 18px 20px 18px 52px;
       background-color: @body-bg;
       color: #525c6c;
-      font-family: @main-font;
+      font-family: @medium;
       font-size: 14px;
       font-weight: 500;
       line-height: 20px;
       white-space: nowrap;
       text-decoration: none;
       position: relative;
-      box-shadow: inset 0 5px 16px rgba(0, 0, 0, 0.1), 0 0 0 #e0e6ed;
+      /*box-shadow: inset 0 5px 16px rgba(0, 0, 0, 0.1), 0 0 0 #e0e6ed;*/
+      &:after{
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 16px;
+        background-image: linear-gradient(180deg, #e0e6ed 0%, rgba(224, 230, 237, 0) 100%);
+      }
     }
     background-color: #fff;
     .main-nav {
@@ -427,12 +436,22 @@ export default {
           line-height: 20px;
           white-space: nowrap;
           text-decoration: none;
-          transition: all 0.25s;
+          &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 16px;
+          }
           &:hover {
             background-color: @body-bg;
             color: #525c6c;
             position: relative;
-            box-shadow: inset 0 5px 16px rgba(0, 0, 0, 0.1), 0 0 0 #e0e6ed;
+            &:after {
+              background-color: @body-bg;
+              background-image: linear-gradient(180deg, #e0e6ed 0%, rgba(224, 230, 237, 0) 100%);
+            }
           }
           &::before {
             content: '';

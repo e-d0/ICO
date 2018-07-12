@@ -456,7 +456,7 @@ export default {
         &-month {
           margin-bottom: 5px;
           color: #333f52;
-          font-family: @main-font;
+          font-family: @medium;
           font-size: 16px;
           font-weight: 400;
           line-height: 16px;
@@ -650,6 +650,7 @@ export default {
         box-shadow: 0 2px 0 darken(@accent-color,10%);
         border-radius: 4px;
         background-color: @accent-color;
+        font-family: @medium;
         color: #fff;
       }
     }

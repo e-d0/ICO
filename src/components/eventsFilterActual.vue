@@ -165,6 +165,7 @@ export default {
       &-name {
         color: #333f52;
         font-family: @medium;
+        font-weight: 500;
         font-size: 14px;
         line-height: 16px;
         white-space: nowrap;

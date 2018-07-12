@@ -119,7 +119,7 @@ export default {
       margin-bottom: 20px;
       color: #707986;
       font-size: 14px;
-      font-family: @main-font;
+      font-family: @condenced;
       font-weight: 700;
       line-height: 18px;
       text-transform: uppercase;
@@ -170,21 +170,22 @@ export default {
       &-data {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        width: 60%;
+        justify-content: start;
       }
       &-name {
         color: #525c6c;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 500;
         font-size: 14px;
         line-height: 16px;
+        width: 184px;
       }
       &-amount {
+        width: 312px;
         display: flex;
         align-items: center;
         color: #333f52;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 500;
         font-size: 16px;
         line-height: 16px;
@@ -197,7 +198,7 @@ export default {
         &-usd {
           margin-left: 6px;
           color: #8f96a1;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 12px;
           line-height: 12px;
@@ -206,7 +207,7 @@ export default {
       }
       &-time {
         color: #707986;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 400;
         font-size: 12px;
         line-height: 16px;

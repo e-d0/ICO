@@ -37,7 +37,7 @@
     "eventFilterActualTitle": "Current ICO events",
     "Actual": "Actual",
     "Past": "Past",
-    "eventFilterActualStart": "Starts in {time}",
+    "eventFilterActualStart": "Starts {time}",
     "eventFilterActualEnd": "Ends in {time}",
     "Starts": "Starts",
     "RemindTime": "Remind in {time} minutes",
@@ -97,7 +97,9 @@
     "Stats": "Stats",
     "Based_on_added": "Based on added",
     "since_last_week": "Since Last week",
-    "since_last_month": "Since Last month"
+    "since_last_month": "Since Last month",
+    "copy_link": "copy link",
+    "Profit": "PROFIT/LOSS"
   },
   "favourite": {
     "favorite_ico": "Favorite ICO",

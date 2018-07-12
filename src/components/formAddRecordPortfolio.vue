@@ -407,7 +407,9 @@ export default {
 <style lang="less" scoped>
   @import "../assets/less/vars";
   .portfolio_add_record_form {
+    text-align: right;
     position: relative;
+    margin-bottom: 34px;
     padding: 16px 16px 0px 28px;
     //border-radius: 4px;
     background-color: #ffffff;
@@ -432,7 +434,6 @@ export default {
         //flex-grow: 2;
         //align-items: center;
         margin-bottom: 20px;
-        width: 76%;
       }
       &_buttons {
         display: flex;
@@ -444,7 +445,7 @@ export default {
           text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
           background-color: @accent-color;
           color: #ffffff;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 14px;
           line-height: 14px;
@@ -452,16 +453,17 @@ export default {
       }
       &_name {
         position: relative;
-        display: flex;
-        flex-direction: column;
-        margin-right: 30px;
-        flex-grow: 1;
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        margin-right: 45px;
+        /*flex-grow: 1;*/
+        width: 99px;
         &::before {
           content: "";
           position: absolute;
           width: 8px;
           height: 4px;
-          right: 18px;
+          right: 16px;
           top: 41px;
           background-image: @img-select-arrow;
           background-position: center;
@@ -469,28 +471,38 @@ export default {
           z-index: 11;
         }
         select {
-          max-width: 264px;
-          padding: 10px 32px 8px 12px;
+          padding: 0px 12px 0px 12px;
+          width: 100%;
           color: #525c6c;
           font-family: @main-font;
           font-weight: 400;
           font-size: 15px;
           line-height: 16px;
-          text-transform: uppercase;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.09);
+          text-transform: capitalize;
+          height: 35px;
+          box-shadow: 0 1px 0 #c5d0de;
           border-radius: 4px;
-          border: 1px solid #44af36;
+          border: 1px solid #c5d0de;
           background-color: #ffffff;
+        }
+        select:focus{
+          outline: none;
+          box-shadow: 0 1px 0 #c5d0de;
+          border-radius: 4px;
+          border: 1px solid #c5d0de;
+          background-color: #ffffff;
+          color: #525c6c;
         }
       }
       &_amount {
         position: relative;
-        margin-right: 30px;
+        margin-right: 34px;
         display: flex;
         flex-direction: column;
+        width: 134px;
         input {
           padding: 12px;
-          width: 104px;
+          width: 100%;
           height: 36px;
           font-size: 15px;
           font-family: @main-font;
@@ -553,13 +565,13 @@ export default {
         position: relative;
         display: flex;
         flex-direction: column;
-        margin-right: 32px;
+        margin-right: 36px;
         &::before {
           content: "";
           position: absolute;
           width: 8px;
           height: 4px;
-          right: 18px;
+          right: 16px;
           top: 41px;
           background-image: @img-select-arrow;
           background-position: center;
@@ -604,14 +616,16 @@ export default {
         }
         select {
           margin-left: -1px;
-          padding: 0px 32px 0px 12px;
+          width: 73px;
+          padding: 2px 12px 0px 12px;
           color: #525c6c;
           font-family: @main-font;
           font-weight: 400;
           font-size: 15px;
           line-height: 15px;
           text-transform: uppercase;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.09);
+          height: 35px;
+          box-shadow: 0 1px 0 #c5d0de;
           border-radius: 0 4px 4px 0;
           border: 1px solid #c5d0de;
           background-color: #ffffff;
@@ -623,7 +637,7 @@ export default {
         margin-right: auto;;
         span {
           color: #333f52;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 16px;
           line-height: 37px;
@@ -641,7 +655,7 @@ export default {
       background-color: #45af37;
       text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
       color: #ffffff;
-      font-family: @main-font;
+      font-family: @medium;
       font-weight: 500;
       font-size: 14px;
       line-height: 11px;
@@ -663,9 +677,7 @@ export default {
   }
   .portfolio_add_record_form.toggled {
     background-color: rgba(232, 237, 242, 0.3);
-
     & > .btn-add-record {
-
         padding: 13px 16px 10px;
         box-shadow: 0 2px 0 #707986, inset 0 2px 4px rgba(1, 1, 1, 0.3);
         border-radius: 4px;

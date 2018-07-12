@@ -714,10 +714,11 @@
       "id": 1,
       "title": "Portfolio #1",
       "is_private": false,
+      "profit": "-22395.23",
       "coin": [
         {
           "id": 4,
-          "amount": 23.5,
+          "amount": 22.5,
           "operations": [
             {
               "date": "2018-06-17T02:36:04.632Z",
@@ -751,6 +752,14 @@
               "price_per_coin": "7334.2",
               "quantity": 2,
               "type": "bought"
+            },
+            {
+              "date": "2018-07-10T22:08:59.576Z",
+              "deal_currency": 1,
+              "price": "7334.2",
+              "price_per_coin": "7334.2",
+              "quantity": 1,
+              "type": "sold"
             }
           ]
         },
@@ -758,14 +767,6 @@
           "id": 5,
           "amount": 32.406725,
           "operations": [
-            {
-              "date": "2018-06-17T02:36:14.418Z",
-              "deal_currency": 1,
-              "price": "1736.8",
-              "price_per_coin": "434.2",
-              "quantity": "4",
-              "type": "bought"
-            },
             {
               "date": "2018-06-17T02:40:46.648Z",
               "deal_currency": 4,
@@ -815,6 +816,7 @@
       "id": 2,
       "title": "Private Invest",
       "is_private": true,
+      "profit": "4395.23",
       "coin": [
         {
           "id": 5,
@@ -880,6 +882,7 @@
       "id": 3,
       "title": "Shared",
       "is_private": false,
+      "profit": "12395.23",
       "coin": [
         {
           "id": 6,

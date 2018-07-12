@@ -16,36 +16,36 @@
 
           <template v-if="operation.type !== 'swapped'">
             <div class="add-record-form_price">
-              <label :for="[`priceRecord--${selectedCoin.id}`]"> {{ $t('portfolio.Price_per_coin') }}</label>
-              <div class="add-record-form_price-input-wrapper">
-                <div class="selected" v-html="currencyConverter(operation.price_per_coin, selectedCurrency.ticker, true)"></div>
-              </div>
-            </div>
-            <div class="add-record-form_price">
               <label :for="[`priceRecord--${selectedCoin.id}`]"> {{ $t('portfolio.Price') }}</label>
               <div class="add-record-form_price-input-wrapper">
                 <div class="selected" v-html="currencyConverter(operation.price, selectedCurrency.ticker, true)"></div>
+              </div>
+            </div>
+            <div class="add-record-form_price">
+              <label :for="[`priceRecord--${selectedCoin.id}`]"> {{ $t('portfolio.Price_per_coin') }}</label>
+              <div class="add-record-form_price-input-wrapper">
+                <div class="selected" v-html="currencyConverter(operation.price_per_coin, selectedCurrency.ticker, true)"></div>
               </div>
             </div>
           </template>
 
           <template v-else>
             <div class="add-record-form_price">
+              <label :for="[`priceRecord--${selectedCoin.id}`]"> {{ $t('portfolio.Price') }}</label>
+              <div class="add-record-form_price-input-wrapper">
+                <div class="selected" v-html="currencyConverter(operation.price, selectedCurrency.ticker, true)"></div>
+              </div>
+            </div>
+            <div class="add-record-form_price swapped">
               <label :for="[`priceRecord--${selectedCoin.id}`]"> {{ $t('portfolio.Price_per_coin') }}</label>
               <div class="add-record-form_price-input-wrapper">
                 <div class="selected" v-html="currencyConverter(operation.price_per_coin, selectedCurrency.ticker, true)"></div>
               </div>
             </div>
-            <div class="add-record-form_price">
+            <div class="add-record-form_price swapped">
               <label :for="[`priceRecord--${selectedCoin.id}`]"> {{ $t('portfolio.price_per_coin_swapped') }}</label>
               <div class="add-record-form_price-input-wrapper">
                 <div class="selected" v-html="currencyConverter(operation.price_per_coin_swapped, selectedCurrency.ticker, true)"></div>
-              </div>
-            </div>
-            <div class="add-record-form_price">
-              <label :for="[`priceRecord--${selectedCoin.id}`]"> {{ $t('portfolio.Price') }}</label>
-              <div class="add-record-form_price-input-wrapper">
-                <div class="selected" v-html="currencyConverter(operation.price, selectedCurrency.ticker, true)"></div>
               </div>
             </div>
           </template>
@@ -474,10 +474,10 @@ export default {
         }
       }
       &_name {
+        width: 128px;
         position: relative;
         display: flex;
         flex-direction: column;
-        margin-right: 30px;
         flex-grow: 0;
         select {
           max-width: 264px;
@@ -495,8 +495,10 @@ export default {
         }
       }
       &_amount {
+        width: 104px;
+        margin-right: 72px;
+        margin-left: 12px;
         position: relative;
-        margin-right: 30px;
         display: flex;
         flex-direction: column;
         input {
@@ -564,7 +566,11 @@ export default {
         position: relative;
         display: flex;
         flex-direction: column;
-        margin-right: 32px;
+        width: 168px;
+        &.swapped{
+          width: 134px;
+        }
+        padding-left: 12px;
         &-input-wrapper {
           display: flex;
         }

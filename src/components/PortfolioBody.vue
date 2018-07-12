@@ -24,7 +24,28 @@
           <div class="portfolio-view_public">
             <a>{{ $t('portfolio.public_portfolio') }}<sup class="tooltip-mark"></sup></a>
             <div class="portfolio-view_toggle">
-              <span>toggle</span>
+              <label class="toggle">
+                <input type="checkbox" :id="`links-checkbox-${portfolio.id}`" name="toggle" @click="switchPublicPortfolio()">
+                <span></span>
+              </label>
+            </div>
+          </div>
+          <div :id="`portfolio-links-${portfolio.id}`"
+               :class="['portfolio-view_links', 'hidden']">
+            <input v-if="portfolio"
+                   type="text"
+                   name=""
+                   :id="`clipboard-${portfolio.id}`"
+                   placeholder=""
+                   :value="portfolioLink"
+                   disabled>
+            <div class="profile-social">
+              <a href="#" class="profile-social_links-item profile-social_links-item--fb"></a>
+              <a href="#" class="profile-social_links-item profile-social_links-item--tw"></a>
+              <a href="#" class="profile-social_links-item profile-social_links-item--G"></a>
+              <a href="#" class="profile-social_links-item profile-social_links-item--in"></a>
+              <a href="#" class="profile-social_links-item profile-social_links-item--wk"></a>
+              <a href="#" @click="clipboardPortfolioLink()" class="copy_link">{{ $t('portfolio.copy_link') }}</a>
             </div>
           </div>
         </div>
@@ -41,6 +62,13 @@
               <span class="portfolio_cost-usd" v-if="totalCost()" v-html="currencyConverter(totalCost(), currentCurrency.ticker )"></span>
               <span class="portfolio_cost-btc" v-if="totalCost()" v-html="currencyConvertUSDToBTC(totalCost())"></span>
             </div>
+            <div class="portfolio_profit" v-if="portfolio">
+              <span class="portfolio_profit-price">{{ $t('portfolio.Profit') }}</span>
+              <span :class="['portfolio_profit-usd', { positive: portfolio.profit >= 0 }, { negative: portfolio.profit < 0 }]"
+                    v-html="currencyConverter(Math.abs(portfolio.profit), currentCurrency.ticker )">
+              </span>
+              <span class="portfolio_profit-btc" v-html="currencyConvertUSDToBTC(Math.abs(portfolio.profit))"></span>
+            </div>
             <!-- /.portfolio_worth -->
             <div class="portfolio_deviation">
               <span class="portfolio_deviation-24hours">{{ $t('portfolio.24HCHANGE') }}</span>
@@ -51,22 +79,21 @@
               <span class="portfolio_deviation-usd" v-html=" totalChangeCurrency() "></span>
             </div>
             <!-- /.portfolio_deviation -->
-            <div class="portfolio_changes">
+            <div v-if="portfolio" class="portfolio_changes">
               <a href="#"
-                 v-b-toggle="`chartPortfolio`"
+                 v-b-toggle="`chartPortfolio-${portfolio.id}`"
                  @click.prevent=""
                  v-html="$t('portfolio.changes_chart')"></a>
             </div>
           </div>
           <!-- /.portfolio_bottom-line -->
-          <PortfolioChartWrapper :portfolio="portfolio"/>
+            <b-collapse v-if="portfolio" :id="`chartPortfolio-${portfolio.id}`" class="">
+              <PortfolioChartWrapper :portfolio="portfolio"/>
+            </b-collapse>
 
-          <!--<b-collapse v-if="portfolio" :id="`chartPortfolio`" class="">-->
-            <!--<chart-portfolio></chart-portfolio>-->
-          <!--</b-collapse>-->
-          <b-collapse id="formAddDeleteCoin" class="">
-            <form-add-delete-coin :portfolio.sync="portfolio" ></form-add-delete-coin>
-          </b-collapse>
+            <b-collapse id="formAddDeleteCoin" class="">
+              <form-add-delete-coin :portfolio.sync="portfolio" ></form-add-delete-coin>
+            </b-collapse>
 
           <!-- /.portfolio_form -->
           <portfolio-list v-if="portfolio" :portfolio.sync="portfolio" ></portfolio-list>
@@ -104,6 +131,7 @@ export default {
         template: `<div class="tooltip custom" role="tooltip"> <div class="arrow"></div> <div class="tooltip-inner"></div> </div>`,
         html: true
       },
+      showPortfolioLinks: false,
       currencyStorage: null
     }
   },
@@ -117,6 +145,12 @@ export default {
       getCurrencyByTicker: 'getCurrencyByTicker',
       currentCurrency: 'currentCurrency'
     }),
+    portfolioLink: function () {
+      if (this.portfolio) {
+        // return portfolio.link
+        return 'https://icopapa.com/shared/as3ld22'
+      }
+    },
     stringifiedPortfolio: function () {
       if (this.portfolio) {
         return JSON.parse(JSON.stringify(this.portfolio))
@@ -131,6 +165,24 @@ export default {
     }
   },
   methods: {
+    switchPublicPortfolio () {
+      let el = document.getElementById(`portfolio-links-${this.portfolio.id}`)
+      if (el.classList.contains('hidden')) {
+        el.classList.remove('hidden')
+      } else {
+        el.classList.add('hidden')
+      }
+    },
+    /**
+     * Копируем содержимое элемента инпут в буфер
+     * */
+    clipboardPortfolioLink () {
+      let testingCodeToCopy = document.querySelector(`input#clipboard-${this.portfolio.id}`)
+      testingCodeToCopy.disabled = false
+      testingCodeToCopy.select()
+      document.execCommand('copy')
+      testingCodeToCopy.disabled = true
+    },
     chartData (portfolio) {
       if (portfolio !== undefined) {
         let sum = this.totalCost()
@@ -243,6 +295,48 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  label.toggle {
+    margin-bottom: 0;
+    input[type=checkbox] {
+      display: none;
+      position: relative;
+      top: 2px;
+    }
+    span {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      width: 48px;
+      height: 20px;
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 48px;
+        height: 20px;
+        background-image: @img-tumbler-inactive;
+        background-repeat: no-repeat;
+        background-position: center;
+        z-index: 33;
+        border: none;
+        box-shadow: none;
+        background-color: transparent;
+      }
+    }
+  }
+  label.toggle input[type=checkbox]:checked + span::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 48px;
+    height: 20px;
+    background-image: @img-tumbler-active;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 33;
+  }
   #chartPortfolio{
     width: 100%;
   }
@@ -298,7 +392,7 @@ export default {
           color: #525c6c;
           background-color: #fff;
           border: 1px solid #c5d0de;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 11px;
           line-height: 12px;
@@ -307,12 +401,11 @@ export default {
     }
     &_public {
       display: flex;
-      align-items: center;
-      margin-top: 30px;
+      /*margin-top: 30px;*/
       padding-left: 28px;
       a {
         position: relative;
-        color: #333f52;
+        color: @dark;
         font-family: @main-font;
         font-weight: 400;
         font-size: 14px;
@@ -328,6 +421,87 @@ export default {
           background-position: center;
           background-repeat: no-repeat;
           z-index: 11;
+        }
+      }
+    }
+    &_links {
+      margin-top: 22px;
+      input{
+        color: #8f96a1;
+        font-family: @medium;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 14px;
+        letter-spacing: -0.07px;
+        width: 100%;
+        padding: 8px 9px 10px 9px;
+        border-radius: 4px;
+        border: 1px solid #c5d0de;
+        background-color: #e8edf2;
+        margin-bottom: 12px;
+        height: 32px;
+      }
+      .profile-social {
+        margin-bottom: 34px;
+        span {
+          display: inline-block;
+          margin-bottom: 10px;
+          color: @dark;
+          font-family: @main-font;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 16px;
+        }
+        .copy_link{
+          float: right;
+          top: 4px;
+          position: relative;
+          text-transform: capitalize;
+          color: #45af37;
+          font-family: @main-font;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 12px;
+          display: inline-block;
+          padding-bottom: 2px;
+          border-bottom: 1px dashed;
+          &:hover{
+            border-bottom: 1px solid;
+            text-decoration: none;
+          }
+        }
+        &_links {
+          display: flex;
+          &-item {
+            position: relative;
+            margin-right: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 2px;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: inline-block;
+            &--fb {
+              background-color: #345c94;
+              background-image: @img-fb-icon;
+            }
+            &--tw {
+              background-color: #00b0e9;
+              background-image: @img-tw-icon;
+            }
+            &--in {
+              background-color: #0086ba;
+              background-image: @img-in-icon;
+            }
+            &--wk {
+              background-color: #4c75a3;
+              background-image: @img-wk-icon;
+            }
+            &--G{
+              background-color: #e34346;
+              background-image: @img-G-icon;
+            }
+          }
         }
       }
     }
@@ -382,11 +556,12 @@ export default {
       &-price {
         margin-bottom: 9px;
         color: #707986;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 500;
         font-size: 11px;
         line-height: 11px;
         letter-spacing: 0.3px;
+        text-transform: uppercase;
       }
       &-usd {
         margin-bottom: 4px;
@@ -401,37 +576,42 @@ export default {
       &-btc {
         opacity: 0.6;
         color: #525c6c;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 500;
         font-size: 11px;
         line-height: 12px;
         text-transform: uppercase;
       }
     }
-    &_deviation {
+    .portfolio_profit {
       display: flex;
       flex-direction: column;
-      margin-left: 60px;
-      &-24hours {
+      margin-left: 74px;
+      span /deep/ b{
+        line-height: 20px;
+        font-size: 18px;
+        font-weight: normal;
+      }
+      &-price {
         margin-bottom: 9px;
         color: #707986;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 500;
         font-size: 11px;
         line-height: 11px;
         letter-spacing: 0.3px;
         text-transform: uppercase;
       }
-      &-percent {
-        position: relative;
-        padding-left: 15px;
+      &-usd {
         margin-bottom: 4px;
-        color: @accent-color;
+        color: #333f52;
         font-family: @main-font;
-        font-weight: 400;
+        font-weight: 700;
         font-size: 24px;
         line-height: 24px;
         letter-spacing: -0.5px;
+        position: relative;
+        padding-left: 20px;
         &.positive::before {
           content: "";
           position: absolute;
@@ -457,15 +637,85 @@ export default {
           background-repeat: no-repeat;
           z-index: 11;
         }
+
+      }
+      &-btc {
+        opacity: 0.6;
+        color: #525c6c;
+        font-family: @medium;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 12px;
+        text-transform: uppercase;
+      }
+    }
+    &_deviation {
+      display: flex;
+      flex-direction: column;
+      margin-left: 78px;
+      &-24hours {
+        margin-bottom: 9px;
+        color: #707986;
+        font-family: @medium;
+        font-weight: 500;
+        font-size: 11px;
+        line-height: 11px;
+        letter-spacing: 0.3px;
+        text-transform: uppercase;
+      }
+      &-percent {
+        position: relative;
+        padding-left: 19px;
+        margin-bottom: 4px;
+        color: @accent-color;
+        font-family: @main-font;
+        font-weight: 400;
+        font-size: 24px;
+        line-height: 24px;
+        letter-spacing: -0.5px;
+        &.positive{
+          color: #45af37;
+          &::before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 16px;
+            left: -5px;
+            top: 6px;
+            background-image: @img-triangle-green;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 11;
+          }
+        }
+        &.negative{
+          color: #ff3657;
+          &::before {
+            content: "";
+            position: absolute;
+            width: 20px;
+            height: 16px;
+            left: -5px;
+            top: 6px;
+            transform: rotateX(180deg);
+            background-image: @img-triengle-red;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 11;
+          }
+        }
         sup {
           font-size: 16px;
           letter-spacing: -0.5px;
+          position: relative;
+          top: -5px;
+          left: 7px;
         }
       }
       &-usd {
         opacity: 0.6;
         color: #525c6c;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 500;
         font-size: 11px;
         line-height: 11px;
@@ -488,13 +738,14 @@ export default {
         text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
         box-shadow: 0 2px 0 #3b962f;
         color: #ffffff;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 500;
         font-size: 13px;
         line-height: 11px;
         letter-spacing: -0.22px;
         border-radius: 4px;
         background-color: #45af37;
+        outline: none;
         &::before {
           content: "";
           position: absolute;
@@ -505,7 +756,16 @@ export default {
           background-image: @img-coin;
           background-position: center;
           background-repeat: no-repeat;
+          background-size: cover;
           z-index: 11;
+        }
+        &:hover,&:active{
+          box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3)!important;
+          background-color: #45af37;
+          text-shadow: none;
+        }
+        &:focus{
+          outline: none;
         }
       }
     }

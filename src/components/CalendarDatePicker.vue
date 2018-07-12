@@ -37,7 +37,7 @@ export default {
           width: '100%'
         },
         headerTitle: {
-          fontWeight: 'bold',
+          fontWeight: '500',
           textTransform: 'capitalize',
           fontSize: '16px',
           fontFamily: 'Roboto Medium'

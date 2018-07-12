@@ -97,7 +97,9 @@
     "Stats": "Статистика",
     "Based_on_added": "Основанно на добавленных",
     "since_last_week": "С Последней недели",
-    "since_last_month": "С Последнего месяца"
+    "since_last_month": "С Последнего месяца",
+    "copy_link": "копировать ссылку",
+    "Profit": "РОСТ/ПАДЕНИЕ"
   },
   "favourite": {
     "favorite_ico": "Избранные ICO",

@@ -21,7 +21,6 @@
             </div>
             <div class="portfolio-nav_button">
               <b-btn  class="btn" v-b-toggle.formAddDeleteCoin variant="primary">{{ $t('portfolio.Add_Delete_Coin') }}</b-btn>
-              <!--<a href="#" class="btn">{{ $t('portfolio.Add_Delete_Coin') }}</a>-->
             </div>
           </div>
           <!-- /.portfolio-nav -->
@@ -98,7 +97,7 @@ export default {
           padding: 14px 0;
           color: #707986;
           font-family: @main-font;
-          font-weight: 400;;
+          font-weight: 400;
           font-size: 20px;
           line-height: 18px;
         }
@@ -115,7 +114,7 @@ export default {
           }
           a {
             color: #333f52;
-            font-family: @main-font;
+            font-family: @medium;
             font-weight: 500;
           }
         }
@@ -140,26 +139,31 @@ export default {
     }
     &_add-portfolio {
       a {
-        padding-left: 26px;
+        margin-left: 50px;
         position: relative;
         color: #45af37;
         font-family: @main-font;
         font-weight: 400;
         font-size: 14px;
         line-height: 12px;
-        text-decoration: underline;
-        text-decoration-style: dashed;
+        display: inline-block;
+        padding-bottom: 3px;
+        border-bottom: 1px dashed;
         &::before {
           content: '';
           position: absolute;
-          top: 2px;
-          left: 6px;
+          top: 0px;
+          left: -22px;
           width: 14px;
           height: 14px;
           background-image: @img-plus;
           background-repeat: no-repeat;
           background-position: center;
           z-index: 11;
+        }
+        &:hover{
+          border-bottom: 1px solid;
+          text-decoration: none;
         }
       }
     }
@@ -170,7 +174,7 @@ export default {
         padding: 11px 11px 11px 32px;
         /*background-image: linear-gradient(180deg, #358c29 0%, #45af36 100%);*/
         color: #ffffff;
-        font-family: @main-font;
+        font-family: @medium;
         font-weight: 500;
         font-size: 13px;
         line-height: 11px;
@@ -179,17 +183,27 @@ export default {
         border-radius: 4px;
         background-color: #45af37;
         text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
+        outline: none;
         &::before {
           content: "";
           position: absolute;
           width: 15px;
           height: 15px;
-          left: 10px;
+          left: 12px;
           top: 9px;
           background-image: @img-coin;
           background-position: center;
           background-repeat: no-repeat;
+          background-size: contain;
           z-index: 11;
+        }
+        &:hover,&:active{
+          box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3)!important;
+          background-color: #45af37;
+          text-shadow: none;
+        }
+        &:focus{
+          outline: none;
         }
       }
     }

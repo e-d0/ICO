@@ -34,7 +34,7 @@ export default {
     text-align: center;
     .btn.submit{
       margin-top: 12px;
-      font-family: 'Roboto', sans-serif;
+      font-family: 'Roboto Medium', sans-serif;
       padding: 6px 8px 4px 6px;
       -webkit-box-shadow: 0 2px 0 #3b962f;
       box-shadow: 0 2px 0 #3b962f;

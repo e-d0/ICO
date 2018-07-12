@@ -241,6 +241,7 @@ export default {
             ticks: {
               padding: 50,
               fontColor: 'rgba(112, 121, 134, 0.6)',
+              fontSize: 12,
               maxTicksLimit: 5,
               xAlign: 'left',
               callback: function (label, index, labels) {
@@ -262,6 +263,7 @@ export default {
               maxRotation: 0,
               borderColor: 'rgba(51, 63, 82, .3)',
               minRotation: 0,
+              fontSize: 10,
               padding: 20
             },
             gridLines: {
@@ -522,6 +524,7 @@ export default {
           color: #525c6c;
           font-size: 11px;
           font-weight: 500;
+          font-family: @medium;
           line-height: 12px;
           letter-spacing: -0.05px;
           margin-right: 28px;
@@ -579,7 +582,7 @@ export default {
             color: #525c6c;
             background-color: #fff;
             border: 1px solid #c5d0de;
-            font-family: "RobotoMedium";
+            font-family: @medium;
             font-weight: 500;
             font-size: 11px;
             line-height: 12px;

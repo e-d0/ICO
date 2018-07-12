@@ -79,7 +79,11 @@ Chart.controllers.CustomDoughnut = Chart.controllers.doughnut.extend({
 // 4. Generate the vue-chartjs component
 // First argument is the chart-id, second the chart type.
 const CustomDoughnutPortfolio = generateChart('CustomDoughnutPortfolio', 'CustomDoughnut')
-
+/**
+ * Отправные точки в размерах доната
+ * */
+const outerRadius = 124
+const innerRadius = 74.4
 export default {
   extends: CustomDoughnutPortfolio,
   name: 'chartDonutPortfolio',
@@ -90,12 +94,12 @@ export default {
     return {
       showInfo: false,
       options: {
-        responsive: true,
+        responsive: false,
         maintainAspectRatio: false,
         cutoutPercentage: 60,
         id: 'doughnutChart',
-        outerRadius: 124,
-        innerRadius: 74.4,
+        outerRadius: outerRadius,
+        innerRadius: innerRadius,
         // onHover: function (e) { console.log(e) },
         onClick: function (e, item) {
           let activePoints = this.getElementAtEvent(e)
@@ -105,14 +109,14 @@ export default {
             let meta1 = this.getDatasetMeta(0)
             meta1.data.forEach(function (item) {
               if (item === meta1.data[index] && !item._model.isOpened) {
-                item._model.outerRadius = 124
-                item._model.innerRadius = 74.4 * 0.9
+                item._model.outerRadius = outerRadius
+                item._model.innerRadius = innerRadius * 0.9
                 item._model.isOpened = true
                 EventBus.$emit('chart:doughnut:grow', item._model.label, true)
                 // console.log('Opened')
               } else {
-                item._model.outerRadius = 124 * 0.9
-                item._model.innerRadius = 74.4
+                item._model.outerRadius = outerRadius * 0.9
+                item._model.innerRadius = innerRadius
                 item._model.isOpened = false
                 EventBus.$emit('chart:doughnut:grow', item._model.label, false)
                 // console.log('Closed')
@@ -121,8 +125,8 @@ export default {
           } else {
             let meta1 = this.getDatasetMeta(0)
             meta1.data.forEach(function (item) {
-              item._model.outerRadius = 124 * 0.9
-              item._model.innerRadius = 74.4
+              item._model.outerRadius = outerRadius * 0.9
+              item._model.innerRadius = innerRadius
               item._model.isOpened = false
               EventBus.$emit('chart:doughnut:grow', item._model.label, false)
               // console.log('Closed')
@@ -174,8 +178,8 @@ export default {
       let chartElements = doughnutObj.getDatasetMeta(0)
       chartElements.data.forEach(item => {
         if (item._model.label === ticker) {
-          item._model.outerRadius = value ? (124) : (124 * 0.9)
-          item._model.innerRadius = value ? (74.4 * 0.9) : (74.4)
+          item._model.outerRadius = value ? outerRadius : (outerRadius * 0.9)
+          item._model.innerRadius = value ? (innerRadius * 0.9) : innerRadius
           item._model.isOpened = value
           /**
            * Пробрасываем события, для отображения лейбла в донат чарте

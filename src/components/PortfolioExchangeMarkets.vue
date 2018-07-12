@@ -1,7 +1,7 @@
 <template>
   <div class="container exchange">
-    <div class="exchange_wrapper row">
-      <div class="col-md-4">
+    <div class="exchange_wrapper">
+      <div class="exchange_graph_wrapper">
         <div class="exchange_graph">
           <chart-exchange v-if="exchangeDataset"
                           :chart-id="chartId()"
@@ -10,7 +10,7 @@
                           :width = "295"></chart-exchange>
         </div>
       </div>
-      <div class="col-md-8">
+      <div class="exchange_header_wrapper">
         <div class="exchange_header row">
           <div class="col-md-4">{{ $t('portfolio.Exchange') }}</div>
           <div class="col-md-2">{{ $t('portfolio.Price') }}</div>
@@ -141,20 +141,28 @@ export default {
   @import "../assets/less/vars";
   .exchange {
     &_wrapper {
-      padding: 12px 12px 30px 0px;
+      display: flex;
+      flex-direction: row;
+      width: 100%;
     }
     .exchange_graph {
+      &_wrapper{
+        width: 296px;
+      }
       text-align: left;
       position: relative;
-      /*padding-right: 30px;*/
     }
     &_header{
+      &_wrapper{
+        width: 540px;
+        margin-left: 30px;
+      }
       background-color: #fff;
       border-bottom: 1px solid #e9ecee;
       height: 36px;
       > div {
         color: #525c6c;
-        font-family: 'Roboto', sans-serif;
+        font-family: @main-font;
         font-weight: 400;
         font-size: 13px;
         line-height: 36px;
@@ -185,8 +193,8 @@ export default {
         }
         span{
           color: #707986;
-          font-family: 'Roboto', sans-serif;
-          font-weight: bold;
+          font-family: @medium;
+          font-weight: 500;
           font-size: 16px;
         }
       }
@@ -203,57 +211,8 @@ export default {
         }
       }
     }
-    tr.t-foot {
-      td {
-        padding: 12px 12px 12px 12px;
-        color: #707986;
-        font-family: @main-font;
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 16px;
-        b {
-          font-size: 12px;
-        }
-        &:nth-child(2) {
-          text-align: right;
-          border-right: 1px solid #e9ecee;
-        }
-        &:last-child {
-          text-align: right;
-          padding: 12px 28px 12px 12px;
-        }
-      }
-      &:nth-child(odd) {
-        background-color: rgba(232, 237, 242, 0.44);
-      }
-      &:first-child {
-        background-color: #fff;
-        border-bottom: 1px solid #e9ecee;
-        td {
-          color: #525c6c;
-          font-family: @main-font;
-          font-weight: 400;
-          font-size: 13px;
-          line-height: 12px;
-          &:nth-child(2) {
-            text-align: left;
-            border-right: none;
-          }
-          &:nth-child(3) {
-            text-align: right;
-            border-right: 1px solid #e9ecee;
-          }
-          &:last-child {
-            text-align: left;
-          }
-        }
-      }
-      &:last-child {
-        background-color: #fff;
-        border-bottom: none;
-      }
-    }
     .btn-trade {
+      float: right;
       position: relative;
       padding: 6px 8px 5px 22px;
       background-color: #1991eb;
@@ -261,7 +220,7 @@ export default {
       box-shadow: 0 1px 0 #1175c0;
       color: #fff;
       font-size: 11px;
-      font-family: @main-font;
+      font-family: @medium;
       font-weight: 500;
       line-height: 11px;
       &::before {
@@ -270,7 +229,7 @@ export default {
         width: 10px;
         height: 9px;
         left: 7px;
-        top: 6px;
+        top: 7px;
         background-image: @img-wallet;
         background-position: center;
         background-repeat: no-repeat;

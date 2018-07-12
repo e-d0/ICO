@@ -1,167 +1,154 @@
 <template>
-  <table class="portfolio_item">
-    <thead>
-    <template v-if="item">
-    <tr v-if="coin">
-        <th :class="['portfolio_item-cell', 'portfolio_item-name', `portfolio_item-name--${coin.ticker}`]">
-          <small :class="[`portfolio_item-name--pseudo`]" :style="{backgroundColor: coin.color}"></small>
-          <div class="portfolio_item-logo">
-            <img :src="coin.icon"
-                 :alt="coin.title">
-          </div>
-          <span>{{ coin.title }} · <b>{{ coin.ticker }}</b></span></th>
+  <div class="portfolio_item" v-if="item">
+      <div class="portfolio_item__head" v-if="coin">
+        <div :class="['portfolio_item-cell', 'portfolio_item-name', `portfolio_item-name--${coin.ticker}`]">
+            <small :class="[`portfolio_item-name--pseudo`]" :style="{backgroundColor: coin.color}"></small>
+            <div class="portfolio_item-logo">
+              <img :src="coin.icon"
+                   :alt="coin.title">
+            </div>
+            <span>{{ coin.title }} · <b>{{ coin.ticker }}</b></span></div>
 
-          <th class="portfolio_item-cell portfolio_item-amount">
+          <div class="portfolio_item-cell portfolio_item-amount">
             <div class="portfolio_item-amount-wrapper">
               <span>{{ item.amount }} <b>{{ coin.ticker }}</b></span>
-              <a href="#" class="portfolio_item-edit" data-toggle="popover" data-placement="right" data-original-title="" title=""></a>
+              <a href="#"
+                 @click.prevent="localCollapse()"
+                 :class="['portfolio_item-edit',{'portfolio_item-edit-open': collapseOpen === true }]"
+                 ></a>
             </div>
-          </th>
+          </div>
 
-          <th class="portfolio_item-cell portfolio_item-percent">
+          <div class="portfolio_item-cell portfolio_item-percent">
             <span v-if="totalPercent"> {{ totalPercent }}%</span>
-          </th>
+          </div>
 
-          <th class="portfolio_item-cell portfolio_item-price">
+          <div class="portfolio_item-cell portfolio_item-price">
             <span class="portfolio_item-price-usd" v-html="currencyConverter(countValue(item.amount , item.id), currentCurrency.ticker )"></span>
             <span class="portfolio_item-price-btc" v-html="currencyConvertUSDToBTC(countValue(item.amount , item.id))"></span>
-          </th>
-
-          <th :class="['portfolio_item-cell', 'portfolio_item-24hour', `portfolio_item-24hour--${ isPositive (coin) }`]">
-            <span v-html=" coin['24_change']+'%'"></span>
-          </th>
-
-        <th class="portfolio_item-cell portfolio_item-capitalizations">
-          <span v-html=" currencyConverter(coin.market_cap, currentCurrency.ticker ) "></span>
-        </th>
-
-        <th class="portfolio_item-cell portfolio_item-volume" v-if="coin">
-          <div class="portfolio_item-volume-wrapper">
-            <span v-html=" currencyConverter(coin['24H_volume'], currentCurrency.ticker ) "></span>
-            <a href="#" @click.prevent="localCollapse()" class="portfolio_item-dropdown js-thead-show"></a>
           </div>
-        </th>
-      </tr>
-    </template>
-    </thead>
 
-      <tbody :id="`coin-toggle--${coin.ticker}`"
-             v-if="coin" :class="['tbody', `tbody--${coin.ticker}`, 'js-tbody', {collapsed: !collapseOpen}]">
-        <tr>
-          <td>
-            <span>{{ $t('portfolio.Operation') }}</span>
-          </td>
-          <td>
-            <span>{{ $t('portfolio.Quantity') }}</span>
-          </td>
-          <td colspan="2">
-            <span>{{ $t('portfolio.Price') }}</span>
-          </td>
-          <td colspan="3">
-            <span>{{ $t('portfolio.Price_per_coin') }}</span>
-            <a href="#" :id="`removeCoinForm-${coin.id}`" @click.prevent="onEnable(`removeCoinForm-${coin.id}`)" class="removeCoin"></a>
+          <div :class="['portfolio_item-cell', 'portfolio_item-24hour', `portfolio_item-24hour--${ isPositive (coin) }`]">
+            <span v-html=" coin['24_change']+'%'"></span>
+          </div>
 
-            <b-popover :target="`removeCoinForm-${coin.id}`"
-                       :placement="'top'"
-                       triggers="hover"
-                       >
-              <span v-bind:style="[
-                           {padding: '8px'},
-                           {fontSize: '12px'},
-                           {textAlign: 'center'},
-                           {backgroundColor: '#ffffff'},
-                           {boxShadow: '-8px 8px 24px rgba(0, 0, 0, 0.2)'}
-                            ]">{{ $t('portfolio.remove_coin_short') }}</span>
-            </b-popover>
+          <div class="portfolio_item-cell portfolio_item-capitalizations">
+            <span v-html=" currencyConverter(coin.market_cap, currentCurrency.ticker ) "></span>
+          </div>
 
-            <popover-coin-delete :id="coin.id"
-                                 :coin="coin"
-                                 v-on:confirm="removeCoin()"
-                                 v-on:close="onDisable(`removeCoinForm-${coin.id}`)"></popover-coin-delete>
-          </td>
-        </tr>
-        <small :class="[`tbody--pseudo`]" :style="{backgroundColor: coin.color}"></small>
-        <template v-if="item" v-for="(operation, index) in item.operations">
-          <tr :key="index">
+          <div class="portfolio_item-cell portfolio_item-volume" v-if="coin">
+            <div class="portfolio_item-volume-wrapper">
+              <span v-html=" currencyConverter(coin['24H_volume'], currentCurrency.ticker ) "></span>
+              <a href="#"
+                 @click.prevent="localCollapse()"
+                 :class="['portfolio_item-dropdown', {'portfolio_item-dropdown-open': collapseOpen === true }]">
+              </a>
+            </div>
+          </div>
+      </div>
+      <div :id="`coin-toggle--${coin.ticker}`"
+           v-if="coin" :class="['portfolio_item__body', `tbody--${coin.ticker}`, {collapsed: !collapseOpen}]">
+        <small :class="[`portfolio_item__body--pseudo`]" :style="{backgroundColor: coin.color}"></small>
+        <div class="item__head">
+            <div class="item__head__cell operation">
+              <span>{{ $t('portfolio.Operation') }}</span>
+            </div>
+            <div class="item__head__cell quantity">
+              <span>{{ $t('portfolio.Quantity') }}</span>
+            </div>
+            <div class="item__head__cell price">
+              <span>{{ $t('portfolio.Price') }}</span>
+            </div>
+            <div class="item__head__cell price-per-coin">
+              <span>{{ $t('portfolio.Price_per_coin') }}</span>
+              <a href="#" :id="`removeCoinForm-${coin.id}`" @click.prevent="onEnable(`removeCoinForm-${coin.id}`)" class="removeCoin"></a>
 
-          <template v-if="operation.type === 'swapped'">
-            <td>
-              <span :class="[ operationType(operation) ]">{{ $t(`portfolio.${operationType(operation) }`) }}</span>
-            </td>
-            <td>
-              <span>{{ operation.quantity }} <b>{{ coin.ticker }}</b></span>
-              <span class="swapped_coin"><small>{{ $t(`portfolio.IN`)}}</small> {{ countSwappedCoinQuantity(operation) }} <b>{{ swappedCoinTicker(operation) }}</b></span>
-            </td>
-            <td colspan="2">
-              <span v-html="currencyConverter(operation.price, currentCurrency.ticker )"></span>
-            </td>
-            <td colspan="2">
-              <span v-html="currencyConverter( operation.price_per_coin, currentCurrency.ticker )"></span>
-              <span class="swapped_coin" v-html="pricePerCoinSwapped(operation)"></span>
-            </td>
-          </template>
+              <b-popover :target="`removeCoinForm-${coin.id}`"
+                         :placement="'top'"
+                         triggers="hover"
+              >
+                    <span v-bind:style="[
+                                 {padding: '8px'},
+                                 {fontSize: '12px'},
+                                 {textAlign: 'center'},
+                                 {backgroundColor: '#ffffff'},
+                                 {boxShadow: '-8px 8px 24px rgba(0, 0, 0, 0.2)'}
+                                  ]">{{ $t('portfolio.remove_coin_short') }}</span>
+              </b-popover>
 
-          <template v-else>
-            <td>
-              <span :class="[ operationType(operation) ]">{{ $t(`portfolio.${operationType(operation) }`) }}</span>
-            </td>
-            <td>
-              <span>{{ operation.quantity }} <b>{{ coin.ticker }}</b></span>
-            </td>
-            <td colspan="2">
-              <span v-html="currencyConverter(countOperationValue(operation), currentCurrency.ticker )"></span>
-            </td>
-            <td colspan="2">
-              <span v-html="currencyConverter( operation.price_per_coin, currentCurrency.ticker )"></span>
-            </td>
-          </template>
-          <td>
-            <!--<a href="#" :id="`editConfirmForm-${index}-${item.id}`" @click.prevent="onEnable(`editConfirmForm-${index}-${item.id}`)" class="edit">{{ $t(`form.edit`) }}</a>-->
+              <popover-coin-delete :id="coin.id"
+                                   :coin="coin"
+                                   v-on:confirm="removeCoin()"
+                                   v-on:close="onDisable(`removeCoinForm-${coin.id}`)"></popover-coin-delete>
+            </div>
+        </div>
+    <template v-if="item" v-for="(operation, index) in item.operations">
+      <div class="item__body" :key="index">
+
+        <template v-if="operation.type === 'swapped'">
+          <div class="item__body__cell operation">
+            <span :class="[ 'type', operationType(operation) ]">{{ $t(`portfolio.${operationType(operation) }`) }}</span>
+          </div>
+          <div class="item__body__cell quantity">
+            <span>{{ operation.quantity }} <b>{{ coin.ticker }}</b></span>
+            <span class="swapped_coin"><small>{{ $t(`portfolio.IN`)}}</small> {{ countSwappedCoinQuantity(operation) }} <b>{{ swappedCoinTicker(operation) }}</b></span>
+          </div>
+          <div class="item__body__cell price">
+            <span v-html="currencyConverter(operation.price, currentCurrency.ticker )"></span>
+          </div>
+          <div class="item__body__cell price-per-coin">
+            <span v-html="currencyConverter( operation.price_per_coin, currentCurrency.ticker )"></span>
+            <span class="swapped_coin" v-html="pricePerCoinSwapped(operation)"></span>
             <button @click="toggleEditOperation(`formEditRecord--${index}${item.id}`)" class="edit">{{ $t(`form.edit`) }}</button>
-            <button :id="`deleteConfirmForm-${index}-${item.id}`" @click="onEnable(`deleteConfirmForm-${index}-${item.id}`)" class="delete">{{ $t(`form.delete`) }}</button>
-            <span>
+            <button :id="`deleteConfirmForm-${index}-${item.id}`" @click="onEnable(`deleteConfirmForm-${index}-${item.id}`)" class="delete">
+              {{ $t(`form.delete`) }}
+            </button>
+          </div>
+        </template>
 
-                <popover-operation-delete :index="index"
+        <template v-else>
+          <div class="item__body__cell operation">
+            <span :class="[ 'type', operationType(operation) ]">{{ $t(`portfolio.${operationType(operation) }`) }}</span>
+          </div>
+          <div class="item__body__cell quantity">
+            <span>{{ operation.quantity }} <b>{{ coin.ticker }}</b></span>
+          </div>
+          <div class="item__body__cell price">
+            <span v-html="currencyConverter(countOperationValue(operation), currentCurrency.ticker )"></span>
+          </div>
+          <div class="item__body__cell price-per-coin">
+            <span v-html="currencyConverter( operation.price_per_coin, currentCurrency.ticker )"></span>
+            <button @click="toggleEditOperation(`formEditRecord--${index}${item.id}`)" class="edit">{{ $t(`form.edit`) }}</button>
+            <button :id="`deleteConfirmForm-${index}-${item.id}`" @click="onEnable(`deleteConfirmForm-${index}-${item.id}`)" class="delete">
+              {{ $t(`form.delete`) }}
+            </button>
+          </div>
+        </template>
+        <popover-operation-delete :index="index"
                                           :id="item.id"
                                           v-on:confirm="deleteOperation(operation, index)"
                                           v-on:close="onDisable(`deleteConfirmForm-${index}-${item.id}`)"></popover-operation-delete>
-
-                <!--<popover-operation-edit :index="index"-->
-                                        <!--:coinId="item.id"-->
-                                        <!--:operation="operation"-->
-                                        <!--v-on:confirm="editOperation(index, payload = $event)"-->
-                                        <!--v-on:close="onDisable(`editConfirmForm-${index}-${item.id}`)"></popover-operation-edit>-->
-            </span>
-          </td>
-          </tr>
-          <tr :key="index+item.operations.length">
-            <td class="form_td" colspan="12">
-              <b-collapse :id="`formEditRecord--${index}${item.id}`">
-                <form-edit-operation-portfolio :index="index"
-                                               :selectedCoin="item"
-                                               :portfolio="portfolio"
-                                               :operation="operation"></form-edit-operation-portfolio>
-              </b-collapse>
-            </td>
-          </tr>
-        </template>
-        <tr>
-          <td colspan="12">
-
-              <form-add-record-portfolio :selectedCoin="item" :portfolio="portfolio"></form-add-record-portfolio>
-
-            <!-- /.portfolio_form -->
-          </td>
-        </tr>
-        <tr>
-          <td class="exchange" colspan="12">
-            <PortfolioExchangeMarkets :coin="item" ></PortfolioExchangeMarkets>
-          </td>
-        </tr>
-      </tbody>
-
-  </table>
-  <!-- /.portfolio_item -->
+        </div>
+        <div :key="index+item.operations.length"
+             class="form_td">
+          <b-collapse :id="`formEditRecord--${index}${item.id}`">
+            <form-edit-operation-portfolio :index="index"
+                                           :selectedCoin="item"
+                                           :portfolio="portfolio"
+                                           :operation="operation"></form-edit-operation-portfolio>
+          </b-collapse>
+        </div>
+      </template>
+      <div class="form_add_record">
+          <form-add-record-portfolio :selectedCoin="item" :portfolio="portfolio"></form-add-record-portfolio>
+          <!-- /.portfolio_form -->
+      </div>
+      <div class="exchange">
+        <PortfolioExchangeMarkets :coin="item" ></PortfolioExchangeMarkets>
+      </div>
+    </div>
+  </div>
+    <!--/.portfolio_item -->
 </template>
 
 <script>
@@ -353,8 +340,8 @@ export default {
       position: absolute;
       width: 11px;
       height: 13px;
-      right: 29px;
-      top: 24px;
+      right: 17px;
+      bottom: 10px;
       background-image: @img-trash;
       background-position: center;
       background-repeat: no-repeat;
@@ -362,14 +349,46 @@ export default {
       z-index: 11;
     }
     &_item {
-      display: table;
+      display: flex;
+      flex-direction: column;
       width: 100%;
-      table-layout: fixed;
       position: relative;
       background-color: #fafbfc;
-      //height: 52px;
+      &__head{
+        display: flex;
+        width: 100%;
+      }
+      &__body{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        padding: 20px 12px 35px 28px;
+        background-color: #fff;
+        position: relative;
+        &.collapsed{
+          display: none;
+        }
+        &::before {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 10px;
+          background-image: linear-gradient(180deg, #e0e6ed 0%, rgba(224, 230, 237, 0) 100%);
+        }
+        &--pseudo{
+          position: absolute;
+          width: 4px;
+          height: 100%;
+          left: 0;
+          top: 1px;
+          z-index: 11;
+        }
+      }
       &-cell {
-        padding: 14px 12px;
+        box-sizing: border-box;
+        padding: 20px 12px 14px 12px;
         border-right: 1px solid #e9ecee;
         &:last-child {
           border-right: none;
@@ -390,18 +409,19 @@ export default {
       &-name {
         width: 20%;
         position: relative;
-        display: table-cell;
-        padding: 0px 10px 0 24px;
+        padding: 16px 0 12px 20px;
         span {
           color: #333f52;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 14px;
           line-height: 14px;
           letter-spacing: -0.2px;
+          position: relative;
+          top: 2px;
         }
         b {
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           color: #8f96a1;
           letter-spacing: -0.2px;
@@ -417,21 +437,20 @@ export default {
       }
       &-amount {
         width: 20%;
-        display: table-cell;
         &-wrapper {
           display: flex;
           justify-content: space-between;
         }
         span {
           color: #333f52;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 16px;
           line-height: 16px;
           text-transform: uppercase;
         }
         b {
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 12px;
         }
@@ -440,15 +459,17 @@ export default {
         width: 12px;
         height: 12px;
         background-image: @img-edit;
+        &-open{
+          background-image: @img-edit-green;
+        }
       }
       &-percent {
         width: 6%;
-        display: table-cell;
         text-align: center;
         span {
           //margin: auto;
           color: #333f52;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 16px;
           line-height: 16px;
@@ -456,7 +477,6 @@ export default {
       }
       &-price {
         width: 12%;
-        display: table-cell;
         padding: 14px 12px 0px 12px;
         span /deep/ b {
           font-size: 12px;
@@ -465,7 +485,7 @@ export default {
           display: block;
           white-space: nowrap;
           color: #333f52;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 16px;
           line-height: 16px;
@@ -473,16 +493,17 @@ export default {
         &-btc {
           opacity: 0.6;
           color: #8f96a1;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 9px;
           line-height: 12px;
           text-transform: uppercase;
+          position: relative;
+          top: -3px;
         }
       }
       &-24hour {
         width: 10%;
-        display: table-cell;
         b {
           padding: 2px 8px 2px;
           color: #8f96a1;
@@ -529,10 +550,9 @@ export default {
       }
       &-capitalizations {
         width: 13%;
-        display: table-cell;
         span {
           color: #707986;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 16px;
           line-height: 16px;
@@ -540,12 +560,12 @@ export default {
         }
         b, /deep/ b {
           font-size: 12px;
+          font-family: @medium;
         }
       }
       &-volume {
         width: 19%;
-        display: table-cell;
-        padding: 14px 22px 14px 12px;
+        padding: 20px 22px 14px 12px;
         &-wrapper {
           display: flex;
           align-items: center;
@@ -553,7 +573,7 @@ export default {
         }
         span {
           color: #707986;
-          font-family: @main-font;
+          font-family: @medium;
           font-weight: 500;
           font-size: 16px;
           line-height: 16px;
@@ -562,148 +582,159 @@ export default {
         b, /deep/ b {
           font-size: 12px;
         }
-        a {
+        .portfolio_item-dropdown {
           width: 12px;
-          height: 12px;
+          height: 10px;
           background-image: @img-dropdown-portfolio;
+          &-open{
+            background-image: @img-dropdown-portfolio-opened;
+          }
         }
       }
     }
   }
-  table {
-    width: 100%;
-    table-layout: fixed;
-    .tbody {
-      position: relative;
-      background-color: #fff;
-      transition: all .3s ease;
-      height: 100%;
-      &.collapsed{
-        display: none;
-      }
-      &::before {
-        content: "";
-        position: absolute;
-        //top: 48px;
-        left: 0;
-        width: 100%;
-        height: 10px;
-        background-image: linear-gradient(180deg, #e0e6ed 0%, rgba(224, 230, 237, 0) 100%);
-      }
-      &--pseudo{
-        position: absolute;
-        width: 4px;
+  .item{
+    &__head{
+      display: flex;
+      width: 100%;
+      &__cell {
         height: 100%;
-        left: 0px;
-        top: 1px;
-        //background-color: #bcbdbc;
-        z-index: 11;
+        border-bottom: 1px solid #e9ecee;
+        border-left: 1px solid #e9ecee;
+        display: inline-flex;
+        text-align: center;
+        span{
+          padding-top: 10px;
+          padding-left: 12px;
+          padding-bottom: 9px;
+          color: #525c6c;
+          font-size: 13px;
+          font-weight: 400;
+          line-height: 12px;
+          letter-spacing: -0.09px;
+        }
+        &:first-child{
+          border-left: none;
+          span{
+            padding-left: 24px;
+          }
+        }
+        &.operation{
+          width: 17.6%;
+        }
+        &.quantity{
+          width: 21%;
+        }
+        &.price{
+          width: 18.8%;
+        }
+        &.price-per-coin{
+          width: 42.45%;
+          position: relative;
+        }
       }
-      tr {
-        &:first-child {
-          border-bottom: 1px solid #e9ecee;
-
-          td {
-            padding: 30px 12px 9px 12px;
-            border-right: 1px solid #e9ecee;
+    }
+    &__body{
+      display: flex;
+      width: 100%;
+      &__cell {
+        border-left: 1px solid #e9ecee;
+        display: inline-flex;
+        text-align: center;
+        height: 100%;
+        span{
+          padding-top: 14px;
+          padding-left: 12px;
+          padding-bottom: 15px;
+          color: #525c6c;
+          font-size: 13px;
+          font-weight: 400;
+          line-height: 12px;
+          letter-spacing: -0.09px;
+          font-family: @medium;
+          white-space: nowrap;
+          b, /deep/ b {
+            font-weight: 500;
+            font-size: 12px;
+          }
+        }
+        &:first-child{
+          border-left: none;
+        }
+        &.operation{
+          width: 17.6%;
+          position: relative;
+          padding-left: 26px;
+          .type{
             position: relative;
-            span {
-              color: #525c6c;
-              font-family: @main-font;
-              font-weight: 400;
-              font-size: 13px;
-              line-height: 12px;
+            padding-left: 22px;
+            &::before {
+              content: "";
+              position: absolute;
+              width: 17px;
+              height: 17px;
+              left: -1px;
+              top: 12px;
+              background-position: center;
+              background-repeat: no-repeat;
+              z-index: 11;
             }
-            &:first-child {
-              padding: 30px 12px 9px 58px;
-            }
-            &:nth-last-child(2) {
-              border-right: 1px solid #e9ecee;
-            }
-            &:last-child {
-              text-align: left;
-              border-right: none;
-            }
-          }
-        }
-        &:last-child {
-          td {
-            &:first-child {
-              padding: 0;
-              text-align: right;
-            }
-          }
-        }
-        td.form_td{
-          padding: 0px 12px 0px 58px!important;
-        }
-        td {
-          padding: 15px 24px 13px 12px;
-          border-right: 1px solid #e9ecee;
-          &:first-child {
-            padding: 12px 12px 9px 58px;
-            .bought {
-              position: relative;
-              padding-left: 22px;
+            &.bought {
               color: #45af37;
               &::before {
-                content: "";
-                position: absolute;
-                width: 17px;
-                height: 17px;
-                left: -1px;
-                top: 0px;
                 background-image: @img-bought;
-                background-position: center;
-                background-repeat: no-repeat;
-                z-index: 11;
               }
             }
-            .sold {
-              position: relative;
-              padding-left: 22px;
+            &.sold {
               color: #ff3657;
               &::before {
-                content: "";
-                position: absolute;
-                width: 17px;
-                height: 17px;
-                left: -1px;
-                top: 0px;
                 background-image: @img-sold;
-                background-position: center;
-                background-repeat: no-repeat;
-                z-index: 11;
               }
             }
-            .swapped {
-              position: relative;
-              padding-left: 22px;
+            &.swapped {
               color: #1991eb;
               &::before {
-                content: "";
-                position: absolute;
-                width: 17px;
-                height: 17px;
-                left: -1px;
-                top: 0px;
                 background-image: @img-swapped;
-                background-position: center;
-                background-repeat: no-repeat;
-                z-index: 11;
               }
             }
           }
-          &:last-child {
-            text-align: right;
-            border-right: none;
-          }
-          &:nth-last-child(2) {
-            border-right: none;
-          }
+        }
+        &.quantity{
+          width: 21%;
+          flex-wrap: wrap;
+          position: relative;
           span {
+            padding-top: 12px;
             color: #333f52;
-            font-family: @main-font;
+            font-family: @medium;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 16px;
+            text-align: left;
+            width: 100%;
+          }
+          .swapped_coin{
+            position: absolute;
+            bottom: 0px;
+            height: 12px;
+            color: #707986;
+            font-size: 11px;
+            font-weight: 500;
+            line-height: 11px;
+            text-transform: uppercase;
+            letter-spacing: -0.04px;
+            /deep/ small{
+            }
+            /deep/ b{
+            }
+          }
+        }
+        &.price{
+          width: 18.8%;
+          span {
+            padding-top: 12px;
+            color: #333f52;
+            font-family: @medium;
             font-weight: 500;;
             font-size: 16px;
             line-height: 16px;
@@ -711,13 +742,29 @@ export default {
               font-size: 12px;
             }
           }
+        }
+        &.price-per-coin{
+          width: 42.45%;
+          position: relative;
+          align-items: center;
+          span {
+            padding-top: 12px;
+            color: #333f52;
+            font-family: @medium;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 16px;
+            text-align: left;
+            width: 100%;
+          }
           .swapped_coin{
-            display: block;
+            position: absolute;
+            bottom: 0px;
             height: 12px;
             color: #707986;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
-            line-height: 12px;
+            line-height: 11px;
             text-transform: uppercase;
             letter-spacing: -0.04px;
             /deep/ small{
@@ -729,25 +776,26 @@ export default {
             position: relative;
             display: inline-block;
             margin-right: 28px;
-            padding-left: 15px;
+            padding: 0 0 1px 0;
             color: #45af37;
             font-family: @main-font;
             font-weight: 400;
             font-size: 12px;
             line-height: 12px;
-            text-decoration: underline;
-            text-decoration-style: dashed;
             border: none;
             background: none;
             outline: none;
+            border-bottom: 1px dashed #45af37;
             cursor: pointer;
+            white-space: nowrap;
+            text-transform: capitalize;
             &::before {
               content: "";
               position: absolute;
               width: 12px;
               height: 12px;
-              left: -1px;
-              top: 0px;
+              left: -17px;
+              top: 0;
               background-image: @img-edit-green;
               background-position: center;
               background-repeat: no-repeat;
@@ -756,7 +804,8 @@ export default {
           }
           .delete {
             position: relative;
-            padding-left: 15px;
+            padding: 0 0 3px 0;
+            margin-right: 16px;
             color: #8f96a1;
             font-family: @main-font;
             font-weight: 400;
@@ -766,14 +815,15 @@ export default {
             background: none;
             outline: none;
             cursor: pointer;
-            padding-right: 0px;
+            white-space: nowrap;
+            text-transform: capitalize;
             &::before {
               content: "";
               position: absolute;
-              width: 12px;
-              height: 12px;
-              left: -1px;
-              top: 0px;
+              width: 7px;
+              height: 8px;
+              left: -13px;
+              top: 2px;
               background-image: @img-delete-grey;
               background-position: center;
               background-repeat: no-repeat;
@@ -782,81 +832,16 @@ export default {
           }
         }
       }
+      .form_td{
+        padding: 0px 12px 0px 58px;
+      }
+      .form_add_record{
+        display: inline-block;
+        margin-top: 12px;
+      }
+      .exchange{
 
+      }
     }
-      tr.t-foot {
-        td {
-          padding: 12px 12px 12px 12px;
-          color: #707986;
-          font-family: @main-font;
-          font-weight: 500;
-          font-size: 16px;
-          line-height: 16px;
-          b {
-            font-size: 12px;
-          }
-          &:nth-child(2) {
-            text-align: right;
-            border-right: 1px solid #e9ecee;
-          }
-          &:last-child {
-            text-align: right;
-            padding: 12px 28px 12px 12px;
-          }
-        }
-        &:nth-child(odd) {
-          background-color: rgba(232, 237, 242, 0.44);
-        }
-        &:first-child {
-          background-color: #fff;
-          border-bottom: 1px solid #e9ecee;
-          td {
-            color: #525c6c;
-            font-family: @main-font;
-            font-weight: 400;
-            font-size: 13px;
-            line-height: 12px;
-            &:nth-child(2) {
-              text-align: left;
-              border-right: none;
-            }
-            &:nth-child(3) {
-              text-align: right;
-              border-right: 1px solid #e9ecee;
-            }
-            &:last-child {
-              text-align: left;
-            }
-          }
-        }
-        &:last-child {
-          background-color: #fff;
-          border-bottom: none;
-        }
-      }
-      .btn-trade {
-        position: relative;
-        padding: 6px 8px 5px 22px;
-        background-color: #1991eb;
-        text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
-        box-shadow: 0 1px 0 #1175c0;
-        color: #fff;
-        font-size: 11px;
-        font-family: @main-font;
-        font-weight: 500;
-        line-height: 11px;
-        &::before {
-          content: "";
-          position: absolute;
-          width: 10px;
-          height: 9px;
-          left: 7px;
-          top: 6px;
-          background-image: @img-wallet;
-          background-position: center;
-          background-repeat: no-repeat;
-          z-index: 11;
-        }
-      }
   }
 </style>
