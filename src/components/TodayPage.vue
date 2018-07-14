@@ -142,6 +142,9 @@ export default {
   created () {
     this.getEvents()
     EventBus.$on('filter:event', this.switchEvents)
+  },
+  destroyed () {
+    EventBus.$off('filter:event', this.switchEvents)
   }
 }
 </script>

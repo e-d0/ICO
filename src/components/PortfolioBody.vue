@@ -30,10 +30,9 @@
               </label>
             </div>
           </div>
-          <div :id="`portfolio-links-${portfolio.id}`"
+          <div v-if="portfolio" :id="`portfolio-links-${portfolio.id}`"
                :class="['portfolio-view_links', 'hidden']">
-            <input v-if="portfolio"
-                   type="text"
+            <input type="text"
                    name=""
                    :id="`clipboard-${portfolio.id}`"
                    placeholder=""
@@ -751,7 +750,7 @@ export default {
           position: absolute;
           width: 15px;
           height: 15px;
-          left: 10px;
+          left: 12px;
           top: 9px;
           background-image: @img-coin;
           background-position: center;

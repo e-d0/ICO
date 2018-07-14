@@ -227,6 +227,9 @@ export default {
   },
   mounted () {
     this.timeOffset()
+  },
+  destroyed () {
+    EventBus.$off()
   }
 }
 </script>

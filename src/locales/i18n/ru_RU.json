@@ -53,7 +53,9 @@
     "edit": "edit",
     "delete": "delete",
     "add_coin": "Добавить монету",
-    "Cancel": "Отмена"
+    "Cancel": "Отмена",
+    "add_ico_calendar": "Добавить ICO в Каденарь",
+    "add_ico_name": "название"
   },
   "portfolio": {
     "Add_portfolio": "Добавить портфолио",

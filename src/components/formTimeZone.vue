@@ -118,13 +118,13 @@ export default {
       }
     }
     select{
-      padding: 4px 24px 3px 9px;
+      padding: 0px 24px 0px 9px;
       height: 24px;
       color: #707986;
       font-family: 'Roboto', sans-serif;
       font-size: 12px;
       font-weight: 400;
-      line-height: 12px;
+      line-height: 24px;
       border: 1px solid rgba(197, 208, 222, 0.5);
       box-shadow: 0 1px 0 #e2e7ee;
       background-color: #ffffff;

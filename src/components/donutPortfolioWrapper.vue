@@ -97,6 +97,9 @@ export default {
   },
   created () {
     EventBus.$on('chart:doughnut:grow', this.showCoin)
+  },
+  destroyed () {
+    EventBus.$off('chart:doughnut:grow', this.showCoin)
   }
 }
 </script>

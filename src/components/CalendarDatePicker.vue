@@ -9,6 +9,7 @@
       :show-day-popover='false'
       titlePosition="left"
       :select-attribute='attrs'
+      :drag-attribute='dragAttrs'
       :theme-styles="themeStyles"
       :formats='formats'
       is-inline>
@@ -34,7 +35,9 @@ export default {
       show: true,
       themeStyles: {
         wrapper: {
-          width: '100%'
+          minWidth: '283px',
+          maxWidth: '283px',
+          backgroundColor: '#fafbfc'
         },
         headerTitle: {
           fontWeight: '500',
@@ -49,37 +52,94 @@ export default {
         header: {
           borderColor: '#404c59',
           borderWidth: '0 0 1px 0',
-          padding: '12px 20px 12px 24px'
+          // padding: '12px 20px 12px 24px',
+          padding: '0px 22px 0px 24px',
+          minHeight: '51px'
         },
         headerHorizontalDivider: {
           borderTop: '1px solid #e0e6ed',
           width: '100%'
         },
+        weeks: {
+          borderRadius: '4px',
+          padding: '0px 16px',
+          // padding: '0px',
+          paddingBottom: '16px',
+          fontFamily: 'Roboto Medium',
+          backgroundColor: '#fafbfc'
+        },
         weekdays: {
           borderWidth: '0 1px',
-          padding: '14px 16px 0 16px',
-          fontFamily: 'Roboto Medium'
+          fontFamily: 'Roboto Medium',
+          padding: '16px',
+          paddingBottom: '8px',
+          backgroundColor: '#fafbfc',
+          maxHeight: '51px',
+          fontSize: '14px'
         },
         dayCellNotInMonth: {
           color: 'rgb(225, 228, 231)'
         },
+        // dayContent: params => (console.log(params)),
         dayContent: params => ({
           ...(params.isHovered && {
             backgroundColor: '#7dc773',
-            color: '#fff'
+            color: '#fff',
+            maxHeight: '27px',
+            maxWidth: '27px'
           })
+          // ...(params.day.weekday === 1 && {
+          //   maxWidth: '27px',
+          //   minWidth: '27px',
+          //   position: 'relative',
+          //   right: '13px'
+          // }),
+          // ...(params.day.weekday === 2 && {
+          //   maxWidth: '27px',
+          //   minWidth: '27px',
+          //   position: 'relative',
+          //   left: '13px'
+          // }),
+          // ...((params.day.weekday === 3) && {
+          //   maxWidth: '27px',
+          //   minWidth: '27px',
+          //   position: 'relative',
+          //   left: '8px'
+          // }),
+          // ...((params.day.weekday === (4)) && {
+          //   maxWidth: '27px',
+          //   minWidth: '27px',
+          //   position: 'relative',
+          //   left: '6px'
+          // }),
+          // ...((params.day.weekday === 6) && {
+          //   maxWidth: '27px',
+          //   minWidth: '27px',
+          //   position: 'relative',
+          //   right: '6px'
+          // }),
+          // ...((params.day.weekday === 7) && {
+          //   maxWidth: '27px',
+          //   minWidth: '27px',
+          //   position: 'relative',
+          //   right: '8px'
+          // }),
+          // ...({
+          //   // maxHeight: '27px',
+          //   // lineHeight: '27px',
+          //   // maxWidth: '27px'
+          // })
         }),
-        weeks: {
-          backgroundColor: '#ffffff',
-          borderRadius: '4px',
-          padding: '8px 16px 16px 16px',
-          fontFamily: 'Roboto Medium'
+        dayCell: {
+          maxHeight: '27px'
         }
       },
       attrs:
         {
           highlight: {
-            backgroundColor: '#e8edf1'
+            backgroundColor: '#e8edf1',
+            height: '27px',
+            borderRadius: '27px'
           },
           contentStyle: params => ({
             ...(params.day && {
@@ -88,19 +148,52 @@ export default {
             ...(!params.inBetween && {
               color: '#fff'
             }),
+            ...(params.isFocused && {
+              height: '10px'
+            }),
             ...(params.onEnd && {
               color: this.dynamicEndFontStyle(params)
             })
           }),
+          // highlightCaps: params => (console.log(params)),
           highlightCaps: params => ({
             ...(params.onStart && {
               backgroundColor: '#7dc773',
-              color: '#fff'
+              color: '#fff',
+              border: '1px solid #C71900',
+              height: '27px'
             }),
             ...(params.onEnd && {
               backgroundColor: this.dynamicEndCapStyle(params),
               border: 'none',
-              color: this.dynamicEndFontStyle(params)
+              color: this.dynamicEndFontStyle(params),
+              height: '27px'
+            })
+          })
+        },
+      dragAttrs:
+        {
+          highlight: {
+            backgroundColor: '#e8edf1',
+            height: '27px',
+            borderRadius: '17px'
+          },
+          highlightCaps: params => ({
+            ...(params.onStart && {
+              backgroundColor: '#ffffff',
+              color: '#000000',
+              borderColor: '#7DC773',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              height: '27px'
+            }),
+            ...(params.onEnd && {
+              backgroundColor: '#ffffff',
+              color: '#000000',
+              borderColor: '#7DC773',
+              borderWidth: '1px',
+              borderStyle: 'solid',
+              height: '27px'
             })
           })
         },
@@ -133,7 +226,7 @@ export default {
         type: 'event/setDates',
         data: generatedDays
       })
-      console.log(generatedDays, 'schedular caletndar emitted dates array')
+      // console.log(generatedDays, 'schedular caletndar emitted dates array')
     }
   },
   created () {
@@ -143,7 +236,6 @@ export default {
      * Создаем массив дней в зависимости от принятых дат
      * и передаем в глобальное событие
      */
-    console.log('el calendar is created')
     this.datesEmit(this.selectedDate)
   },
   computed: {
@@ -158,5 +250,7 @@ export default {
     border-radius: 4px;
     background-color: #ffffff;
     margin-bottom: 32px;
+    min-width: 284px;
+    max-width: 284px;
   }
 </style>

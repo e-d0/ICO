@@ -189,7 +189,8 @@ export default {
   @import "../assets/less/vars";
   #formICO{
     width: 100%;
-    margin-top: 32px;
+    max-width: 907px;
+    margin-top: 20px;
   }
   .calendar.calendar__month .timeline_top-line{
     padding-right: 2px;
@@ -351,19 +352,7 @@ export default {
         background-color: #45af37;
         color: #fff;
         box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
-        /* Style for "Input Copy" */
-        /*width: 56px;*/
-        /*height: 32px;*/
       }
-      /*&_btn:hover{*/
-        /*position: relative;*/
-        /*top: 0px;*/
-        /*text-decoration: none;*/
-        /*background-color: #44af36;*/
-        /*color: #fff;*/
-        /*-webkit-box-shadow: 0 2px 0 #35882a;*/
-        /*box-shadow: 0 2px 0 #35882a;*/
-      /*}*/
     }
     .radio-buttons {
       label {
@@ -400,14 +389,23 @@ export default {
           background-position: 12px 50%;
           background-repeat: no-repeat;
           padding-left: 32px;
-          &:active,
-          &:focus,
           &:hover{
             text-decoration: none;
             background-color: #45af37;
             color: #fff;
             box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
           }
+        }
+        .add_ico.collapsed{
+          font-family: @medium;
+          background-image: @img-plus_2;
+          background-position: 12px 50%;
+          background-repeat: no-repeat;
+          padding-left: 32px;
+          text-decoration: none;
+          background-color: #45af37;
+          color: #fff;
+          box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3);
         }
       }
     }

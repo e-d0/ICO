@@ -108,6 +108,9 @@ export default {
      * На событии из фильтра вызываем функцию
      * */
     EventBus.$on('filter:event', this.switchEvents)
+  },
+  destoryed () {
+    EventBus.$off()
   }
 }
 </script>

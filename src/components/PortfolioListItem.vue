@@ -322,6 +322,9 @@ export default {
      * Весим событие, при котором срабатывает функция открывающая\закрывающая инфу о коине
      * */
     EventBus.$on('chart:doughnut:grow', this.toggleCollapseCoin)
+  },
+  destroyed () {
+    EventBus.$off('chart:doughnut:grow', this.toggleCollapseCoin)
   }
 }
 </script>

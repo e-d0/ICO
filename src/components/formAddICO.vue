@@ -2,9 +2,9 @@
   <div class="add_ico_form">
     <div v-b-toggle="'formICO'" class="add_ico_form-close">
     </div>
-    <h3>Добавить ICO в Календарь</h3>
+    <h3>{{ $t('form.add_ico_calendar') }}</h3>
     <form class="add-coin-form">
-      <h4>Название</h4>
+      <h4>{{ $t('form.add_ico_name') }}</h4>
       <fieldset class="fieldset-left">
         <multiselect class="" id="formAddIco"
                        v-model="value"
@@ -32,7 +32,9 @@
         <span></span>
         </template>
         </multiselect>
-        <button @click.prevent = "" class="add-coin-form_buttons btn btn-primary" type="submit" name="button">Добавить</button>
+        <button @click.prevent = ""
+                class="add-coin-form_buttons btn"
+                type="submit" name="button">{{ $t('form.Add') }}</button>
       </fieldset>
     </form>
   </div>
@@ -83,10 +85,12 @@ export default {
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 <style lang="less">
 @import "../assets/less/vars";
+@btn_width: 57px;
+@btn_margin: 23px;
 .add_ico_form {
   margin-bottom: 40px;
   position: relative;
-  padding: 20px;
+  padding: 15px 20px 20px 20px;
   border-top: 4px solid @accent-color;
   border-radius: 4px;
   background-color: #fff;
@@ -95,11 +99,26 @@ export default {
   .fieldset-left {
     width: 100%;
     .multiselect{
-      display: inline-block;
-      width: 85%;
-      margin-right: 15px;
+      margin-right: 0;
       margin-bottom: 0;
-      vertical-align: middle;
+      width: ~"calc(100% - @{btn_width} - @{btn_margin} - 3px)";
+      float: left;
+      &__content-wrapper{
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.09);
+        border: 1px solid #c5d0de;
+      }
+      &__tags{
+        height: 36px;
+        min-height: 36px;
+        line-height: 36px;
+        padding: 6px 40px 0 8px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.09);
+        border: 1px solid #c5d0de;
+      }
+      &__option{
+        padding: 14px 20px;
+      }
       .multiselect__element span.multiselect__option.multiselect__option--highlight:after,
       .multiselect__element span.multiselect__option.multiselect__option--highlight{
         background: #c5d0de!important;
@@ -116,15 +135,16 @@ export default {
           font-weight: 500;
           line-height: 16px;
           letter-spacing: -0.2px;
+          font-family: @medium;
         }
         &__bullet{
-          color: #333f52;
+          color: #8f96a1;
+          font-size: 12px;
         }
         &__ticker{
           color: #8f96a1;
           letter-spacing: -0.2px;
         }
-
       }
     }
   }
@@ -142,7 +162,7 @@ export default {
     &::before {
       content: "";
       position: absolute;
-      width: 12px;
+      width: 15px;
       height: 1px;
       top: 6px;
       left: 1px;
@@ -152,7 +172,7 @@ export default {
     &::after {
       content: "";
       position: absolute;
-      width: 12px;
+      width: 15px;
       height: 1px;
       top: 6px;
       left: 1px;
@@ -161,7 +181,7 @@ export default {
     }
   }
   h3 {
-    margin-bottom: 16px;
+    margin-bottom: 13px;
     color: #525c6c;
     font-family: @main-font;
     font-size: 16px;
@@ -170,13 +190,11 @@ export default {
     display: block;
   }
   .add-coin-form {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
     fieldset{
     }
     h4 {
-      margin-bottom: 16px;
+      margin-bottom: 4px;
+      text-transform: capitalize;
       color: #525c6c;
       font-family: @main-font;
       font-size: 16px;
@@ -191,6 +209,8 @@ export default {
     }
     &_buttons {
       &.btn {
+        margin-left: @btn_margin;
+        min-width: @btn_width;
         text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.1);
         font-family: @main-font;
         font-size: 14px;
@@ -201,11 +221,7 @@ export default {
         border-radius: 4px;
         background-color: @accent-color;
         color: #fff;
-        height: 100%;
-        vertical-align: middle;
         display: inline-block;
-        bottom: 2px;
-        float: right;
         &:active,
         &:focus,
         &:hover{

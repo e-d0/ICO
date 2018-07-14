@@ -568,7 +568,7 @@ export default {
         flex-direction: column;
         width: 168px;
         &.swapped{
-          width: 134px;
+          width: 120px;
         }
         padding-left: 12px;
         &-input-wrapper {

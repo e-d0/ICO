@@ -47,6 +47,7 @@ export default {
   },
   computed: {
     ...storeEvent.mapGetters({
+      events: 'events',
       filteredEvents: 'filteredEvents',
       /**
        * Получаем элементы фильтра по имени из vuex хранилища напрямую.
@@ -131,7 +132,7 @@ export default {
       if (this.actual !== undefined) {
         this.actual ? events = this.actualEvents(this.moment()) : events = this.pastEvents(this.moment())
       } else {
-        events = this.filteredEvents
+        events = this.events
       }
       if (events !== undefined) {
         let count = 0
@@ -211,6 +212,7 @@ export default {
   }
   .filter {
     margin-top: 32px;
+    max-width: 284px;
     .events-filter {
       padding: 24px 24px 0px;
       border-top: 4px solid #c5d0de;

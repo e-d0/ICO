@@ -195,6 +195,9 @@ export default {
   mounted () {
     this.renderChart(this.datacollection, this.options)
     EventBus.$on('chart:doughnut:check', this.toggleChart)
+  },
+  destroyed () {
+    EventBus.$off('chart:doughnut:check', this.toggleChart)
   }
 }
 </script>

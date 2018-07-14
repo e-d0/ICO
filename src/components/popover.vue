@@ -41,25 +41,29 @@
         </div>
       </template>
 
-      <div v-if="(notificForm || this.clickedItemAlerts() === undefined ) && (filteredTimeOptions.length > 0)" class="mypopover_remainder">
-        <span>{{ $t('form.Remind') }} </span>
-        <div class="mypopover_remainder-select">
-          <select v-model="timeValue">
-            <template v-for="( val, index ) in filteredTimeOptions">
+      <!--Селект с возможностью добавлять время алерта. Пока отключен за ненадобностью-->
 
-                <option :key="index" name="name[]" :value="val" >
-                  <a>{{ val }} {{ $t('form.min') }}</a>
-                </option>
+      <!--<div v-if="(notificForm || this.clickedItemAlerts() === undefined ) &&-->
+                  <!--(filteredTimeOptions.length > 0)"-->
+                  <!--class="mypopover_remainder">-->
+        <!--<span>{{ $t('form.Remind') }} </span>-->
+        <!--<div class="mypopover_remainder-select">-->
+          <!--<select v-model="timeValue">-->
+            <!--<template v-for="( val, index ) in filteredTimeOptions">-->
 
-            </template>
-          </select>
-        </div>
-        <a :class="['add']" @click="addAlert(timeValue)" >{{ $t('form.Add') }}</a>
-      </div>
+                <!--<option :key="index" name="name[]" :value="val" >-->
+                  <!--<a>{{ val }} {{ $t('form.min') }}</a>-->
+                <!--</option>-->
+
+            <!--</template>-->
+          <!--</select>-->
+        <!--</div>-->
+        <!--<a :class="['add']" @click="addAlert(timeValue)" >{{ $t('form.Add') }}</a>-->
+      <!--</div>-->
 
       <div class="mypopover_add">
         <div class="col-sm-6 mypopover_add-remind" >
-          <a :class="[{'active': notificForm }]" @click="openAddAlert()">{{ $t('form.AddReminder') }}</a>
+          <a :class="[{'disabled': filteredTimeOptions.length === 0 }]" @click="addAlertToTempStorage()">{{ $t('form.AddReminder') }}</a>
         </div>
         <div class="col-sm-6 mypopover_add-comment">
           <a v-if="!commentForm && comment !== null" @click="removeComment()">{{ $t('form.RemoveComment') }}</a>
@@ -97,9 +101,15 @@ import { countDiffBetweenDates } from './eventbus'
 export default {
   name: 'popover',
   props: {
+    /**
+     * Event ,переданный при создании формы из родителя
+     * */
     clickedEvent: Object,
     popoverShow: Boolean,
     target: String,
+    /**
+     * Начало или окончание event
+     * */
     isStart: Boolean
   },
   data () {
@@ -114,6 +124,9 @@ export default {
     }
   },
   computed: {
+    /**
+     * Отфильтрованные значения времени алерта для выпадающего селекта
+     * */
     filteredTimeOptions: {
       cache: false,
       get: function () {
@@ -139,17 +152,29 @@ export default {
   watch: {
   },
   created () {
+    /**
+     * При создании этого компонента заполняем переменную алертами из текущего event
+     * */
     if (this.clickedItemAlerts() !== undefined) {
       this.alerts = this.sortDates([...this.clickedItemAlerts()])
     }
+    /**
+     * При создании этого компонента заполняем переменную комментариями из текущего event
+     * */
     if (this.clickedItemComments() !== undefined) this.comment = this.clickedItemComments()
   },
   methods: {
+    /**
+     * Проверка, откуда брать alert: из начала события или окончания
+     * */
     clickedItemAlerts () {
       if (this.clickedEvent.alerts !== undefined) {
         return this.clickedEvent.isStart ? this.clickedEvent.alerts.starts : this.clickedEvent.alerts.ends
       }
     },
+    /**
+     * Проверка, откуда брать comment: из начала события или окончания
+     * */
     clickedItemComments () {
       if (this.clickedEvent.comment !== undefined) {
         return this.clickedEvent.isStart ? this.clickedEvent.comment.starts : this.clickedEvent.comment.ends
@@ -181,15 +206,24 @@ export default {
     getTypeNameByCode () {
       return this.$store.getters['event/getTypeNameByCode'](this.clickedEvent.tempType)
     },
+    /**
+     * Добавить оповещение
+     * */
     addAlert (val) {
       let eventStarts = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
       let startTime = this.$moment(eventStarts).subtract(val, 'minutes')
       this.alerts.push(startTime.toISOString())
       this.alerts = this.sortDates(this.alerts)
     },
+    /**
+     * Удалить оповещение
+     * */
     removeAlert (index) {
       this.alerts.splice(index, 1)
     },
+    /**
+     * Посчитать разницу во времени между переданным объектом даты и началом\окончанием event в минутах
+     * */
     convertToDiff (item) {
       let alert = this.$moment(item)
       let start = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
@@ -199,6 +233,9 @@ export default {
        * */
       return ((diff / 1000) / 60)
     },
+    /**
+     * Посчитать разницу во времени между алертом из массива alerts и началом\окончанием event в минутах
+     * */
     countDiffTime (index) {
       let alert = this.$moment(this.alerts[index])
       let start = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
@@ -238,17 +275,40 @@ export default {
     removeComment () {
       this.comment = null
     },
+    /**
+     * Показать форму добавления комментариев
+     * */
     openAddComment () {
       let val = this.commentForm
       this.commentForm = !val
     },
-    openAddAlert () {
-      let val = this.notificForm
-      this.notificForm = !val
+    /**
+     * По нажатию на кнопку сразу добавить оповещение
+     * */
+    addAlertToTempStorage () {
+      if (this.filteredTimeOptions.length > 0) {
+        this.notificForm = true
+        this.timeValue = this.filteredTimeOptions[0]
+        this.addAlert(this.timeValue)
+      } else {
+        this.notificForm = false
+      }
     },
+    /**
+     * Показать форму добавления алерта
+     * */
+    openAddAlert () {
+      this.notificForm = !this.notificForm
+    },
+    /**
+     * Возвращает дату начала текущего event
+     * */
     dateStart () {
       return this.clickedEvent.isStart ? this.$moment(this.clickedEvent.starts) : this.$moment(this.clickedEvent.ends)
     },
+    /**
+     * Показать времея до начала события от текущего момента
+     * */
     timeToStart () {
       return this.clickedEvent.isStart ? this.$moment(this.clickedEvent.starts).fromNow() : this.$moment(this.clickedEvent.ends).fromNow()
     },
@@ -563,6 +623,7 @@ export default {
         display: inline-block;
         &:focus,
         &.active,
+        &.disabled,
         &:hover {
           text-decoration: none;
           color: #8f96a1;
@@ -583,7 +644,8 @@ export default {
           z-index: 11;
         }
         &:hover::before,
-        &.active::before{
+        &.active::before,
+        &.disabled::before{
           color: #8f96a1;
           background-image: @img-grey-bell;
           background-position: center;

@@ -53,7 +53,9 @@
     "edit": "edit",
     "delete": "delete",
     "add_coin": "Add coin",
-    "Cancel": "Cancel"
+    "Cancel": "Cancel",
+    "add_ico_calendar": "Adding ICO to Calendar",
+    "add_ico_name": "name"
   },
   "portfolio": {
     "Add_portfolio": "Add portfolio",
