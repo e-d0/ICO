@@ -435,7 +435,10 @@ export default {
        color: #999;
        border-style: solid;
        border-width: 3px 0 3px 4px;
-       border-color: transparent transparent transparent #3f3f3f9c;
+       border-top-color: transparent;
+       border-right-color: transparent;
+       border-left-color: rgba(63, 63, 63, 0.61);
+       border-bottom-color: transparent;
        content: "";
      }
   }
