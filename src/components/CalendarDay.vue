@@ -20,18 +20,19 @@
       </div>
     </div>
     </div>
-    <v-touch :swipe-options="{ direction: 'horizontal', threshold: 100 }"
-             :pan-options = "{ direction: 'vertical'}"
-             v-on:pandown="onSwipeLeft"
-             v-on:panup="onSwipeRight"
-             v-on:swipeleft="onSwipeLeft"
-             v-on:swiperight="onSwipeRight"
-             v-on:swipeup="onSwipeLeft"
-             v-on:swipedown="onSwipeRight"
-             class="events"
+    <!--<v-touch :swipe-options="{ direction: 'horizontal', threshold: 100 }"-->
+             <!--:pan-options = "{ direction: 'vertical'}"-->
+             <!--v-on:pandown="onSwipeLeft"-->
+             <!--v-on:panup="onSwipeRight"-->
+             <!--v-on:swipeleft="onSwipeLeft"-->
+             <!--v-on:swiperight="onSwipeRight"-->
+             <!--v-on:swipeup="onSwipeLeft"-->
+             <!--v-on:swipedown="onSwipeRight"-->
+    <v-touch class="events"
              id="events"
              transition = "fade"
-             ref="dragTarget">
+             ref="dragTarget"
+             v-wheel="onWheel">
     <div class="events-group" v-if="dates"
                               v-for="(dayItem, dayInd) in dates"
                               :key="dayInd">
@@ -65,7 +66,12 @@ import { generateHours, EventBus, isSameOnlyDate } from './eventbus'
 import Vuex from 'vuex'
 import TWEEN from '@tweenjs/tween.js'
 import moment from 'moment'
+import Vue from 'vue'
+import vuewheel from 'vuewheel'
+
 const storeEvent = Vuex.createNamespacedHelpers('event')
+
+Vue.use(vuewheel)
 
 export default {
   name: 'Day',
@@ -101,6 +107,34 @@ export default {
     }
   },
   methods: {
+    /**
+     * Отслеживание скролла осуществляется за счет маленького миксина https://github.com/Tombarr/vue-wheel
+     * */
+    onWheel: function (e) {
+      /**
+       * Полная ширина элемента с учетом спрятанного
+       * */
+      let scrollWidth = this.$el.querySelector('#events').scrollWidth
+      /**
+       * Ндлина элемента в поле видимости
+       * */
+      let clientWidth = this.$el.querySelector('#events').clientWidth
+      /**
+       * На какую длину уже сделан скролл
+       * */
+      let scrollLeft = this.$el.querySelector('#events').scrollLeft
+      let scrollUp = -100
+      let scrollDown = 100
+      if (e.deltaY === scrollDown && scrollWidth > clientWidth + scrollLeft) {
+        e.preventDefault()
+        this.onSwipeLeft()
+        console.log(scrollWidth)
+      } else if (e.deltaY === scrollUp && scrollLeft !== 0) {
+        e.preventDefault()
+        this.onSwipeRight()
+        console.log(scrollWidth)
+      }
+    },
     /**
      * Фильтр по текущему дню
      * */
@@ -149,10 +183,16 @@ export default {
         return Math.round(offsetHeight)
       }
     },
-    onSwipeLeft (el) {
+    /**
+     * Двигает скролл влево
+     * */
+    onSwipeLeft () {
       // получаем элемент из DOM
       let elem = this.$el.querySelector('#events')
-      let width = this.$el.querySelector('#events').offsetWidth * 0.75
+      /**
+       * Величина, на которую сделать сдвиг скролла
+       * */
+      let width = this.$el.querySelector('#events').offsetWidth * 0.25
       let newVal = elem.scrollLeft + width
       // анимируем с tween.js
       function animate () {
@@ -167,10 +207,16 @@ export default {
 
       animate()
     },
-    onSwipeRight (el) {
+    /**
+     * Двигает скролл вправо
+     * */
+    onSwipeRight () {
       // получаем элемент из DOM
       let elem = this.$el.querySelector('#events')
-      let width = this.$el.querySelector('#events').offsetWidth * 0.75
+      /**
+       * Величина, на которую сделать сдвиг скролла
+       * */
+      let width = this.$el.querySelector('#events').offsetWidth * 0.25
       let newVal = elem.scrollLeft - width
       // анимируем с tween.js
       function animate () {
