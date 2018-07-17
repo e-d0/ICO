@@ -35,8 +35,8 @@ export default {
       show: true,
       themeStyles: {
         wrapper: {
-          minWidth: '283px',
-          maxWidth: '283px',
+          minWidth: '284px',
+          maxWidth: '284px',
           backgroundColor: '#fafbfc'
         },
         headerTitle: {
@@ -62,8 +62,8 @@ export default {
         },
         weeks: {
           borderRadius: '4px',
-          padding: '0px 16px',
-          // padding: '0px',
+          // padding: '0px 16px',
+          padding: '0px',
           paddingBottom: '16px',
           fontFamily: 'Roboto Medium',
           backgroundColor: '#fafbfc'
@@ -71,8 +71,8 @@ export default {
         weekdays: {
           borderWidth: '0 1px',
           fontFamily: 'Roboto Medium',
-          padding: '16px',
-          paddingBottom: '8px',
+          padding: '16px 0px 8px',
+          // paddingBottom: '8px',
           backgroundColor: '#fafbfc',
           maxHeight: '51px',
           fontSize: '14px'
@@ -141,20 +141,22 @@ export default {
             height: '27px',
             borderRadius: '27px'
           },
-          contentStyle: params => ({
-            ...(params.day && {
-              color: '#000'
-            }),
-            ...(!params.inBetween && {
-              color: '#fff'
-            }),
-            ...(params.isFocused && {
-              height: '10px'
-            }),
-            ...(params.onEnd && {
-              color: this.dynamicEndFontStyle(params)
-            })
-          }),
+          contentStyle: params => (
+            {
+              ...(params.day && {
+                color: '#000'
+              }),
+              ...(!params.inBetween && {
+                color: '#fff'
+              }),
+              ...(params.isFocused && {
+                height: '10px'
+              }),
+              ...(params.onEnd && {
+                color: this.dynamicEndFontStyle(params)
+              })
+            }
+          ),
           // highlightCaps: params => (console.log(params)),
           highlightCaps: params => ({
             ...(params.onStart && {

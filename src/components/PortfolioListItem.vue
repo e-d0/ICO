@@ -312,7 +312,6 @@ export default {
         /**
          * Шлем в чарт сообщение о закрытии\открытии
          * */
-        console.log('event>>>>>>', e, value)
         this.$root.$emit('bv::toggle::collapse', `coin-toggle--${e}`, value)
       }
     }

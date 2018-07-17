@@ -1,4 +1,8 @@
 <script>
+/**
+ * https://github.com/emn178/Chart.PieceLabel.js
+ * */
+import chartPierceLabel from './Chart.PieceLabel'
 import { EventBus } from './eventbus'
 // 1. Import Chart.js so you can use the global Chart object
 import Chart from 'chart.js'
@@ -94,6 +98,13 @@ export default {
     return {
       showInfo: false,
       options: {
+        pieceLabel: {
+          render: ['percentage', 'label'],
+          showActualPercentages: true,
+          fontFamily: 'Roboto',
+          fontSize: 12,
+          fontColor: '#fff'
+        },
         responsive: false,
         maintainAspectRatio: false,
         cutoutPercentage: 60,
@@ -103,10 +114,13 @@ export default {
         // onHover: function (e) { console.log(e) },
         onClick: function (e, item) {
           let activePoints = this.getElementAtEvent(e)
+          console.log('1111111>>>>>>>', activePoints)
+          let meta1 = this.getDatasetMeta(0)
           if (activePoints.length > 0) {
             // increase radius
             let index = activePoints[0]._index
-            let meta1 = this.getDatasetMeta(0)
+            let pierceLabel = activePoints['0']._chart.options.pieceLabel.fontColor
+            activePoints['0']._chart.options.pieceLabel.fontColor = pierceLabel === 'rgb(0,0,0,0)' ? '#fff' : 'rgb(0,0,0,0)'
             meta1.data.forEach(function (item) {
               if (item === meta1.data[index] && !item._model.isOpened) {
                 item._model.outerRadius = outerRadius
@@ -123,7 +137,7 @@ export default {
               }
             })
           } else {
-            let meta1 = this.getDatasetMeta(0)
+            meta1.data['0']._chart.options.pieceLabel.fontColor = '#fff'
             meta1.data.forEach(function (item) {
               item._model.outerRadius = outerRadius * 0.9
               item._model.innerRadius = innerRadius
@@ -176,6 +190,7 @@ export default {
        * Получаем данные из нулевого набора данных(dataset)
        * */
       let chartElements = doughnutObj.getDatasetMeta(0)
+      chartElements.data['0']._chart.options.pieceLabel.fontColor = value ? 'rgb(0,0,0,0)' : '#fff'
       chartElements.data.forEach(item => {
         if (item._model.label === ticker) {
           item._model.outerRadius = value ? outerRadius : (outerRadius * 0.9)

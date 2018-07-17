@@ -24,7 +24,7 @@
           <div class="portfolio-view_public">
             <a>{{ $t('portfolio.public_portfolio') }}<sup class="tooltip-mark"></sup></a>
             <div class="portfolio-view_toggle">
-              <label class="toggle">
+              <label class="toggle" v-if="portfolio">
                 <input type="checkbox" :id="`links-checkbox-${portfolio.id}`" name="toggle" @click="switchPublicPortfolio()">
                 <span></span>
               </label>
@@ -80,8 +80,7 @@
             <!-- /.portfolio_deviation -->
             <div v-if="portfolio" class="portfolio_changes">
               <a href="#"
-                 v-b-toggle="`chartPortfolio-${portfolio.id}`"
-                 @click.prevent=""
+                 @click.prevent="togglePortfolioChart()"
                  v-html="$t('portfolio.changes_chart')"></a>
             </div>
           </div>
@@ -131,7 +130,8 @@ export default {
         html: true
       },
       showPortfolioLinks: false,
-      currencyStorage: null
+      currencyStorage: null,
+      showPortfolioChart: false
     }
   },
   computed: {
@@ -147,6 +147,9 @@ export default {
     portfolioLink: function () {
       if (this.portfolio) {
         // return portfolio.link
+        /**
+         * Заглушка. В дальнейшем заменится на данные с сервера
+         * */
         return 'https://icopapa.com/shared/as3ld22'
       }
     },
@@ -164,6 +167,10 @@ export default {
     }
   },
   methods: {
+    togglePortfolioChart () {
+      this.showPortfolioChart = !this.showPortfolioChart
+      this.$root.$emit('bv::toggle::collapse', `chartPortfolio-${this.portfolio.id}`, this.showPortfolioChart)
+    },
     switchPublicPortfolio () {
       let el = document.getElementById(`portfolio-links-${this.portfolio.id}`)
       if (el.classList.contains('hidden')) {
@@ -184,7 +191,6 @@ export default {
     },
     chartData (portfolio) {
       if (portfolio !== undefined) {
-        let sum = this.totalCost()
         let colors = []
         let labels = []
         /**
@@ -199,12 +205,22 @@ export default {
         /**
          * Заполняем массив с данными для чарта бублика: отношение в процентах к общему количеству
          * */
+        let totalPortfolio = 0
+        for (let index = 0; index < portfolio.coin.length; ++index) {
+          let item = portfolio.coin[index]
+          totalPortfolio += this.countValue(item)
+        }
         let percentage = portfolio.coin.map((current) => {
           if (this.getCoinObject(current.id)) {
-            let coinPriceTotal = parseFloat(current.amount) * this.getCoinObject(current.id).market_price * current.amount
-            return (coinPriceTotal * 100 / parseFloat(sum)).toFixed(2)
+            // let coinPriceTotal = parseFloat(current.amount) * this.getCoinObject(current.id).market_price * current.amount
+            // return (coinPriceTotal * 100 / parseFloat(sum)).toFixed(2)
+            let coinPrice = this.countValue(current)
+            console.log('PERECENTAGE', totalPortfolio, coinPrice)
+            let coinPercent = (coinPrice / totalPortfolio) * 100
+            return coinPercent.toFixed(0)
           }
         })
+        console.log('PERECENTAGE', totalPortfolio, labels, percentage)
         /**
          * Формируем в один объект
          * */
