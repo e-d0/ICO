@@ -104,6 +104,9 @@ export default {
     return {
       showInfo: false,
       options: {
+        /**
+         * Опции плагина
+         * */
         pieceLabel: {
           showActualPercentages: true,
           fontFamily: 'Roboto',
@@ -120,15 +123,34 @@ export default {
         outerRadius: outerRadius,
         innerRadius: innerRadius,
         // onHover: function (e) { console.log(e) },
+        /**
+         * Обработчик клика, который висит на бублике непосредственно.
+         * */
         onClick: function (e, item) {
+          /**
+         * Общая информация о канвасе. Функции с api charts.js
+         * */
           let activePoints = this.getElementAtEvent(e)
           let meta1 = this.getDatasetMeta(0)
           if (activePoints.length > 0) {
             // increase radius
+            /**
+             * Получаем текущую выбранную долю с клика
+             * */
             let index = activePoints[0]._index
-            let pierceLabel = activePoints['0']._chart.options.pieceLabel.fontColor
-            activePoints['0']._chart.options.pieceLabel.fontColor = pierceLabel === 'rgb(0,0,0,0)' ? clrFont : 'rgb(0,0,0,0)'
-            activePoints['0']._chart.options.pieceLabel.secondFontColor = pierceLabel === 'rgb(0,0,0,0)' ? clrSecondFont : 'rgb(0,0,0,0)'
+            /**
+             * Получаем текущие цвета лейблов и процентов с бублика
+             * */
+            let pierceLabelColor = activePoints['0']._chart.options.pieceLabel.fontColor
+            let pierceLabelSecondColor = activePoints['0']._chart.options.pieceLabel.fontColor
+            /**
+             * Делаем подписи видимыми/невидимыми
+             * */
+            activePoints['0']._chart.options.pieceLabel.fontColor = pierceLabelColor === 'rgb(0,0,0,0)' ? clrFont : 'rgb(0,0,0,0)'
+            activePoints['0']._chart.options.pieceLabel.secondFontColor = pierceLabelSecondColor === 'rgb(0,0,0,0)' ? clrSecondFont : 'rgb(0,0,0,0)'
+            /**
+             * Изменяем размер долей при клике. При клике в пустое место бублика, все сбрасываем в начальное положение
+             * */
             meta1.data.forEach(function (item) {
               if (item === meta1.data[index] && !item._model.isOpened) {
                 item._model.outerRadius = outerRadius
@@ -155,6 +177,9 @@ export default {
               // console.log('Closed')
             })
           }
+          /**
+           * Обновляем виджет с текущим набором данных
+           * */
           this.render(0)
         },
         layout: {
@@ -193,21 +218,31 @@ export default {
     }
   },
   methods: {
+    /**
+     * Функция отвечает за изменения цвета подписей и размера долей.
+     * Однако срабатывает от внешнего события 'chart:doughnut:check', а не от клика.
+     * */
     toggleChart (ticker, value) {
       let doughnutObj = this.$data._chart
       /**
-       * Получаем данные из нулевого набора данных(dataset)
+       * Получаем данные из нулевого набора (dataset)
        * */
       let chartElements = doughnutObj.getDatasetMeta(0)
+      /**
+       * Меняем цвет подписей
+       * */
       chartElements.data['0']._chart.options.pieceLabel.fontColor = value ? 'rgb(0,0,0,0)' : clrFont
       chartElements.data['0']._chart.options.pieceLabel.secondFontColor = value ? 'rgb(0,0,0,0)' : clrSecondFont
+      /**
+       * Изменяем размер долей
+       * */
       chartElements.data.forEach(item => {
         if (item._model.label === ticker) {
           item._model.outerRadius = value ? outerRadius : (outerRadius * 0.9)
           item._model.innerRadius = value ? (innerRadius * 0.9) : innerRadius
           item._model.isOpened = value
           /**
-           * Пробрасываем события, для отображения лейбла в донат чарте
+           * Пробрасываем события в глобальную шину, для отображения лейбла в чарте
            * */
           EventBus.$emit('chart:doughnut:grow', item._model.label, value)
         }
