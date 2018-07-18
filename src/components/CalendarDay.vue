@@ -32,7 +32,8 @@
              id="events"
              transition = "fade"
              ref="dragTarget"
-             v-wheel="onWheel">
+             @mousewheel.native="onWheel"
+    >
     <div class="events-group" v-if="dates"
                               v-for="(dayItem, dayInd) in dates"
                               :key="dayInd">

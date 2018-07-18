@@ -24,24 +24,22 @@ export default (function () {
       if (element === document.body || element === document || element === window) {
         document.onscroll = fn
       } else {
-        // if (element.addEventListener) {
-        //   if ('onwheel' in document) {
-        //     // IE9+, FF17+, Ch31+
-        //     element.addEventListener('wheel', fn)
-        //   } else if ('onmousewheel' in document) {
-        //     // устаревший вариант события
-        //     element.addEventListener('mousewheel', fn)
-        //   } else {
-        //     // Firefox < 17
-        //     element.addEventListener('MozMousePixelScroll', fn)
-        //   }
-        // } else { // IE8-
-        //   element.attachEvent('onmousewheel', fn)
-        // }
+        if (element.addEventListener) {
+          if ('onwheel' in document) {
+            // IE9+, FF17+, Ch31+
+            element.addEventListener('wheel', fn)
+          } else if ('onmousewheel' in document) {
+            // устаревший вариант события
+            element.addEventListener('mousewheel', fn)
+          } else {
+            // Firefox < 17
+            element.addEventListener('MozMousePixelScroll', fn)
+          }
+        } else { // IE8-
+          element.attachEvent('onmousewheel', fn)
+        }
         if (element.addEventListener) {
           element.addEventListener('mousewheel', fn)
-        } else {
-          element.attachEvent('on' + 'mousewheel', fn)
         }
       }
     }
