@@ -135,7 +135,8 @@
             <form-edit-operation-portfolio :index="index"
                                            :selectedCoin="item"
                                            :portfolio="portfolio"
-                                           :operation="operation"></form-edit-operation-portfolio>
+                                           :operation="operation"
+                                            @close-edit-record="toggleEditOperation(`formEditRecord--${index}${item.id}`)"></form-edit-operation-portfolio>
           </b-collapse>
         </div>
       </template>

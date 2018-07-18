@@ -253,6 +253,7 @@ export default {
         this.quantity = 0
         this.total = 0
       }
+      this.toggled = !this.toggled
     },
     /**
      * Операции покупки, продажи
@@ -660,7 +661,8 @@ export default {
       font-size: 14px;
       line-height: 11px;
       letter-spacing: -0.23px;
-      &--active {
+      &--active,
+      &:hover{
         padding: 13px 16px 10px;
         box-shadow: 0 2px 0 #707986, inset 0 2px 4px rgba(1, 1, 1, 0.3);
         border-radius: 4px;
@@ -689,7 +691,6 @@ export default {
         font-size: 14px;
         line-height: 11px;
         letter-spacing: -0.23px;
-
     }
   }
 </style>

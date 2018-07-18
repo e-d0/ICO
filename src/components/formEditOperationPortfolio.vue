@@ -169,6 +169,13 @@ export default {
     }
   },
   methods: {
+    /**
+     * Передает в родителя id формы, которую необходимо закрыть.
+     * */
+    closeEditOperation () {
+      this.$emit('close-edit-record', `formEditRecord--${this.index}${this.portfolio.id}`)
+      // this.$root.$emit('bv::toggle::collapse', `formEditRecord--${this.index}${this.portfolio.id}`)
+    },
     editOperation () {
       if (this.quantity !== this.operation.quantity) {
         let portfolioChanged = JSON.parse(JSON.stringify(this.portfolio))
@@ -265,6 +272,7 @@ export default {
 
         this.$store.dispatch('portfolio/changePortfolio', portfolioChanged)
       }
+      this.closeEditOperation()
     },
     countSwappedCoinQuantity (operation) {
       let count = operation.price / operation.price_per_coin_swapped
@@ -471,6 +479,11 @@ export default {
           font-weight: 500;
           font-size: 14px;
           line-height: 14px;
+          &:hover{
+            box-shadow: 0 2px 0 #3e9532, inset 0 2px 4px rgba(1, 1, 1, 0.3) !important;
+            background-color: #45af37;
+            text-shadow: none;
+          }
         }
       }
       &_name {

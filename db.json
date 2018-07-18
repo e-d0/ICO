@@ -716,7 +716,7 @@
       "coin": [
         {
           "id": 4,
-          "amount": 22.5,
+          "amount": 25.5,
           "operations": [
             {
               "date": "2018-06-17T02:36:04.632Z",
@@ -738,9 +738,9 @@
             {
               "date": "2018-06-21T10:53:48.302Z",
               "deal_currency": 1,
-              "price": "7334.2",
+              "price": 14668.4,
               "price_per_coin": "7334.2",
-              "quantity": 1,
+              "quantity": 2,
               "type": "bought"
             },
             {
@@ -758,12 +758,20 @@
               "price_per_coin": "7334.2",
               "quantity": 1,
               "type": "sold"
+            },
+            {
+              "date": "2018-07-18T02:41:27.251Z",
+              "deal_currency": 1,
+              "price": 14668.4,
+              "price_per_coin": "7334.2",
+              "quantity": 2,
+              "type": "bought"
             }
           ]
         },
         {
           "id": 5,
-          "amount": 62.406725,
+          "amount": 63.406725,
           "operations": [
             {
               "date": "2018-06-17T02:40:46.648Z",
@@ -786,16 +794,16 @@
             {
               "date": "2018-07-18T00:14:44.477Z",
               "deal_currency": 1,
-              "price": "13026",
+              "price": 13460.2,
               "price_per_coin": "434.2",
-              "quantity": "30",
+              "quantity": 31,
               "type": "bought"
             }
           ]
         },
         {
           "id": 6,
-          "amount": 13,
+          "amount": 16,
           "operations": [
             {
               "date": "2018-06-17T02:39:37.758Z",
@@ -817,9 +825,9 @@
             {
               "date": "2018-07-18T00:15:05.369Z",
               "deal_currency": 1,
-              "price": "123342",
+              "price": 160344.6,
               "price_per_coin": "12334.2",
-              "quantity": "10",
+              "quantity": 13,
               "type": "bought"
             }
           ]
@@ -856,14 +864,14 @@
         },
         {
           "id": 4,
-          "amount": 7,
+          "amount": 8,
           "operations": [
             {
               "date": "2018-06-08T13:31:25.376Z",
               "deal_currency": 1,
-              "price": "51339.4",
+              "price": 58673.6,
               "price_per_coin": "7334.2",
-              "quantity": 7,
+              "quantity": 8,
               "type": "bought"
             }
           ]
