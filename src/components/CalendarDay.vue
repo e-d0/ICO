@@ -67,11 +67,11 @@ import Vuex from 'vuex'
 import TWEEN from '@tweenjs/tween.js'
 import moment from 'moment'
 import Vue from 'vue'
-import vuewheel from 'vuewheel'
+import scrollWheel from './scrollWheel'
 
 const storeEvent = Vuex.createNamespacedHelpers('event')
 
-Vue.use(vuewheel)
+Vue.use(scrollWheel)
 
 export default {
   name: 'Day',

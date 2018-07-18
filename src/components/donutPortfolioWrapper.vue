@@ -81,7 +81,6 @@ export default {
         if (val) {
           this.coinStorage = coin
         } else if (event === 'All' || (this.coinStorage !== null && coin.id === this.coinStorage.id)) {
-          console.log('NULLED')
           this.coinStorage = null
         }
       }
@@ -103,9 +102,6 @@ export default {
      * Событие при смене портфолио
      * */
     EventBus.$on('changed:portfolio', this.clearStorage)
-  },
-  beforeDestroy () {
-    // this.coinStorage = null
   },
   destroyed () {
     EventBus.$off()
