@@ -6,6 +6,13 @@
  * @copyright Chen, Yi-Cyuan 2017-2018
  * @license MIT
  */
+/**
+ *  Во весь плагин добавил значение position === inside, дя того ,чтобы отображался лейбл снизу. Добавил новую позицию,
+ *  по принципу уже готовой позиции outside. Просто скопировал outside и потом уже правил значения, чтобы полностью вписаться
+ *  в код автора плагина и ничего не сломать.
+ *  Так же сделал возможным добавление в position массива значений.
+ *  Добавлены свойства secondFontSize и secondFontColor для добавления стиля внутренним лейблам.
+ * */
 import Chart from 'chart.js'
 (function () {
   if (typeof Chart === 'undefined') {
@@ -100,7 +107,9 @@ import Chart from 'chart.js'
         continue
       }
       ctx.save()
-
+      /**
+       * Если передан массив в позицию
+       * */
       if (this.position instanceof Array) {
         ctx.beginPath()
         this.position.forEach((posItem, index) => {
@@ -113,15 +122,24 @@ import Chart from 'chart.js'
              * Отступ считается ,как размер шрифта и данные из отступа для текста
              * */
             offset = (index > 0 ? this.secondFontSize : this.fontSize) + this.textMargin
+            /**
+             * Угол, по которому проходит центральная линия отдельной доли бублика
+             * */
             centreAngle = view.startAngle + ((view.endAngle - view.startAngle) / 2)
             if (posItem === 'border') {
               rangeFromCentre = (view.outerRadius - innerRadius) / 2 + innerRadius
             } else if (posItem === 'outside') {
               rangeFromCentre = (view.outerRadius - innerRadius) + innerRadius + offset
             } else if (posItem === 'inside') {
-              rangeFromCentre = (view.innerRadius) - offset * 2
+              /**
+               * Отступ от центра
+               * */
+              rangeFromCentre = (view.innerRadius) - (offset * 2)
               // rangeFromCentre = (view.outerRadius - innerRadius) + innerRadius + offset
             }
+            /**
+             * Начальная позиция элемента на круге
+             * */
             position = {
               x: view.x + (Math.cos(centreAngle) * rangeFromCentre),
               y: view.y + (Math.sin(centreAngle) * rangeFromCentre)
@@ -135,12 +153,14 @@ import Chart from 'chart.js'
               arcOffset = view.outerRadius + offset
             }
             if (posItem === 'inside') {
-              if (position.x < view.x) {
-                position.x -= offset
-              } else {
-                position.x += offset
+              /**
+               * Пересчитываю позицию для внутренних лейблов
+               * Подбивал значения на глаз.
+               * */
+              position = {
+                x: view.x + ((Math.cos(centreAngle) * rangeFromCentre) * 1.1),
+                y: view.y + ((Math.sin(centreAngle) * rangeFromCentre) * 1.1)
               }
-              arcOffset = view.innerRadius + offset
             }
           } else {
             innerRadius = view.innerRadius
