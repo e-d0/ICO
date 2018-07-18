@@ -45,7 +45,9 @@ import Chart from 'chart.js'
     this.labelBounds = []
     chartInstance.config.data.datasets.forEach(this.drawDataset)
   }
-
+  /**
+   * Функция ,где происходит перебор массива входящих данных и происходит отрисовка
+   * */
   PieceLabel.prototype.drawDataset = function (dataset) {
     let ctx = this.ctx
     var chartInstance = this.chartInstance
@@ -108,7 +110,7 @@ import Chart from 'chart.js'
       }
       ctx.save()
       /**
-       * Если передан массив в позицию
+       * Если передан массив в опциях доната в position
        * */
       if (this.position instanceof Array) {
         ctx.beginPath()
@@ -303,7 +305,9 @@ import Chart from 'chart.js'
       }
     }
   }
-
+  /**
+   * Собираем все данные с опций доната
+   * */
   PieceLabel.prototype.parseOptions = function (chartInstance) {
     var pieceLabel = chartInstance.options.pieceLabel
     if (pieceLabel) {
@@ -338,7 +342,10 @@ import Chart from 'chart.js'
       return false
     }
   }
-
+  /**
+   * Насколько я понял, фунция служит для проверки , влезает ли текст в канвас. Ничего здесь не правил
+   * @return boolean
+   * */
   PieceLabel.prototype.checkTextBound = function (left, right, top, bottom) {
     let labelBounds = this.labelBounds
     for (let i = 0; i < labelBounds.length; ++i) {
@@ -379,7 +386,9 @@ import Chart from 'chart.js'
     })
     return true
   }
-
+  /**
+   * Ничего не правил в этой функции
+   * */
   PieceLabel.prototype.measureText = function (text) {
     if (typeof text === 'object') {
       return { width: text.width, height: text.height }
@@ -388,6 +397,9 @@ import Chart from 'chart.js'
     }
   }
 
+  /**
+   * Ничего не правил в этой функции
+   * */
   PieceLabel.prototype.fillText = function (text, position, fontColor) {
     var ctx = this.ctx
     if (typeof text === 'object') {
@@ -411,6 +423,9 @@ import Chart from 'chart.js'
     }
   }
 
+  /**
+   * Ничего не правил в этой функции
+   * */
   PieceLabel.prototype.loadImage = function (obj) {
     var image = new Image()
     image.src = obj.src
@@ -419,6 +434,9 @@ import Chart from 'chart.js'
     return image
   }
 
+  /**
+   * Ничего не правил в этой функции
+   * */
   PieceLabel.prototype.drawArcText = function (str, radius, view, overlap) {
     var ctx, centerX, centerY, startAngle, endAngle
     ctx = this.ctx
@@ -459,6 +477,9 @@ import Chart from 'chart.js'
     ctx.restore()
   }
 
+  /**
+   * Функция, регистрирующая плагин. Здесь же можно прописать хуки. Ничего не правил в этой функции
+   * */
   Chart.pluginService.register({
     beforeInit: function (chartInstance) {
       chartInstance.pieceLabel = new PieceLabel()
