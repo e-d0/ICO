@@ -174,7 +174,6 @@ export default {
      * */
     closeEditOperation () {
       this.$emit('close-edit-record', `formEditRecord--${this.index}${this.portfolio.id}`)
-      // this.$root.$emit('bv::toggle::collapse', `formEditRecord--${this.index}${this.portfolio.id}`)
     },
     editOperation () {
       if (this.quantity !== this.operation.quantity) {

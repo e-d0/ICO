@@ -139,15 +139,10 @@ export default {
              * */
             let index = activePoints[0]._index
             /**
-             * Получаем текущие цвета лейблов и процентов с бублика
-             * */
-            let pierceLabelColor = activePoints['0']._chart.options.pieceLabel.fontColor
-            let pierceLabelSecondColor = activePoints['0']._chart.options.pieceLabel.fontColor
-            /**
              * Делаем подписи видимыми/невидимыми
              * */
-            activePoints['0']._chart.options.pieceLabel.fontColor = pierceLabelColor === 'rgb(0,0,0,0)' ? clrFont : 'rgb(0,0,0,0)'
-            activePoints['0']._chart.options.pieceLabel.secondFontColor = pierceLabelSecondColor === 'rgb(0,0,0,0)' ? clrSecondFont : 'rgb(0,0,0,0)'
+            activePoints['0']._chart.options.pieceLabel.fontColor = 'rgb(0,0,0,0)'
+            activePoints['0']._chart.options.pieceLabel.secondFontColor = 'rgb(0,0,0,0)'
             /**
              * Изменяем размер долей при клике. При клике в пустое место бублика, все сбрасываем в начальное положение
              * */

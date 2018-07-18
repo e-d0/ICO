@@ -80,12 +80,14 @@ export default {
         coin = coin.find(item => event === item.ticker)
         if (val) {
           this.coinStorage = coin
-        } else {
-          if ((this.coinStorage !== null && coin.id === this.coinStorage.id) || event === 'all') {
-            this.coinStorage = null
-          }
+        } else if (event === 'All' || (this.coinStorage !== null && coin.id === this.coinStorage.id)) {
+          console.log('NULLED')
+          this.coinStorage = null
         }
       }
+    },
+    clearStorage () {
+      this.coinStorage = null
     }
   },
   computed: {
@@ -97,9 +99,16 @@ export default {
   },
   created () {
     EventBus.$on('chart:doughnut:grow', this.showCoin)
+    /**
+     * Событие при смене портфолио
+     * */
+    EventBus.$on('changed:portfolio', this.clearStorage)
+  },
+  beforeDestroy () {
+    // this.coinStorage = null
   },
   destroyed () {
-    EventBus.$off('chart:doughnut:grow', this.showCoin)
+    EventBus.$off()
   }
 }
 </script>

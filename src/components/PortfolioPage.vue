@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { EventBus } from './eventbus'
 import tplHeader from './TheHeader'
 import tplFooter from './TheFooter'
 import PortfolioBody from './PortfolioBody'
@@ -60,6 +61,10 @@ export default {
     ...storeEvent.mapActions(['setCurrentPortfolio']),
     changePortfolio (index) {
       this.isActive = index
+      /**
+       * Оповещаем о смене портфолио
+       * */
+      EventBus.$emit('changed:portfolio')
     },
     /**
      * Загрузить все портфели в хранилище
