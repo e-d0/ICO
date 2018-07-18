@@ -1,6 +1,7 @@
 <script>
 /**
  * https://github.com/emn178/Chart.PieceLabel.js
+ * Плагин для отображения процентов на долях и внутренних лейблов. Модифицирован.
  * */
 import './Chart.PieceLabel'
 import { EventBus } from './eventbus'
