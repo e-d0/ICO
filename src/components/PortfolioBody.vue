@@ -215,12 +215,10 @@ export default {
             // let coinPriceTotal = parseFloat(current.amount) * this.getCoinObject(current.id).market_price * current.amount
             // return (coinPriceTotal * 100 / parseFloat(sum)).toFixed(2)
             let coinPrice = this.countValue(current)
-            console.log('PERECENTAGE', totalPortfolio, coinPrice)
             let coinPercent = (coinPrice / totalPortfolio) * 100
             return coinPercent.toFixed(0)
           }
         })
-        console.log('PERECENTAGE', totalPortfolio, labels, percentage)
         /**
          * Формируем в один объект
          * */

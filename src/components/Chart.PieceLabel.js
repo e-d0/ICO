@@ -6,6 +6,7 @@
  * @copyright Chen, Yi-Cyuan 2017-2018
  * @license MIT
  */
+import Chart from 'chart.js'
 (function () {
   if (typeof Chart === 'undefined') {
     console.warn('Can not find Chart object.')
@@ -17,10 +18,16 @@
   }
 
   PieceLabel.prototype.beforeDatasetsUpdate = function (chartInstance) {
+    let padding
     if (this.parseOptions(chartInstance) && this.position === 'outside') {
-      var padding = this.fontSize * 1.5 + this.outsidePadding
+      padding = this.fontSize * 1.5 + this.outsidePadding
       chartInstance.chartArea.top += padding
       chartInstance.chartArea.bottom -= padding
+    }
+    if (this.parseOptions(chartInstance) && this.position === 'inside') {
+      padding = this.fontSize * 1.5 + this.outsidePadding
+      chartInstance.chartArea.top -= padding
+      chartInstance.chartArea.bottom += padding
     }
   }
 
@@ -33,13 +40,14 @@
   }
 
   PieceLabel.prototype.drawDataset = function (dataset) {
-    var ctx = this.ctx
+    let ctx = this.ctx
     var chartInstance = this.chartInstance
     var meta = dataset._meta[Object.keys(dataset._meta)[0]]
     var totalPercentage = 0
     for (var i = 0; i < meta.data.length; i++) {
-      var element = meta.data[i],
-        view = element._view, text
+      let element, view, text
+      element = meta.data[i]
+      view = element._view
 
       // Skips label creation if value is zero and showZero is set
       if (view.circumference === 0 && !this.showZero) {
@@ -92,75 +100,187 @@
         continue
       }
       ctx.save()
-      ctx.beginPath()
-      ctx.font = Chart.helpers.fontString(this.fontSize, this.fontStyle, this.fontFamily)
-      var position, innerRadius, arcOffset
-      if (this.position === 'outside' || this.position === 'border') {
-        innerRadius = view.outerRadius / 2
-        var rangeFromCentre, offset = this.fontSize + this.textMargin,
-          centreAngle = view.startAngle + ((view.endAngle - view.startAngle) / 2)
-        if (this.position === 'border') {
-          rangeFromCentre = (view.outerRadius - innerRadius) / 2 + innerRadius
-        } else if (this.position === 'outside') {
-          rangeFromCentre = (view.outerRadius - innerRadius) + innerRadius + offset
-        }
-        position = {
-          x: view.x + (Math.cos(centreAngle) * rangeFromCentre),
-          y: view.y + (Math.sin(centreAngle) * rangeFromCentre)
-        }
-        if (this.position === 'outside') {
-          if (position.x < view.x) {
-            position.x -= offset
-          } else {
-            position.x += offset
-          }
-          arcOffset = view.outerRadius + offset
-        }
-      } else {
-        innerRadius = view.innerRadius
-        position = element.tooltipPosition()
-      }
 
-      var fontColor = this.fontColor
-      if (typeof fontColor === 'function') {
-        fontColor = fontColor({
-          label: chartInstance.config.data.labels[i],
-          value: dataset.data[i],
-          percentage: percentage,
-          text: text,
-          backgroundColor: dataset.backgroundColor[i],
-          dataset: dataset,
-          index: i
-        })
-      } else if (typeof fontColor !== 'string') {
-        fontColor = fontColor[i] || this.options.defaultFontColor
-      }
-      if (this.arc) {
-        if (!arcOffset) {
-          arcOffset = (innerRadius + view.outerRadius) / 2
+      if (this.position instanceof Array) {
+        ctx.beginPath()
+        this.position.forEach((posItem, index) => {
+          ctx.font = Chart.helpers.fontString(index > 0 ? this.secondFontSize : this.fontSize, this.fontStyle, this.fontFamily)
+          var position, innerRadius, arcOffset
+          if (posItem === 'outside' || posItem === 'inside' || posItem === 'border') {
+            innerRadius = view.outerRadius / 2
+            let rangeFromCentre, offset, centreAngle
+            /**
+             * Отступ считается ,как размер шрифта и данные из отступа для текста
+             * */
+            offset = (index > 0 ? this.secondFontSize : this.fontSize) + this.textMargin
+            centreAngle = view.startAngle + ((view.endAngle - view.startAngle) / 2)
+            if (posItem === 'border') {
+              rangeFromCentre = (view.outerRadius - innerRadius) / 2 + innerRadius
+            } else if (posItem === 'outside') {
+              rangeFromCentre = (view.outerRadius - innerRadius) + innerRadius + offset
+            } else if (posItem === 'inside') {
+              rangeFromCentre = (view.innerRadius) - offset * 2
+              // rangeFromCentre = (view.outerRadius - innerRadius) + innerRadius + offset
+            }
+            position = {
+              x: view.x + (Math.cos(centreAngle) * rangeFromCentre),
+              y: view.y + (Math.sin(centreAngle) * rangeFromCentre)
+            }
+            if (posItem === 'outside') {
+              if (position.x < view.x) {
+                position.x -= offset
+              } else {
+                position.x += offset
+              }
+              arcOffset = view.outerRadius + offset
+            }
+            if (posItem === 'inside') {
+              if (position.x < view.x) {
+                position.x -= offset
+              } else {
+                position.x += offset
+              }
+              arcOffset = view.innerRadius + offset
+            }
+          } else {
+            innerRadius = view.innerRadius
+            position = element.tooltipPosition()
+          }
+
+          var fontColor = index > 0 ? this.secondFontColor : this.fontColor
+          if (typeof fontColor === 'function') {
+            fontColor = fontColor({
+              label: chartInstance.config.data.labels[i],
+              value: dataset.data[i],
+              percentage: percentage,
+              text: text,
+              backgroundColor: dataset.backgroundColor[i],
+              dataset: dataset,
+              index: i
+            })
+          } else if (typeof fontColor !== 'string') {
+            fontColor = fontColor[i] || this.options.defaultFontColor
+          }
+          if (this.arc) {
+            if (!arcOffset) {
+              arcOffset = (innerRadius + view.outerRadius) / 2
+            }
+            ctx.fillStyle = fontColor
+            ctx.textBaseline = 'middle'
+            this.drawArcText(text, arcOffset, view, this.overlap)
+          } else {
+            var drawable, mertrics, left, right, top, bottom
+            mertrics = this.measureText(text)
+            left = position.x - mertrics.width / 2
+            right = position.x + mertrics.width / 2
+            top = position.y - this.secondFontSize / 2
+            bottom = position.y + this.secondFontSize / 2
+            if (this.overlap) {
+              drawable = true
+            } else if (posItem === 'outside') {
+              drawable = this.checkTextBound(left, right, top, bottom)
+            } else if (posItem === 'inside') {
+              drawable = this.checkTextBound(left, right, top, bottom)
+            } else {
+              drawable = element.inRange(left, top) && element.inRange(left, bottom) &&
+                element.inRange(right, top) && element.inRange(right, bottom)
+            }
+            if (drawable) {
+              this.fillText(
+                index > 0 ? chartInstance.config.data.labels[i] : text,
+                position,
+                fontColor
+              )
+            }
+          }
+          ctx.restore()
         }
-        ctx.fillStyle = fontColor
-        ctx.textBaseline = 'middle'
-        this.drawArcText(text, arcOffset, view, this.overlap)
+        )
       } else {
-        var drawable, mertrics = this.measureText(text),
-          left = position.x - mertrics.width / 2,
-          right = position.x + mertrics.width / 2,
-          top = position.y - this.fontSize / 2,
-          bottom = position.y + this.fontSize / 2
-        if (this.overlap) {
-          drawable = true
-        } else if (this.position === 'outside') {
-          drawable = this.checkTextBound(left, right, top, bottom)
+        ctx.beginPath()
+        ctx.font = Chart.helpers.fontString(this.fontSize, this.fontStyle, this.fontFamily)
+        var position, innerRadius, arcOffset
+        if (this.position === 'outside' || this.position === 'inside' || this.position === 'border') {
+          innerRadius = view.outerRadius / 2
+          var rangeFromCentre, offset, centreAngle
+          offset = this.fontSize + this.textMargin
+          centreAngle = view.startAngle + ((view.endAngle - view.startAngle) / 2)
+          if (this.position === 'border') {
+            rangeFromCentre = (view.outerRadius - innerRadius) / 2 + innerRadius
+          } else if (this.position === 'outside') {
+            rangeFromCentre = (view.outerRadius - innerRadius) + innerRadius + offset
+          } else if (this.position === 'inside') {
+            rangeFromCentre = (view.innerRadius) - offset * 2
+          }
+          position = {
+            x: view.x + (Math.cos(centreAngle) * rangeFromCentre),
+            y: view.y + (Math.sin(centreAngle) * rangeFromCentre)
+          }
+          if (this.position === 'outside') {
+            if (position.x < view.x) {
+              position.x -= offset
+            } else {
+              position.x += offset
+            }
+            arcOffset = view.outerRadius + offset
+          }
+          if (this.position === 'inside') {
+            if (position.x < view.x) {
+              position.x -= offset
+            } else {
+              position.x += offset
+            }
+            arcOffset = view.innerRadius
+          }
         } else {
-          drawable = element.inRange(left, top) && element.inRange(left, bottom) &&
-            element.inRange(right, top) && element.inRange(right, bottom)
+          innerRadius = view.innerRadius
+          position = element.tooltipPosition()
         }
-        if (drawable) {
-          this.fillText(text, position, fontColor)
+
+        var fontColor = this.fontColor
+        if (typeof fontColor === 'function') {
+          fontColor = fontColor({
+            label: chartInstance.config.data.labels[i],
+            value: dataset.data[i],
+            percentage: percentage,
+            text: text,
+            backgroundColor: dataset.backgroundColor[i],
+            dataset: dataset,
+            index: i
+          })
+        } else if (typeof fontColor !== 'string') {
+          fontColor = fontColor[i] || this.options.defaultFontColor
         }
+        if (this.arc) {
+          if (!arcOffset) {
+            arcOffset = (innerRadius + view.outerRadius) / 2
+          }
+          ctx.fillStyle = fontColor
+          ctx.textBaseline = 'middle'
+          this.drawArcText(text, arcOffset, view, this.overlap)
+        } else {
+          var drawable, mertrics, left, right, top, bottom
+          mertrics = this.measureText(text)
+          left = position.x - mertrics.width / 2
+          right = position.x + mertrics.width / 2
+          top = position.y - this.fontSize / 2
+          bottom = position.y + this.fontSize / 2
+          if (this.overlap) {
+            drawable = true
+          } else if (this.position === 'outside') {
+            drawable = this.checkTextBound(left, right, top, bottom)
+          } else if (this.position === 'inside') {
+            drawable = this.checkTextBound(left, right, top, bottom)
+          } else {
+            drawable = element.inRange(left, top) && element.inRange(left, bottom) &&
+              element.inRange(right, top) && element.inRange(right, bottom)
+          }
+          if (drawable) {
+            this.fillText(text, position, fontColor)
+          }
+        }
+        ctx.restore()
       }
-      ctx.restore()
     }
   }
 
@@ -176,7 +296,9 @@
       this.format = pieceLabel.format
       this.precision = pieceLabel.precision || 0
       this.fontSize = pieceLabel.fontSize || this.options.defaultFontSize
+      this.secondFontSize = pieceLabel.secondFontSize || this.options.defaultFontSize
       this.fontColor = pieceLabel.fontColor || this.options.defaultFontColor
+      this.secondFontColor = pieceLabel.secondFontColor || this.options.defaultFontColor
       this.fontStyle = pieceLabel.fontStyle || this.options.defaultFontStyle
       this.fontFamily = pieceLabel.fontFamily || this.options.defaultFontFamily
       this.shadowOffsetX = pieceLabel.shadowOffsetX || 3
@@ -198,18 +320,18 @@
   }
 
   PieceLabel.prototype.checkTextBound = function (left, right, top, bottom) {
-    var labelBounds = this.labelBounds
-    for (var i = 0; i < labelBounds.length; ++i) {
-      var bound = labelBounds[i]
-      var potins = [
+    let labelBounds = this.labelBounds
+    for (let i = 0; i < labelBounds.length; ++i) {
+      let bound = labelBounds[i]
+      let potins = [
         [left, top],
         [left, bottom],
         [right, top],
         [right, bottom]
       ]
-      for (var j = 0; j < potins.length; ++j) {
-        var x = potins[j][0]
-        var y = potins[j][1]
+      for (let j = 0; j < potins.length; ++j) {
+        let x = potins[j][0]
+        let y = potins[j][1]
         if (x >= bound.left && x <= bound.right && y >= bound.top && y <= bound.bottom) {
           return false
         }
@@ -220,9 +342,10 @@
         [bound.right, bound.top],
         [bound.right, bound.bottom]
       ]
-      for (var j = 0; j < potins.length; ++j) {
-        var x = potins[j][0]
-        var y = potins[j][1]
+      for (let j = 0; j < potins.length; ++j) {
+        let x
+        x = potins[j][0]
+        let y = potins[j][1]
         if (x >= left && x <= right && y >= top && y <= bottom) {
           return false
         }
@@ -277,11 +400,12 @@
   }
 
   PieceLabel.prototype.drawArcText = function (str, radius, view, overlap) {
-    var ctx = this.ctx,
-      centerX = view.x,
-      centerY = view.y,
-      startAngle = view.startAngle,
-      endAngle = view.endAngle
+    var ctx, centerX, centerY, startAngle, endAngle
+    ctx = this.ctx
+    centerX = view.x
+    centerY = view.y
+    startAngle = view.startAngle
+    endAngle = view.endAngle
 
     ctx.save()
     ctx.translate(centerX, centerY)
@@ -305,7 +429,7 @@
         ctx.translate(0, -1 * radius)
         ctx.fillText(char, 0, 0)
         ctx.restore()
-        ctx.rotate(mertrics.width / radius)
+        ctx.rotate(mertrics.width / (radius))
       }
     } else {
       ctx.rotate((origStartAngle + endAngle) / 2)
