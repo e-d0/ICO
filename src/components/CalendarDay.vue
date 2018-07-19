@@ -155,7 +155,6 @@ export default {
          * Одинаковое ограничение для delta [-1,1] для корректной работы во всех браузерах
          * */
         delta = Math.max(-1, Math.min(1, delta))
-        console.log(delta)
         if (delta < 0 && target.scrollWidth > (target.clientWidth + target.scrollLeft + 16)) {
           e.preventDefault()
           pos += -delta * speed
