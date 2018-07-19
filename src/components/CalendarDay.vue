@@ -28,11 +28,10 @@
              <!--v-on:swiperight="onSwipeRight"-->
              <!--v-on:swipeup="onSwipeLeft"-->
              <!--v-on:swipedown="onSwipeRight"-->
-    <v-touch class="events"
+            <!--@mousewheel.native="onWheel"-->
+    <div class="events"
              id="events"
-             transition = "fade"
              ref="dragTarget"
-             @mousewheel.native="onWheel"
     >
     <div class="events-group" v-if="dates"
                               v-for="(dayItem, dayInd) in dates"
@@ -56,7 +55,7 @@
         </div>
 
     </div>
-    </v-touch>
+    </div>
   </div>
 
 </template>
@@ -67,12 +66,8 @@ import { generateHours, EventBus, isSameOnlyDate } from './eventbus'
 import Vuex from 'vuex'
 import TWEEN from '@tweenjs/tween.js'
 import moment from 'moment'
-import Vue from 'vue'
-import scrollWheel from './scrollWheel'
 
 const storeEvent = Vuex.createNamespacedHelpers('event')
-
-Vue.use(scrollWheel)
 
 export default {
   name: 'Day',
@@ -109,9 +104,10 @@ export default {
   },
   methods: {
     /**
-     * Отслеживание скролла осуществляется за счет маленького миксина https://github.com/Tombarr/vue-wheel
+     * свайп пока отключен
      * */
     onWheel: function (e) {
+      console.log(e)
       /**
        * Полная ширина элемента с учетом спрятанного
        * */
@@ -124,18 +120,88 @@ export default {
        * На какую длину уже сделан скролл
        * */
       let scrollLeft = this.$el.querySelector('#events').scrollLeft
-      let scrollUp = -100
-      let scrollDown = 100
-      if (e.deltaY === scrollDown && scrollWidth > clientWidth + scrollLeft) {
+      // let scrollUp = -100
+      // let scrollDown = 100
+      if (e.deltaY >= 0 && scrollWidth > clientWidth + scrollLeft) {
         e.preventDefault()
         this.onSwipeLeft()
         console.log(scrollWidth)
-      } else if (e.deltaY === scrollUp && scrollLeft !== 0) {
+      } else if (e.deltaY <= 0 && scrollLeft !== 0) {
         e.preventDefault()
         this.onSwipeRight()
         console.log(scrollWidth)
       }
     },
+
+    smoothScroll: function (target, speed, smooth) {
+      /**
+       * Кросс браузерный суппор для скрола
+       * */
+      if (target === document) { target = (document.documentElement || document.body.parentNode || document.body) }
+      let moving = false
+      let pos = target.scrollLeft
+      target.addEventListener('mousewheel', scrolled, false)
+      target.addEventListener('DOMMouseScroll', scrolled, false)
+
+      function scrolled (e) {
+        let delta = e.delta || e.wheelDelta || e.deltaY
+        if (delta === undefined) {
+          /**
+           * Исключение для firefox
+           * */
+          delta = -e.detail
+        }
+        /**
+         * Одинаковое ограничение для delta [-1,1] для корректной работы во всех браузерах
+         * */
+        delta = Math.max(-1, Math.min(1, delta))
+        console.log(delta)
+        if (delta < 0 && target.scrollWidth > (target.clientWidth + target.scrollLeft + 16)) {
+          e.preventDefault()
+          pos += -delta * speed
+          /**
+           * Ограничение для скрола
+           * */
+          pos = Math.max(0, Math.min(pos, target.scrollWidth - target.clientWidth)) // limit scrolling
+        }
+        if (delta > 0 && target.scrollLeft !== 0) {
+          e.preventDefault()
+          pos += -delta * speed
+          /**
+           * Ограничение для скрола
+           * */
+          pos = Math.max(0, Math.min(pos, target.scrollWidth - target.clientWidth)) // limit scrolling
+        }
+
+        if (!moving) update()
+      }
+
+      function update () {
+        moving = true
+        let delta = (pos - target.scrollLeft) / smooth
+        target.scrollLeft += delta
+        /**
+         * Если скролл, запускаем requestAnimationFrame
+         * */
+        if (Math.abs(delta) > 0.5) { requestFrame(update) } else { moving = false }
+      }
+      /**
+       * Кроссбраузерный requestAnimationFrame
+       * */
+      let requestFrame = (function () {
+        return (
+          window.requestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.oRequestAnimationFrame ||
+          window.msRequestAnimationFrame ||
+          function (func) {
+            window.setTimeout(func, 1000 / 50)
+          }
+        )
+      }())
+    },
+
     /**
      * Фильтр по текущему дню
      * */
@@ -274,6 +340,10 @@ export default {
   },
   mounted () {
     this.timeOffset()
+    /**
+     * весибработчик на скролл
+     * */
+    this.smoothScroll(this.$refs.dragTarget, 120, 12)
   },
   destroyed () {
     EventBus.$off()

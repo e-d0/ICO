@@ -18,7 +18,7 @@
 
   </ul>
 
-</template>s
+</template>
 
 <script>
 import popover from './popover'
@@ -124,7 +124,7 @@ export default {
       color: #999;
       border-style: solid;
       border-width: 3px 0 3px 4px;
-      border-color: transparent transparent transparent rgba(63, 63, 63, 0.61);
+      border-color: transparent transparent transparent #3f3f3f9c;
       content: "";
     }
     &.last{
