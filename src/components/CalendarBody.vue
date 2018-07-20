@@ -419,6 +419,8 @@ export default {
       position: relative;
       /*display: flex;*/
       height: 48px;
+      min-height: 48px;
+      max-height: 48px;
       border-bottom: 1px solid #e0e6ed;
       //overflow: hidden;
       &:last-child {

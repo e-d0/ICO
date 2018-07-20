@@ -386,7 +386,9 @@ export default {
   }
   #events{}
 .empty-slot{
-    height: 62px;
+    min-height: 63px;
+    max-height: 63px;
+    height: 63px;
     border-bottom: 1px solid #e0e6ed;
   }
 </style>
