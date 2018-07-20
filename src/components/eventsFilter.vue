@@ -128,12 +128,7 @@ export default {
      * Считаем количество событий по типу
      * */
     itemCount (type) {
-      let events
-      if (this.actual !== undefined) {
-        this.actual ? events = this.actualEvents(this.moment()) : events = this.pastEvents(this.moment())
-      } else {
-        events = this.events
-      }
+      let events = this.events
       if (events !== undefined) {
         let count = 0
         events.filter((event) => {
