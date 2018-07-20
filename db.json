@@ -2079,5 +2079,157 @@
         }
       ]
     }
+  ],
+  "operations_by_day":[
+    {
+      "date": "2018-06-17T02:36:04.632Z",
+      "portfolio_cost": "3213489",
+      "operations": [
+        {
+          "type": "sold",
+          "value": "2.36",
+          "ticker": "BTC",
+          "swapped_in": ""
+        },
+        {
+          "type": "bought",
+          "value": "1.76",
+          "ticker": "ETH",
+          "swapped_in": ""
+        },
+        {
+          "type": "swapped",
+          "value": "4.76",
+          "ticker": "ETH",
+          "swapped_in": "3",
+          "swapped_in_ticker": "BTC"
+        }
+      ]
+    },
+    {
+      "date": "2018-06-18T02:36:04.632Z",
+      "portfolio_cost": "689326",
+      "operations": [
+        {
+          "type": "bought",
+          "value": "0.76",
+          "ticker": "ETH",
+          "swapped_in": ""
+        },
+        {
+          "type": "swapped",
+          "value": "2.76",
+          "ticker": "ETH",
+          "swapped_in_ticker": "BTC",
+          "swapped_in": "3"
+        },
+        {
+          "type": "sold",
+          "value": "0.36",
+          "ticker": "BTC",
+          "swapped_in": ""
+        }
+      ]
+    },
+    {
+      "date": "2018-06-19T02:36:04.632Z",
+      "portfolio_cost": "938932",
+      "operations": [
+        {
+          "type": "bought",
+          "value": "0.76",
+          "ticker": "ETH",
+          "swapped_in": ""
+        },
+        {
+          "type": "sold",
+          "value": "0.36",
+          "ticker": "BTC",
+          "swapped_in": ""
+        },
+        {
+          "type": "swapped",
+          "value": "2.76",
+          "ticker": "ETH",
+          "swapped_in": "3",
+          "swapped_in_ticker": "BTC"
+        }
+      ]
+    },
+    {
+      "date": "2018-06-21T02:36:04.632Z",
+      "portfolio_cost": "4383332",
+      "operations": [
+        {
+          "type": "swapped",
+          "value": "2.76",
+          "ticker": "ETH",
+          "swapped_in_ticker": "BTC",
+          "swapped_in": "3"
+        },
+        {
+          "type": "bought",
+          "value": "0.76",
+          "ticker": "ETH",
+          "swapped_in": ""
+        },
+        {
+          "type": "sold",
+          "value": "0.36",
+          "ticker": "BTC",
+          "swapped_in": ""
+        }
+      ]
+    },
+    {
+      "date": "2018-07-19T02:36:04.632Z",
+      "portfolio_cost": "6938955",
+      "operations": [
+        {
+          "type": "sold",
+          "value": "0.36",
+          "ticker": "BTC",
+          "swapped_in": ""
+        },
+        {
+          "type": "bought",
+          "value": "0.76",
+          "ticker": "ETH",
+          "swapped_in": ""
+        },
+        {
+          "type": "swapped",
+          "value": "2.76",
+          "ticker": "ETH",
+          "swapped_in_ticker": "BTC",
+          "swapped_in": "3"
+        }
+      ]
+    },
+    {
+      "date": "2019-07-19T02:36:04.632Z",
+      "portfolio_cost": "268888",
+      "operations": [
+        {
+          "type": "swapped",
+          "value": "2.76",
+          "ticker": "ETH",
+          "swapped_in_ticker": "BTC",
+          "swapped_in": "3"
+        },
+        {
+          "type": "bought",
+          "value": "0.76",
+          "ticker": "ETH",
+          "swapped_in": ""
+        },
+        {
+          "type": "sold",
+          "value": "0.36",
+          "ticker": "BTC",
+          "swapped_in": ""
+        }
+      ]
+    }
   ]
 }

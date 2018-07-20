@@ -80,14 +80,13 @@
             <!-- /.portfolio_deviation -->
             <div v-if="portfolio" class="portfolio_changes">
               <a href="#"
-                 @click.prevent="togglePortfolioChart()"
+                 @click.prevent="toggleCollapse(`chartPortfolio-${portfolio.id}`)"
                  v-html="$t('portfolio.changes_chart')"></a>
             </div>
           </div>
           <!-- /.portfolio_bottom-line -->
-            <b-collapse v-if="portfolio" :id="`chartPortfolio-${portfolio.id}`" class="">
-              <PortfolioChartWrapper :portfolio="portfolio"/>
-            </b-collapse>
+
+            <PortfolioChartWrapper :style="collapsable" v-if="portfolio" :ref="`chartPortfolio-${portfolio.id}`" :portfolio="portfolio"/>
 
             <b-collapse id="formAddDeleteCoin" class="">
               <form-add-delete-coin :portfolio.sync="portfolio" ></form-add-delete-coin>
@@ -124,6 +123,11 @@ export default {
   },
   data () {
     return {
+      collapsable: [
+        {maxHeight: '0px'},
+        {overflow: 'hidden'},
+        {transition: 'max-height 0.3s ease-out'}
+      ],
       tipData: {
         title: `<div class="tooltip-inner-custom">${this.$t('portfolio.renew')}</div>`,
         template: `<div class="tooltip custom" role="tooltip"> <div class="arrow"></div> <div class="tooltip-inner"></div> </div>`,
@@ -167,9 +171,13 @@ export default {
     }
   },
   methods: {
-    togglePortfolioChart () {
-      this.showPortfolioChart = !this.showPortfolioChart
-      this.$root.$emit('bv::toggle::collapse', `chartPortfolio-${this.portfolio.id}`, this.showPortfolioChart)
+    toggleCollapse (ref) {
+      console.log(ref)
+      if (this.$refs[ref].$el.style.maxHeight === '0px') {
+        this.$refs[ref].$el.style.maxHeight = this.$refs[ref].$el.scrollHeight + 'px'
+      } else {
+        this.$refs[ref].$el.style.maxHeight = '0px'
+      }
     },
     switchPublicPortfolio () {
       let el = document.getElementById(`portfolio-links-${this.portfolio.id}`)

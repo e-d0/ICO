@@ -1,11 +1,11 @@
 <template>
-    <div class="chart_portfolio__wrapper">
+    <div :class="['chart_portfolio__wrapper']">
         <h4>Portfolio Chart</h4>
         <chart-portfolio ref="chartsPortfolio"
                          :options="options"
                          :chart-id="options.chartId"
                          :chart-data="datacollection"
-                         :width ="930"
+                         :width ="900"
                          :height="241"></chart-portfolio>
         <div class="row">
             <div class="col-md-6 chart_portfolio__labels">
