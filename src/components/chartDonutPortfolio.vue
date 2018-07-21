@@ -122,7 +122,6 @@ export default {
         id: 'doughnutChart',
         outerRadius: outerRadius,
         innerRadius: innerRadius,
-        // onHover: function (e) { console.log(e) },
         /**
          * Обработчик клика, который висит на бублике непосредственно.
          * */
@@ -134,6 +133,7 @@ export default {
           let meta1 = this.getDatasetMeta(0)
           if (activePoints.length > 0) {
             // increase radius
+            console.log('ACTIVE', activePoints)
             /**
              * Получаем текущую выбранную долю с клика
              * */
@@ -153,7 +153,7 @@ export default {
                 item._model.isOpened = true
                 EventBus.$emit('chart:doughnut:grow', item._model.label, true)
                 // console.log('Opened')
-              } else {
+              } else if (item === meta1.data[index] && item._model.isOpened) {
                 item._model.outerRadius = outerRadius * 0.9
                 item._model.innerRadius = innerRadius
                 item._model.isOpened = false
@@ -161,9 +161,14 @@ export default {
                 // console.log('Closed')
               }
             })
+            let chkArr = meta1.data.filter(item => {
+              if (item._model.isOpened) { return item }
+            })
+            if (chkArr.length <= 0) {
+              activePoints['0']._chart.options.pieceLabel.fontColor = clrFont
+              activePoints['0']._chart.options.pieceLabel.secondFontColor = clrSecondFont
+            }
           } else {
-            meta1.data['0']._chart.options.pieceLabel.fontColor = clrFont
-            meta1.data['0']._chart.options.pieceLabel.secondFontColor = clrSecondFont
             meta1.data.forEach(function (item) {
               item._model.outerRadius = outerRadius * 0.9
               item._model.innerRadius = innerRadius
@@ -171,6 +176,8 @@ export default {
               EventBus.$emit('chart:doughnut:grow', item._model.label, false)
               // console.log('Closed')
             })
+            meta1.data['0']._chart.options.pieceLabel.fontColor = clrFont
+            meta1.data['0']._chart.options.pieceLabel.secondFontColor = clrSecondFont
           }
           /**
            * Обновляем виджет с текущим набором данных

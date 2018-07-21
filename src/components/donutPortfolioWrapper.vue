@@ -30,6 +30,12 @@ export default {
     totalCost: null
   },
   methods: {
+    /**
+     * Загрузить все портфели в хранилище
+     * */
+    async getCoins () {
+      await this.$store.dispatch('portfolio/getCoins')
+    },
     isPositive (value) {
       return value > 0 ? 'positive' : 'negative'
     },
@@ -75,7 +81,7 @@ export default {
       return coinStorage
     },
     showCoin (event, val) {
-      if (this.coins !== undefined) {
+      if (this.coins) {
         let coin = JSON.parse(JSON.stringify(this.coins))
         coin = coin.find(item => event === item.ticker)
         if (val) {
@@ -96,12 +102,14 @@ export default {
       currencyConverter: 'currencyConverter'
     })
   },
-  created () {
+  mounted () {
     EventBus.$on('chart:doughnut:grow', this.showCoin)
     /**
      * Событие при смене портфолио
      * */
     EventBus.$on('changed:portfolio', this.clearStorage)
+  },
+  created () {
   },
   destroyed () {
     EventBus.$off()
