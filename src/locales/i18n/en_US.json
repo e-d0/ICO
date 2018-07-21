@@ -30,7 +30,8 @@
     "AddReminder": "Add reminder",
     "ReminderAdded": "Reminder added",
     "EndsIn": "Ends {time}",
-    "StartsIn": "Starts {time}"
+    "StartsIn": "Starts {time}",
+    "no_events": "Events scheduler is empty for this day"
   },
   "form": {
     "eventFilterTitle": "EVENT FILTER",

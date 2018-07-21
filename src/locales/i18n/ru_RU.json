@@ -55,7 +55,8 @@
     "add_coin": "Добавить монету",
     "Cancel": "Отмена",
     "add_ico_calendar": "Добавить ICO в Каденарь",
-    "add_ico_name": "название"
+    "add_ico_name": "название",
+    "no_events": "На этот день в расписании нет событий"
   },
   "portfolio": {
     "Add_portfolio": "Добавить портфолио",

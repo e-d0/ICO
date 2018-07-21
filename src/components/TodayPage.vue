@@ -11,7 +11,7 @@
         </div>
       </div>
       <div class="col-md-12 col-lg-9">
-        <div class="timeline timeline--calendar calendar__today">
+        <div :class="['timeline', 'timeline--calendar', 'calendar__today', `${currentTabComponent}`]">
 
           <div class="timeline_top-line">
             <div class="timeline_date">
@@ -25,7 +25,7 @@
 
               <a :class="['view-1',{ active: currentTabComponent === 'TodayDay' }]" @click="currentTabComponent = 'TodayDay'"></a>
 
-              <a :class="['view-2',{ active: currentTabComponent === 'TodayEventsAll' }]" @click="currentTabComponent = 'TodayEventsAll'"></a>
+              <a :class="['view-2',{ active: currentTabComponent === 'TodayDayView2' }]" @click="currentTabComponent = 'TodayDayView2'"></a>
 
             </div>
 
@@ -48,16 +48,22 @@
                                 :index="index"
                                 ></component>
           </keep-alive >
-          <keep-alive v-else >
-            <component :is="'TodayEventsAll'"></component>
+          <keep-alive v-if="currentTabComponent === 'TodayDayView2'"
+                      v-for="(item, index) in localDatesStorage"
+                      :key="index">
+            <component  :class="[{'first': index === 0}]"
+                        :date="moment(item).toDate()"
+                        :startHour="isFirstDay(index)"
+                        :is="'TodayDayView2'"
+                        :index="index"
+            ></component>
           </keep-alive>
 
-          <a  v-if="this.currentTabComponent === 'TodayDay'"
-              href="#"
+          <a href="#"
               class="show-more"
               @click.prevent="showMore()">
             {{ $t('calendar.ShowMore24') }}</a>
-          <a  v-if="this.currentTabComponent === 'TodayDay' && localDatesStorage.length > 1"
+          <a  v-if="localDatesStorage.length > 1"
               href="#"
               style="float: right;"
               class="show-more"
@@ -76,7 +82,7 @@
 <script>
 import tplHeader from './TheHeader'
 import tplFooter from './TheFooter'
-import TodayEventsAll from './TodayEventsAll'
+import TodayDayView2 from './TodayDayView2'
 import eventsFilter from './eventsFilter'
 import TodayDay from './TodayDay'
 import eventsFilterActual from './eventsFilterActual'
@@ -84,7 +90,7 @@ import { EventBus } from './eventbus'
 import formTimeZone from './formTimeZone'
 export default {
   name: 'TodayPage',
-  components: { tplHeader, tplFooter, eventsFilter, eventsFilterActual, TodayEventsAll, TodayDay, formTimeZone },
+  components: { tplHeader, tplFooter, eventsFilter, eventsFilterActual, TodayDayView2, TodayDay, formTimeZone },
   data () {
     return {
       localDatesStorage: [this.moment().toISOString()],
@@ -190,6 +196,7 @@ export default {
   .calendar__today_item.first .timeline_item-head{
     display: none;
   }
+
   .show-more {
     display: inline-block;
     height: 14px;
@@ -207,6 +214,9 @@ export default {
       text-decoration: none;
     }
   }
+  .TodayDayView2 .show-more {
+    margin-left: 0;
+  }
   .calendar--body{
     display: flex;
     flex-direction: row;
@@ -223,7 +233,7 @@ export default {
     -webkit-box-shadow: 0 4px 8px rgba(184, 194, 201, 0.69);
     box-shadow: 0 4px 8px rgba(184, 194, 201, 0.69);
     border-radius: 4px;
-    overflow-x: hidden;
+    overflow: hidden;
   }
   /*.events::-webkit-scrollbar {*/
   /*}*/
