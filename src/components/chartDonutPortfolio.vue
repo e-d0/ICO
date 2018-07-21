@@ -133,7 +133,6 @@ export default {
           let meta1 = this.getDatasetMeta(0)
           if (activePoints.length > 0) {
             // increase radius
-            console.log('ACTIVE', activePoints)
             /**
              * Получаем текущую выбранную долю с клика
              * */
@@ -153,7 +152,7 @@ export default {
                 item._model.isOpened = true
                 EventBus.$emit('chart:doughnut:grow', item._model.label, true)
                 // console.log('Opened')
-              } else if (item === meta1.data[index] && item._model.isOpened) {
+              } else {
                 item._model.outerRadius = outerRadius * 0.9
                 item._model.innerRadius = innerRadius
                 item._model.isOpened = false
@@ -161,6 +160,9 @@ export default {
                 // console.log('Closed')
               }
             })
+            /**
+             * Проверяем на открытые доли
+             * */
             let chkArr = meta1.data.filter(item => {
               if (item._model.isOpened) { return item }
             })
@@ -233,8 +235,8 @@ export default {
       /**
        * Меняем цвет подписей
        * */
-      chartElements.data['0']._chart.options.pieceLabel.fontColor = value ? 'rgb(0,0,0,0)' : clrFont
-      chartElements.data['0']._chart.options.pieceLabel.secondFontColor = value ? 'rgb(0,0,0,0)' : clrSecondFont
+      // chartElements.data['0']._chart.options.pieceLabel.fontColor = value ? 'rgb(0,0,0,0)' : clrFont
+      // chartElements.data['0']._chart.options.pieceLabel.secondFontColor = value ? 'rgb(0,0,0,0)' : clrSecondFont
       /**
        * Изменяем размер долей
        * */
@@ -249,6 +251,21 @@ export default {
           EventBus.$emit('chart:doughnut:grow', item._model.label, value)
         }
       })
+      /**
+       * Проверяем на открытые доли
+       * */
+      let chkArr = chartElements.data.filter(item => {
+        if (item._model.isOpened) {
+          return item
+        }
+      })
+      if (chkArr.length <= 0) {
+        chartElements.data['0']._chart.options.pieceLabel.fontColor = clrFont
+        chartElements.data['0']._chart.options.pieceLabel.secondFontColor = clrSecondFont
+      } else {
+        chartElements.data['0']._chart.options.pieceLabel.fontColor = 'rgb(0,0,0,0)'
+        chartElements.data['0']._chart.options.pieceLabel.secondFontColor = 'rgb(0,0,0,0)'
+      }
       doughnutObj.render(0)
     }
   },
