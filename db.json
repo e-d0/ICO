@@ -2082,12 +2082,12 @@
   ],
   "operations_by_day":[
     {
-      "date": "2018-06-17T02:36:04.632Z",
-      "portfolio_cost": "3213489",
+      "date": "2018-06-18T02:36:04.632Z",
+      "portfolio_cost": "5213489",
       "operations": [
         {
           "type": "sold",
-          "value": "2.36",
+          "value": "2.3",
           "ticker": "BTC",
           "swapped_in": ""
         },

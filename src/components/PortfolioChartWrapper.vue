@@ -1,12 +1,14 @@
 <template>
     <div :class="['chart_portfolio__wrapper']">
         <h4>Portfolio Chart</h4>
-        <chart-portfolio ref="chartsPortfolio"
-                         :options="options"
-                         :chart-id="options.chartId"
-                         :chart-data="datacollection"
-                         :width ="900"
-                         :height="241"></chart-portfolio>
+        <chart-portfolio  v-if="datacollection && datacollection.operations !== null"
+                          ref="chartsPortfolio"
+                          :options="options"
+                          :chart-id="options.chartId"
+                          :chart-data="chartData"
+                          :filterVal="chartFilterValue"
+                          :width ="900"
+                          :height="241"></chart-portfolio>
         <div class="row">
             <div class="col-md-6 chart_portfolio__labels">
                 <span class="chart_label bought">{{ $t('portfolio.bought') }}</span>
@@ -30,167 +32,13 @@
 </template>
 <script>
 import ChartPortfolio from './chartPortfolio'
+import { EventBus } from './eventbus'
 const vueInstance = this
-/**
- * Тестовый набор операций
- * */
-const operations = [
-  {
-    date: '2018-06-17T02:36:04.632Z',
-    portfolio_cost: '3213489',
-    operations: [
-      {
-        type: 'sold',
-        value: '2.36',
-        ticker: 'BTC',
-        swapped_in: ''
-      },
-      {
-        type: 'bought',
-        value: '1.76',
-        ticker: 'ETH',
-        swapped_in: ''
-      },
-      {
-        type: 'swapped',
-        value: '4.76',
-        ticker: 'ETH',
-        swapped_in: '3',
-        swapped_in_ticker: 'BTC'
-      }
-    ]
-  },
-  {
-    date: '2018-06-18T02:36:04.632Z',
-    portfolio_cost: '689326',
-    operations: [
-      {
-        type: 'bought',
-        value: '0.76',
-        ticker: 'ETH',
-        swapped_in: ''
-      },
-      {
-        type: 'swapped',
-        value: '2.76',
-        ticker: 'ETH',
-        swapped_in_ticker: 'BTC',
-        swapped_in: '3'
-      },
-      {
-        type: 'sold',
-        value: '0.36',
-        ticker: 'BTC',
-        swapped_in: ''
-      }
-    ]
-  },
-  {
-    date: '2018-06-19T02:36:04.632Z',
-    portfolio_cost: '938932',
-    operations: [
-      {
-        type: 'bought',
-        value: '0.76',
-        ticker: 'ETH',
-        swapped_in: ''
-      },
-      {
-        type: 'sold',
-        value: '0.36',
-        ticker: 'BTC',
-        swapped_in: ''
-      },
-      {
-        type: 'swapped',
-        value: '2.76',
-        ticker: 'ETH',
-        swapped_in: '3',
-        swapped_in_ticker: 'BTC'
-      }
-    ]
-  },
-  {
-    date: '2018-06-21T02:36:04.632Z',
-    portfolio_cost: '4383332',
-    operations: [
-      {
-        type: 'swapped',
-        value: '2.76',
-        ticker: 'ETH',
-        swapped_in_ticker: 'BTC',
-        swapped_in: '3'
-      },
-      {
-        type: 'bought',
-        value: '0.76',
-        ticker: 'ETH',
-        swapped_in: ''
-      },
-      {
-        type: 'sold',
-        value: '0.36',
-        ticker: 'BTC',
-        swapped_in: ''
-      }
-    ]
-  },
-  {
-    date: '2018-07-19T02:36:04.632Z',
-    portfolio_cost: '6938955',
-    operations: [
-      {
-        type: 'sold',
-        value: '0.36',
-        ticker: 'BTC',
-        swapped_in: ''
-      },
-      {
-        type: 'bought',
-        value: '0.76',
-        ticker: 'ETH',
-        swapped_in: ''
-      },
-      {
-        type: 'swapped',
-        value: '2.76',
-        ticker: 'ETH',
-        swapped_in_ticker: 'BTC',
-        swapped_in: '3'
-      }
-    ]
-  },
-  {
-    date: '2019-07-19T02:36:04.632Z',
-    portfolio_cost: '268888',
-    operations: [
-      {
-        type: 'swapped',
-        value: '2.76',
-        ticker: 'ETH',
-        swapped_in_ticker: 'BTC',
-        swapped_in: '3'
-      },
-      {
-        type: 'bought',
-        value: '0.76',
-        ticker: 'ETH',
-        swapped_in: ''
-      },
-      {
-        type: 'sold',
-        value: '0.36',
-        ticker: 'BTC',
-        swapped_in: ''
-      }
-    ]
-  }
-]
 export default {
   name: 'PortfolioChartWrapper',
   data () {
     return {
-      items: operations,
+      items: null,
       chartFilter: [
         {
           title: '24H',
@@ -383,7 +231,7 @@ export default {
          * Передаем операции для обработки плагином чарта
          * для раскрашивания точек на графике
          * */
-        operations: operations,
+        operations: null,
         datasets: [
           {
             fill: true,
@@ -419,8 +267,25 @@ export default {
     portfolio: {}
   },
   watch: {
+    /**
+     * Каждый раз, когда меняется значение фильтра, на сервер уходит запрос с новым значением фильтра
+     * */
     chartFilterValue (val) {
-      console.log('SEND REQUEST TO SERVER', val.value)
+      this.fillDChartData(val.value)
+    },
+    /**
+     * Передаем операции для обработки плагином чарта
+     * для раскрашивания точек на графике
+     * */
+    items (val) {
+      this.datacollection.operations = val
+    }
+  },
+  computed: {
+    chartData () {
+      if (this.datacollection && this.datacollection.operations !== null) {
+        return this.datacollection
+      }
     }
   },
   methods: {
@@ -487,16 +352,29 @@ export default {
     },
     findMinValue (array) {
       return Math.min.apply(Math, array)
+    },
+    /**
+     * Ждем ответа с сервера , а потом заполняем данными необходимые поля
+     * */
+    fillDChartData (flterVal) {
+      this.$store.dispatch('portfolio/getPortfolioOperationsPerDay', {id: this.portfolio.id, filterDate: flterVal}).then((response) => {
+        this.items = response
+        this.datacollection.operations = response
+        this.datacollection.labels = this.dates()
+        this.datacollection.datasets['0'].data = this.portfolioCost()
+        this.datacollection.min = this.findMinValue(this.datacollection.datasets['0'].data)
+        this.datacollection.max = this.findMaxValue(this.datacollection.datasets['0'].data)
+        EventBus.$emit('update:portfolio:chart')
+      }, error => {
+        console.log(error)
+      })
     }
   },
   created () {
     /**
-     * Заполняем данными необходимые поля
+     * Ждем ответа с сервера , а потом заполняем данными необходимые поля
      * */
-    this.datacollection.labels = this.dates()
-    this.datacollection.datasets['0'].data = this.portfolioCost()
-    this.datacollection.min = this.findMinValue(this.datacollection.datasets['0'].data)
-    this.datacollection.max = this.findMaxValue(this.datacollection.datasets['0'].data)
+    this.fillDChartData(this.chartFilterValue.value)
   }
 }
 </script>

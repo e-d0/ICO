@@ -172,7 +172,6 @@ export default {
   },
   methods: {
     toggleCollapse (ref) {
-      console.log(ref)
       if (this.$refs[ref].$el.style.maxHeight === '0px') {
         this.$refs[ref].$el.style.maxHeight = this.$refs[ref].$el.scrollHeight + 'px'
       } else {

@@ -81,6 +81,21 @@ const getters = {
 }
 
 const actions = {
+  /**
+   * Получаем текущие операции дял чарта портфолоио с сервера
+   * */
+  getPortfolioOperationsPerDay (context, filterInfo) {
+    console.log('getPortfolioOperationsPerDay', filterInfo)
+    return new Promise((resolve, reject) => {
+      axios.get(context.rootGetters.api_url + '/operations_by_day').then((oResponse) => {
+        console.log('OperationsPerDay get at promise action getPortfolioOperationsPerDay', oResponse.data)
+        resolve(oResponse.data)
+      }, error => {
+        handleXHRerrors(error)
+        reject(error)
+      })
+    })
+  },
   setCurrentCurrency (context, payload) {
     console.log('setCurrentCurrency', payload)
     context.commit('setCurrentCurrency', payload)

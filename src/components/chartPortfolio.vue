@@ -1,7 +1,7 @@
 <script>
 import { Line, mixins } from 'vue-chartjs'
 import Chart from 'chart.js'
-const { reactiveProp } = mixins
+import { EventBus } from './eventbus'
 // 1. Import Chart.js so you can use the global Chart object
 
 // 2. Import the `generateChart()` method to create the vue component.
@@ -58,13 +58,17 @@ Chart.helpers.extend(Chart.controllers.line.prototype, {
     }
   }
 })
-
 export default {
   extends: Line,
-  mixins: [reactiveProp],
+  mixins: [mixins.reactiveProp],
   name: 'chartPortfolio',
-  props: ['options'],
+  props: {
+    options: Object | Array
+  },
   methods: {
+    update () {
+      this.$data._chart.update()
+    },
     colorSwitcher (type) {
       let color
       switch (type) {
@@ -84,6 +88,7 @@ export default {
     }
   },
   mounted () {
+    EventBus.$on('update:portfolio:chart', this.update)
     /**
      * Плагин для чартов для раскрашивания точек на графике
      * */
@@ -92,18 +97,23 @@ export default {
       beforeDraw: (chart) => {
         let datasets = chart.data.datasets
         let i, j
-        for (i = 0; i < datasets.length; i++) {
-          for (j = 0; j < datasets[i].data.length; j++) {
-            let obj = chart.getDatasetMeta(i).data[j]._view
-            let indx = chart.getDatasetMeta(i).data[j]._index
-            let passedItems = chart.config.data.operations[indx]
-            obj.backgroundColor = this.colorSwitcher(passedItems.operations['0'].type)
+        if (this.options) {
+          for (i = 0; i < datasets.length; i++) {
+            for (j = 0; j < datasets[i].data.length; j++) {
+              let obj = chart.getDatasetMeta(i).data[j]._view
+              let indx = chart.getDatasetMeta(i).data[j]._index
+              let passedItems = chart.config.data.operations[indx]
+              obj.backgroundColor = this.colorSwitcher(passedItems.operations['0'].type)
+            }
           }
         }
       }
     }
     )
     this.renderChart(this.chartData, this.options)
+  },
+  destroyed () {
+    EventBus.$off()
   }
 }
 </script>
