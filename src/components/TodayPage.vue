@@ -31,9 +31,9 @@
 
             <div class="radio-buttons">
 
-              <a href="#" @click.prevent="" :class="['switch_btn','btn_left']">{{ $t('calendar.myICO') }}</a>
+              <a href="#" @click.prevent="showOnlyMyICO(true)" :class="['switch_btn','btn_left', {active: filters['my_ico'] === true}]">{{ $t('calendar.myICO') }}</a>
 
-              <a href="#" @click.prevent="" :class="['switch_btn','switch','btn_right']" >{{ $t('calendar.allICO') }}</a>
+              <a href="#" @click.prevent="showOnlyMyICO(false)" :class="['switch_btn','switch','btn_right', {active: filters['my_ico'] === false }]" >{{ $t('calendar.allICO') }}</a>
 
             </div>
           </div>
@@ -88,6 +88,8 @@ import TodayDay from './TodayDay'
 import eventsFilterActual from './eventsFilterActual'
 import { EventBus } from './eventbus'
 import formTimeZone from './formTimeZone'
+import Vuex from 'vuex'
+const storeEvent = Vuex.createNamespacedHelpers('event')
 export default {
   name: 'TodayPage',
   components: { tplHeader, tplFooter, eventsFilter, eventsFilterActual, TodayDayView2, TodayDay, formTimeZone },
@@ -99,8 +101,14 @@ export default {
     }
   },
   computed: {
+    ...storeEvent.mapGetters({
+      filters: 'filters'
+    })
   },
   methods: {
+    showOnlyMyICO (val) {
+      this.$store.dispatch('event/setFilterMyICO', val)
+    },
     /**
      * Если первый день, возвращаем стартовый час
      * */

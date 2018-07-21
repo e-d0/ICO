@@ -6,7 +6,8 @@ const state = {
   types: [],
   filters: {
     'types': [],
-    'names': []
+    'names': [],
+    'my_ico': false
   },
   dates: [],
   /**
@@ -65,7 +66,7 @@ const getters = {
      * */
     return arr.filter(event => {
       if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType) && moment(event.ends) > currTime) {
-        return event
+        return state.filters['my_ico'] === false ? event : (event['user_ico'] === true ? event : false)
       }
     }
     )
@@ -87,7 +88,10 @@ const getters = {
      * */
     return arr.filter(event => {
       if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType) && moment(event.ends) < currTime) {
-        return event
+        /**
+         * Проверка фильтра my_ico
+         * */
+        return state.filters['my_ico'] === false ? event : (event['user_ico'] === true ? event : false)
       }
     }
     )
@@ -132,7 +136,10 @@ const getters = {
         ) {
           for (let item = 0; item < state.filters.names.length; item++) {
             if (state.filters.names[item].name === (event.name)) {
-              return event
+              /**
+               * Проверка на фильтр my_ico
+               * */
+              return state.filters['my_ico'] === false ? event : (event['user_ico'] === true ? event : false)
             }
           }
         } else {
@@ -140,7 +147,10 @@ const getters = {
            * фильтр по типу
            * */
           if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType)) {
-            return event
+            /**
+             * Проверка на фильтр my_ico
+             * */
+            return state.filters['my_ico'] === false ? event : (event['user_ico'] === true ? event : false)
           }
         }
       })
@@ -294,6 +304,10 @@ const actions = {
     console.log('setFilters value at storage ', payload)
     context.commit('setFilters', payload)
   },
+  setFilterMyICO (context, payload) {
+    console.log('setFilterMyICO value at storage ', payload)
+    context.commit('setFilterMyICO', payload)
+  },
   /**
    * Получаем типы событий , используя промис
    * */
@@ -377,6 +391,9 @@ let handleXHRerrors = function (error) {
 }
 
 const mutations = {
+  setFilterMyICO (state, objValue) {
+    state.filters.my_ico = objValue
+  },
   getICO: (state, objEvent) => {
     state.ICO = objEvent
     console.log('write object ICOs to State', objEvent)

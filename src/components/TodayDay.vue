@@ -40,6 +40,9 @@ import moment from 'moment'
 import TodayHour from './TodayHour'
 import { generateHours } from './eventbus'
 
+import Vuex from 'vuex'
+const storeEvent = Vuex.createNamespacedHelpers('event')
+
 export default {
   name: 'TodayDay',
   props: {
@@ -55,6 +58,9 @@ export default {
     }
   },
   computed: {
+    ...storeEvent.mapGetters({
+      filters: 'filters'
+    })
   },
   filters: {
     weekDayName: function (value) {
