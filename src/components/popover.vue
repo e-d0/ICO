@@ -32,14 +32,34 @@
           </div>
         </div>
 
-      <template v-if="alerts.length > 0">
-        <div class="mypopover_remainder"  v-for="(item, index) in alerts" :key="index">
-            <span >
-               {{ $t('form.RemindTime', { time: convertToDiff(item) }  ) }}
-            </span>
-            <a @click="removeAlert(index)">{{ $t('form.Remove') }}</a>
+      <!--<template v-if="alerts.length > 0">-->
+        <!--<div class="mypopover_remainder"  v-for="(item, index) in alerts" :key="index">-->
+            <!--<span >-->
+               <!--{{ $t('form.RemindTime', { time: convertToDiff(item) }  ) }}-->
+            <!--</span>-->
+            <!--<a @click="removeAlert(index)">{{ $t('form.Remove') }}</a>-->
+        <!--</div>-->
+      <!--</template>-->
+      <div class="mypopover_remainder"  v-for="(item, index) in timeValue" :key="index">
+        <span>{{ $t('form.Remind') }} </span>
+        <div class="mypopover_remainder-select">
+          <select :required="true" v-model="timeValue[index]">
+              <template v-for="(val, indx) in timeOptions">
+                  <template v-if="indx === 0">
+                    <option :key="indx" name="name[]" :value="item" >
+                      <a>{{ item }} {{ $t('form.min') }}</a>
+                    </option>
+                  </template>
+                  <template v-if="!inArraySelected(val)">
+                    <option :key="indx+1" name="name[]" :value="val" >
+                      <a>{{ val }} {{ $t('form.min') }}</a>
+                    </option>
+                  </template>
+              </template>
+          </select>
         </div>
-      </template>
+        <a :class="['remove']" @click="removeAlert(index)" >{{ $t('form.Remove') }}</a>
+      </div>
 
       <!--Селект с возможностью добавлять время алерта. Пока отключен за ненадобностью-->
 
@@ -60,7 +80,6 @@
         <!--</div>-->
         <!--<a :class="['add']" @click="addAlert(timeValue)" >{{ $t('form.Add') }}</a>-->
       <!--</div>-->
-
       <div class="mypopover_add">
         <div class="col-sm-6 mypopover_add-remind" >
           <a :class="[{'disabled': filteredTimeOptions.length === 0 }]" @click="addAlertToTempStorage()">{{ $t('form.AddReminder') }}</a>
@@ -119,7 +138,7 @@ export default {
       notificForm: false,
       timeOptions: [15, 30, 45],
       comment: null,
-      timeValue: '15',
+      timeValue: [],
       alerts: []
     }
   },
@@ -150,6 +169,16 @@ export default {
     }
   },
   watch: {
+    /**
+     * Наблюдаем за добавленными юзером значениями и пересчитываем alerts налету
+     * */
+    timeValue: function (newVal, oldVal) {
+      newVal.forEach((item, index) => {
+        let eventStarts = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
+        let startTime = this.$moment(eventStarts).subtract(item, 'minutes')
+        this.alerts[index] = startTime.toISOString()
+      })
+    }
   },
   created () {
     /**
@@ -157,6 +186,7 @@ export default {
      * */
     if (this.clickedItemAlerts() !== undefined) {
       this.alerts = this.sortDates([...this.clickedItemAlerts()])
+      this.timeValue = this.alerts.map(item => this.convertToDiff(item))
     }
     /**
      * При создании этого компонента заполняем переменную комментариями из текущего event
@@ -164,6 +194,12 @@ export default {
     if (this.clickedItemComments() !== undefined) this.comment = this.clickedItemComments()
   },
   methods: {
+    /**
+     * Находится ли средиуже  выбранных значений
+     * */
+    inArraySelected (val) {
+      return this.timeValue.includes(val)
+    },
     /**
      * Проверка, откуда брать alert: из начала события или окончания
      * */
@@ -213,12 +249,14 @@ export default {
       let eventStarts = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
       let startTime = this.$moment(eventStarts).subtract(val, 'minutes')
       this.alerts.push(startTime.toISOString())
-      this.alerts = this.sortDates(this.alerts)
+      // this.alerts = this.sortDates(this.alerts)
     },
     /**
      * Удалить оповещение
      * */
     removeAlert (index) {
+      let indx = this.timeValue.indexOf(this.convertToDiff(this.alerts[index]))
+      this.timeValue.splice(indx, 1)
       this.alerts.splice(index, 1)
     },
     /**
@@ -288,8 +326,10 @@ export default {
     addAlertToTempStorage () {
       if (this.filteredTimeOptions.length > 0) {
         this.notificForm = true
-        this.timeValue = this.filteredTimeOptions[0]
-        this.addAlert(this.timeValue)
+        if (this.filteredTimeOptions[0] !== undefined) {
+          this.timeValue.push(this.filteredTimeOptions[0])
+          this.addAlert(this.filteredTimeOptions[0])
+        }
       } else {
         this.notificForm = false
       }

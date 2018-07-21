@@ -449,7 +449,7 @@ export default {
   .last .event_nav:after{
     right: 14px!important;
     border-width: 3px 4px 3px 0!important;
-    border-color: transparent #3f3f3f9c transparent transparent!important;
+    border-color: transparent rgba(63, 63, 63, 0.61) transparent transparent!important;
   }
 
 </style>
