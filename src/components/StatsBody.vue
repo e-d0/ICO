@@ -446,6 +446,7 @@ export default {
                     line-height: 16px;
                   b, /deep/ b {
                     font-size: 12px;
+                    font-weight: 500;
                   }
                 }
                 &-btc {
