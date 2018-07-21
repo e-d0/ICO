@@ -7,7 +7,9 @@
       <div class="add-record-form_wrapper">
         <div class="add-record-form_name">
           <label :for="[`nameRecord--${selectedCoin.id}`]">{{ $t('portfolio.Operation') }}</label>
-          <select size="1" name="name[]" v-model="selectedOperation" :id="[`nameRecord--${selectedCoin.id}`]">
+          <select size="1" name="name[]"
+                  v-model="selectedOperation"
+                  :id="[`nameRecord--${selectedCoin.id}`]">
             <option v-for="( operation, index ) in operations"
                     :key="index"
                     :value="operation">
@@ -51,8 +53,8 @@
         <template v-else>
           <div class="add-record-form_name">
             <label :for="[`record-coin-name--${selectedCoin.id}`]">{{ $t('portfolio.coin') }}</label>
-            <select  v-if="coins" v-model="coinToChange" size="1" name="name[]" :id="[`record-coin-name--${selectedCoin.id}`]">
-              <option v-for="coin in filteredCoins()"
+            <select  :required="true" v-if="coins" v-model="coinToChange" size="1" name="name[]" :id="[`record-coin-name--${selectedCoin.id}`]">
+              <option  v-for="coin in filteredCoins()"
                       :key="coin.id"
                       :value="coin">{{ coin.ticker }}</option>
             </select>
@@ -231,10 +233,12 @@ export default {
      * */
     filteredCoins () {
       if (this.portfolio) {
-        let coins = JSON.parse(JSON.stringify(this.coins))
-        coins = coins.filter(coin => {
+        this.getCoinByID(this.portfolio.coin.id)
+        let coins = []
+        this.portfolio.coin.forEach(item => {
+          let coin = this.getCoinByID(item.id)
           if (this.selectedCoin.id !== coin.id) {
-            return coin
+            coins.push(JSON.parse(JSON.stringify(coin)))
           }
         })
         return coins
@@ -389,7 +393,7 @@ export default {
         /**
          * Заполняем по умолчанию
          * */
-        this.coinToChange = coinsTemp['0']
+        this.coinToChange = this.filteredCoins()['0']
       }
     }
   },
@@ -478,7 +482,7 @@ export default {
           font-family: @main-font;
           font-weight: 400;
           font-size: 15px;
-          line-height: 16px;
+          line-height: 18px;
           text-transform: capitalize;
           height: 35px;
           box-shadow: 0 1px 0 #c5d0de;

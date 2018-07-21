@@ -64,7 +64,7 @@ export default {
   },
   methods: {
     updateLimitation () {
-      if (this.limitationList <= this.operations.length) {
+      if (this.limitationList < this.operations.length) {
         this.limitationList = this.limitationList + 6
       } else {
         this.limitationList = 6
