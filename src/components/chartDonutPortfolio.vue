@@ -233,11 +233,6 @@ export default {
        * */
       let chartElements = doughnutObj.getDatasetMeta(0)
       /**
-       * Меняем цвет подписей
-       * */
-      // chartElements.data['0']._chart.options.pieceLabel.fontColor = value ? 'rgb(0,0,0,0)' : clrFont
-      // chartElements.data['0']._chart.options.pieceLabel.secondFontColor = value ? 'rgb(0,0,0,0)' : clrSecondFont
-      /**
        * Изменяем размер долей
        * */
       chartElements.data.forEach(item => {
@@ -259,6 +254,9 @@ export default {
           return item
         }
       })
+      /**
+       * Меняем цвет подписей
+       * */
       if (chkArr.length <= 0) {
         chartElements.data['0']._chart.options.pieceLabel.fontColor = clrFont
         chartElements.data['0']._chart.options.pieceLabel.secondFontColor = clrSecondFont
