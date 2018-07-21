@@ -24,7 +24,9 @@
           </div>
 
           <div class="portfolio_item-cell portfolio_item-price">
-            <span class="portfolio_item-price-usd" v-html="currencyConverter(countValue(item.amount , item.id), currentCurrency.ticker )"></span>
+            <span class="portfolio_item-price-usd"
+                  v-b-tooltip.hover.html.top="tipData(currencyConverter(countValue(item.amount , item.id), currentCurrency.ticker ))"
+                  v-html="currencyConverter(countValue(item.amount , item.id), currentCurrency.ticker )"></span>
             <span class="portfolio_item-price-btc" v-html="currencyConvertUSDToBTC(countValue(item.amount , item.id))"></span>
           </div>
 
@@ -33,12 +35,14 @@
           </div>
 
           <div class="portfolio_item-cell portfolio_item-capitalizations">
-            <span v-html=" currencyConverter(coin.market_cap, currentCurrency.ticker ) "></span>
+            <span v-b-tooltip.hover.html.top="tipData(currencyConverter(coin.market_cap, currentCurrency.ticker ))"
+                  v-html=" currencyConverter(coin.market_cap, currentCurrency.ticker ) "></span>
           </div>
 
           <div class="portfolio_item-cell portfolio_item-volume" v-if="coin">
             <div class="portfolio_item-volume-wrapper">
-              <span v-html=" currencyConverter(coin['24H_volume'], currentCurrency.ticker ) "></span>
+              <span  v-b-tooltip.hover.html.top="tipData(currencyConverter(coin['24H_volume'], currentCurrency.ticker ))"
+                     v-html=" currencyConverter(coin['24H_volume'], currentCurrency.ticker ) "></span>
               <a href="#"
                  @click.prevent="localCollapse()"
                  :class="['portfolio_item-dropdown', {'portfolio_item-dropdown-open': collapseOpen === true }]">
@@ -199,6 +203,14 @@ export default {
     }
   },
   methods: {
+    tipData (data) {
+      return {
+        placement: `top`,
+        title: `<div class="tooltip-inner-custom">${data}</div>`,
+        template: `<div class="bs-tooltip-top tooltip custom" role="tooltip"><div class="arrow"></div> <div class="tooltip-inner"></div> </div>`,
+        html: true
+      }
+    },
     /**
      * Открыть форму изменения операции
      * */
@@ -481,8 +493,23 @@ export default {
       &-price {
         width: 12%;
         padding: 14px 12px 0px 12px;
+        position: relative;
+        overflow: hidden;
+        &:after{
+          content: "";
+          position: absolute;
+          display: block;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-collapse: separate;
+          box-shadow: inset -64px 0 22px -45px rgb(255, 255, 255);
+          pointer-events: none;
+        }
         span /deep/ b {
           font-size: 12px;
+          font-weight: 500;
         }
         &-usd {
           display: block;
@@ -553,6 +580,20 @@ export default {
       }
       &-capitalizations {
         width: 13%;
+        position: relative;
+        overflow: hidden;
+        &:after{
+          content: "";
+          position: absolute;
+          display: block;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-collapse: separate;
+          box-shadow: inset -64px 0 22px -45px rgb(255, 255, 255);
+          pointer-events: none;
+        }
         span {
           color: #707986;
           font-family: @medium;
@@ -560,15 +601,35 @@ export default {
           font-size: 16px;
           line-height: 16px;
           text-transform: uppercase;
+          white-space: nowrap;
+          height: 100%;
+          max-width: 75%;
+          display: inline-block;
         }
         b, /deep/ b {
           font-size: 12px;
           font-family: @medium;
+          font-weight: 500;
         }
       }
       &-volume {
         width: 19%;
+        height: 100%;
         padding: 20px 22px 14px 12px;
+        position: relative;
+        overflow: hidden;
+        &:after{
+          content: "";
+          position: absolute;
+          display: block;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          border-collapse: separate;
+          box-shadow: inset -90px 0 22px -45px rgb(255, 255, 255);
+          pointer-events: none;
+        }
         &-wrapper {
           display: flex;
           align-items: center;
@@ -581,11 +642,20 @@ export default {
           font-size: 16px;
           line-height: 16px;
           text-transform: uppercase;
+          white-space: nowrap;
+          overflow: hidden;
+          height: 100%;
+          max-width: 75%;
+          display: inline-block;
         }
         b, /deep/ b {
           font-size: 12px;
+          font-weight: 500;
         }
         .portfolio_item-dropdown {
+          position: absolute;
+          z-index: 11;
+          right: 17px;
           width: 12px;
           height: 10px;
           background-image: @img-dropdown-portfolio;

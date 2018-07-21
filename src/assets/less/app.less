@@ -213,8 +213,17 @@ fieldset {
 }
 
 .tooltip.custom{
-  .arrow::before{
-    border-right-color: #ffffff;
+  pointer-events: none;
+  &.bs-tooltip-top{
+     .arrow::before{
+       border-top-color: #ffffff!important;
+     }
+   }
+  &.bs-tooltip-right{
+    .arrow::before{
+      border-right-color: #ffffff!important;
+      border-left-color: #ffffff!important;
+    }
   }
   .tooltip-inner{
     max-width: 320px;
