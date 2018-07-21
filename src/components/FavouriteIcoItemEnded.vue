@@ -2,8 +2,11 @@
   <div class="ico-item" v-if="ico">
     <div class="row">
       <div class="col-3 d-flex">
-        <div class="ico-item_logo">
-          <img :src="ico.image" :alt="ico.title">
+        <div class="ico-item_logo ico-item_gradient" :style="{'backgroundImage': ico.gradient}">
+          <div class="ico-item_logo_image" :style="{'background': `url(${ico.logo}) no-repeat, ${ico.bg}`,
+                                                            'backgroundPosition': 'center center',
+                                                            'backgroundSize': 'auto'}">
+          </div>
         </div>
       </div>
       <!-- /.col-3 -->
@@ -253,7 +256,7 @@ export default {
           position: relative;
           display: flex;
           width: 100%;
-          min-height: 152px;
+          min-height: 173px;
           border-radius: 4px 0 0 0;
           &::before {
             content: "";
@@ -267,9 +270,11 @@ export default {
             background-repeat: no-repeat;
             z-index: 11;
           }
+          &_image{
+            width: 100%;
+            height: 100%;
+          }
           img {
-            margin: auto;
-            padding: 10px;
           }
         }
         &_discription {
