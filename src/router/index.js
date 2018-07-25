@@ -5,6 +5,7 @@ import TodayPage from '@/components/TodayPage'
 import PortfolioPage from '@/components/PortfolioPage'
 import StatsICOPage from '@/components/StatsICOPage'
 import FavouritePage from '@/components/FavouritePage'
+import OverviewTradeChartWrapper from '@/components/OverviewTradeChartWrapper'
 Vue.use(Router)
 /**
  * Есть требования для сервера в режиме history https://router.vuejs.org/ru/essentials/history-mode.html
@@ -36,6 +37,11 @@ export default new Router({
       path: '/favourite',
       name: 'favourite',
       component: FavouritePage
+    },
+    {
+      path: '/overview',
+      name: 'test',
+      component: OverviewTradeChartWrapper
     }
   ]
 })
