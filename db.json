@@ -5,19 +5,44 @@
       "name": "event-1",
       "created_at": "2018-04-13T21:53:17.892Z",
       "updated_at": "2018-05-26T00:42:12.360Z",
-      "starts": "2018-07-26T14:53:00.000Z",
-      "ends": "2018-07-27T16:53:00.000Z",
-      "type": "kyc",
+      "date": "2018-07-26T17:53:00.000Z",
+      "type": "start",
+      "category": "kyc",
       "user_ico": true,
-      "alerts": {
-        "starts": [
-          "2018-05-20T06:38:00.000Z"
-        ],
-        "ends": []
-      },
-      "comment": {
-        "starts": null,
-        "ends": "42424242"
+      "notifications": [
+        {
+          "user_id": null,
+          "event_id": 1,
+          "id": 0,
+          "date": "2018-07-26T17:38:00.000Z"
+        },
+        {
+          "user_id": null,
+          "event_id": 1,
+          "id": 1,
+          "date": "2018-07-26T17:23:00.000Z"
+        }
+      ],
+      "note": {
+        "user_id": null,
+        "event_id": 1,
+        "text": "1232112324124"
+      }
+    },
+    {
+      "id": 111,
+      "name": "event-111",
+      "created_at": "2018-04-13T21:53:17.892Z",
+      "updated_at": "2018-05-26T00:42:12.360Z",
+      "date": "2018-07-27T16:53:00.000Z",
+      "type": "end",
+      "category": "kyc",
+      "user_ico": true,
+      "notifications": [],
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       }
     },
     {
@@ -25,17 +50,31 @@
       "name": "event-2",
       "created_at": "2018-05-13T21:53:17.892Z",
       "updated_at": "2018-05-26T00:42:17.073Z",
-      "starts": "2018-07-29T05:53:00.000Z",
-      "ends": "2018-07-30T09:53:00.000Z",
-      "type": "kyc",
+      "date": "2018-07-29T05:53:00.000Z",
+      "type": "start",
+      "category": "kyc",
       "user_ico": true,
-      "alerts": {
-        "starts": [],
-        "ends": []
-      },
-      "comment": {
-        "starts": null,
-        "ends": null
+      "notifications": [],
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      }
+    },
+    {
+      "id": 222,
+      "name": "event-222",
+      "created_at": "2018-05-13T21:53:17.892Z",
+      "updated_at": "2018-05-26T00:42:17.073Z",
+      "type": "end",
+      "date": "2018-07-30T09:53:00.000Z",
+      "category": "kyc",
+      "user_ico": true,
+      "notifications": [],
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       }
     },
     {
@@ -43,16 +82,29 @@
       "name": "event-3",
       "created_at": "2018-04-13T21:53:17.892Z",
       "updated_at": "2018-07-06T02:55:31.800Z",
-      "starts": "2018-07-03T01:53:00.000Z",
-      "ends": "2018-07-04T04:53:17.000Z",
-      "type": "pre",
-      "alerts": {
-        "starts": [],
-        "ends": []
-      },
-      "comment": {
-        "starts": null,
-        "ends": null
+      "date": "2018-07-03T01:53:00.000Z",
+      "type": "start",
+      "category": "pre",
+      "notifications": [],
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      }
+    },
+    {
+      "id": 333,
+      "name": "event-333",
+      "created_at": "2018-04-13T21:53:17.892Z",
+      "updated_at": "2018-07-06T02:55:31.800Z",
+      "type": "end",
+      "date": "2018-07-04T04:53:17.000Z",
+      "category": "pre",
+      "notifications": [],
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       }
     },
     {
@@ -60,271 +112,282 @@
       "name": "event-4",
       "created_at": "2018-04-13T21:53:17.892Z",
       "updated_at": "2018-07-08T23:58:21.033Z",
-      "starts": "2018-07-09T12:53:00.000Z",
-      "ends": "2018-07-10T16:53:17.000Z",
-      "type": "ico",
+      "date": "2018-07-09T12:53:00.000Z",
+      "type": "start",
+      "category": "ico",
       "user_ico": false,
-      "alerts": {
-        "starts": [
-          "2018-05-21T01:38:00.000Z"
-        ],
-        "ends": [
-          "2018-05-27T05:38:17.000Z"
-        ]
-      },
-      "comment": {
-        "starts": null,
-        "ends": null
+      "notifications": [],
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      }
+    },
+    {
+      "id": 444,
+      "name": "event-444",
+      "created_at": "2018-04-13T21:53:17.892Z",
+      "updated_at": "2018-07-08T23:58:21.033Z",
+      "type": "end",
+      "date": "2018-07-10T16:53:17.000Z",
+      "category": "ico",
+      "user_ico": false,
+      "notifications": [],
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       }
     },
     {
       "name": "jgdfg",
-      "starts": "2018-07-02T23:26:00.000Z",
-      "ends": "2018-07-03T01:03:00.000Z",
-      "type": "whitelist",
+      "date": "2018-07-02T23:26:00.000Z",
+      "type": "start",
+      "category": "whitelist",
       "user_ico": true,
       "created_at": "2018-04-19T14:26:00.000Z",
       "updated_at": "2018-07-02T22:47:20.464Z",
       "id": 6,
-      "comment": {
-        "starts": null,
-        "ends": "adsdasd"
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       },
-      "alerts": {
-        "starts": [],
-        "ends": []
-      },
+      "notifications": [],
       "isStart": true
     },
     {
-      "name": "test554",
-      "starts": "2018-07-28T04:20:00.000Z",
-      "ends": "2018-07-28T13:20:00.000Z",
-      "type": "ico",
+      "name": "jgdfg",
+      "type": "end",
+      "date": "2018-07-03T01:03:00.000Z",
+      "category": "whitelist",
       "user_ico": true,
+      "created_at": "2018-04-19T14:26:00.000Z",
+      "updated_at": "2018-07-02T22:47:20.464Z",
+      "id": 666,
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      },
+      "notifications": []
+    },
+    {
+      "name": "test554",
+      "date": "2018-07-28T04:20:00.000Z",
+      "type": "start",
+      "category": "ico",
       "created_at": "2018-04-19T20:21:00.000Z",
       "updated_at": "2018-05-26T00:44:25.068Z",
       "id": 9,
-      "comment": {
-        "starts": null,
-        "ends": "fsdfsdfsdf"
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       },
-      "alerts": {
-        "starts": [],
-        "ends": [
-          "2018-05-24T10:05:00.000Z"
-        ]
-      }
+      "notifications": []
+    },
+    {
+      "name": "test55499",
+      "type": "end",
+      "date": "2018-07-28T13:20:00.000Z",
+      "category": "ico",
+      "created_at": "2018-04-19T20:21:00.000Z",
+      "updated_at": "2018-05-26T00:44:25.068Z",
+      "id": 999,
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      },
+      "notifications": []
     },
     {
       "name": "teset66",
-      "starts": "2018-07-03T00:32:00.000Z",
-      "ends": "2018-07-03T10:32:00.000Z",
-      "type": "ico",
-      "user_ico": false,
+      "date": "2018-07-03T00:32:00.000Z",
+      "type": "start",
+      "category": "ico",
       "created_at": "2018-04-19T20:33:00.000Z",
       "updated_at": "2018-07-02T20:54:36.927Z",
       "id": 10,
-      "comment": {
-        "starts": null,
-        "ends": "55555"
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       },
-      "alerts": {
-        "starts": [
-          "2018-05-25T06:17:00.000Z"
-        ],
-        "ends": []
-      }
+      "notifications": []
+    },
+    {
+      "name": "teset6610",
+      "type": "end",
+      "date": "2018-07-03T10:32:00.000Z",
+      "category": "ico",
+      "created_at": "2018-04-19T20:33:00.000Z",
+      "updated_at": "2018-07-02T20:54:36.927Z",
+      "id": 1010,
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      },
+      "notifications": []
     },
     {
       "name": "teste4346",
-      "starts": "2018-07-28T08:44:00.000Z",
-      "ends": "2018-07-29T10:44:00.000Z",
-      "type": "pre",
-      "user_ico": true,
+      "date": "2018-07-28T08:44:00.000Z",
+      "type": "start",
+      "category": "pre",
       "created_at": "2018-04-19T20:44:00.000Z",
       "updated_at": "2018-05-26T00:44:37.835Z",
       "id": 11,
-      "comment": {
-        "starts": null,
-        "ends": null
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       },
-      "alerts": {
-        "starts": [],
-        "ends": []
-      }
+      "notifications": []
+    },
+    {
+      "name": "teste4346",
+      "type": "end",
+      "date": "2018-07-29T10:44:00.000Z",
+      "category": "pre",
+      "created_at": "2018-04-19T20:44:00.000Z",
+      "updated_at": "2018-05-26T00:44:37.835Z",
+      "id": 1111,
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      },
+      "notifications": []
     },
     {
       "name": "rewr3443",
-      "starts": "2018-07-28T13:46:00.000Z",
-      "ends": "2018-07-28T16:46:00.000Z",
-      "type": "kyc",
-      "user_ico": true,
+      "date": "2018-07-28T13:46:00.000Z",
+      "type": "start",
+      "category": "kyc",
       "created_at": "2018-04-19T20:47:00.000Z",
       "updated_at": "2018-05-26T00:43:46.455Z",
       "id": 12,
-      "comment": {
-        "starts": "asdsadasd",
-        "ends": "assasas"
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       },
-      "alerts": {
-        "starts": [],
-        "ends": []
-      }
+      "notifications": []
+    },
+    {
+      "name": "rewr3443",
+      "type": "end",
+      "date": "2018-07-28T16:46:00.000Z",
+      "category": "kyc",
+      "created_at": "2018-04-19T20:47:00.000Z",
+      "updated_at": "2018-05-26T00:43:46.455Z",
+      "id": 1212,
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      },
+      "notifications": []
     },
     {
       "name": "12345567",
-      "starts": "2018-07-02T23:48:00.000Z",
-      "ends": "2018-07-04T00:40:00.000Z",
-      "type": "ico",
-      "user_ico": true,
+      "date": "2018-07-02T23:48:00.000Z",
+      "type": "start",
+      "category": "ico",
       "created_at": "2018-04-23T10:40:00.000Z",
       "updated_at": "2018-07-02T22:45:39.341Z",
       "id": 13,
-      "comment": {
-        "starts": null,
-        "ends": null
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       },
-      "alerts": {
-        "starts": [
-          "2018-05-24T23:25:00.000Z"
-        ],
-        "ends": []
-      }
+      "notifications": []
+    },
+    {
+      "name": "12345567",
+      "type": "end",
+      "date": "2018-07-04T00:40:00.000Z",
+      "category": "ico",
+      "created_at": "2018-04-23T10:40:00.000Z",
+      "updated_at": "2018-07-02T22:45:39.341Z",
+      "id": 1313,
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      },
+      "notifications": []
     },
     {
       "name": "4444445555",
-      "starts": "2018-07-27T01:44:00.000Z",
-      "ends": "2018-07-27T02:44:00.000Z",
-      "type": "ico",
-      "user_ico": false,
+      "date": "2018-07-27T01:44:00.000Z",
+      "type": "start",
+      "category": "ico",
       "created_at": "2018-04-23T10:44:00.000Z",
       "updated_at": "2018-05-26T00:41:53.657Z",
       "id": 14,
-      "comment": {
-        "starts": null,
-        "ends": null
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": null
       },
-      "alerts": {
-        "starts": [
-          "2018-07-27T01:14:00.000Z"
-        ],
-        "ends": []
-      }
+      "notifications": [
+        {
+          "user_id": null,
+          "event_id": 14,
+          "id": 0,
+          "date": "2018-07-27T01:29:00.000Z"
+        }
+      ]
+    },
+    {
+      "name": "4444445555",
+      "date": "2018-07-28T01:44:00.000Z",
+      "type": "end",
+      "category": "ico",
+      "created_at": "2018-04-23T10:44:00.000Z",
+      "updated_at": "2018-05-26T00:41:53.657Z",
+      "id": 1414,
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
+      },
+      "notifications": []
     },
     {
       "name": "test66634",
-      "starts": "2018-07-27T21:54:00.000Z",
-      "ends": "2018-07-28T23:54:00.000Z",
-      "type": "ico",
-      "user_ico": false,
+      "date": "2018-07-27T21:54:00.000Z",
+      "type": "start",
+      "category": "ico",
       "created_at": "2018-04-23T10:54:48.654Z",
       "updated_at": "2018-05-26T00:43:40.763Z",
       "id": 15,
-      "comment": {
-        "starts": null,
-        "ends": null
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       },
-      "alerts": {
-        "starts": [],
-        "ends": [
-          "2018-05-24T01:39:00.000Z"
-        ]
-      }
+      "notifications": []
     },
     {
-      "name": "test6789",
-      "starts": "2018-07-28T02:52:00.000Z",
-      "ends": "2018-07-29T02:52:00.000Z",
-      "type": "pre",
-      "user_ico": true,
-      "created_at": "2018-04-25T08:52:57.615Z",
-      "updated_at": "2018-05-26T00:44:30.726Z",
-      "id": 16,
-      "alerts": {
-        "starts": [],
-        "ends": []
+      "name": "test66634",
+      "type": "end",
+      "date": "2018-07-28T23:54:00.000Z",
+      "category": "ico",
+      "created_at": "2018-04-23T10:54:48.654Z",
+      "updated_at": "2018-05-26T00:43:40.763Z",
+      "id": 1515,
+      "note": {
+        "event_id": "",
+        "user_id": "",
+        "text": "Some string"
       },
-      "comment": {
-        "starts": null,
-        "ends": null
-      }
-    },
-    {
-      "name": "retrrte",
-      "starts": "2018-07-26T09:26:00.000Z",
-      "ends": "2018-07-26T15:26:00.000Z",
-      "type": "whitelist",
-      "user_ico": true,
-      "created_at": "2018-04-25T18:27:05.057Z",
-      "updated_at": "2018-07-21T09:26:08.531Z",
-      "id": 17,
-      "alerts": {
-        "starts": [],
-        "ends": [
-          "2018-05-26T10:11:00.000Z"
-        ]
-      },
-      "comment": {
-        "starts": null,
-        "ends": null
-      }
-    },
-    {
-      "name": "teste434",
-      "starts": "2018-07-03T01:28:00.000Z",
-      "ends": "2018-07-04T01:28:00.000Z",
-      "type": "pre",
-      "user_ico": false,
-      "created_at": "2018-04-27T18:28:26.080Z",
-      "updated_at": "2018-07-02T20:55:07.393Z",
-      "id": 18,
-      "comment": {
-        "starts": null,
-        "ends": null
-      },
-      "alerts": {
-        "starts": [],
-        "ends": []
-      }
-    },
-    {
-      "name": "adfhhfg433",
-      "starts": "2018-07-24T12:00:00.000Z",
-      "ends": "2018-07-25T12:00:00.000Z",
-      "type": "pre",
-      "user_ico": false,
-      "created_at": "2018-04-27T21:07:49.145Z",
-      "updated_at": "2018-07-21T20:50:53.350Z",
-      "id": 19,
-      "alerts": {
-        "starts": [],
-        "ends": []
-      },
-      "comment": {
-        "starts": null,
-        "ends": null
-      }
-    },
-    {
-      "name": "sdafsdaf",
-      "starts": "2018-07-26T09:00:00.000Z",
-      "ends": "2018-07-28T09:00:00.000Z",
-      "type": "ico",
-      "user_ico": false,
-      "created_at": "2018-04-29T09:02:16.092Z",
-      "updated_at": "2018-07-21T09:26:04.183Z",
-      "id": 20,
-      "comment": {
-        "starts": null,
-        "ends": null
-      },
-      "alerts": {
-        "starts": [],
-        "ends": [
-          "2018-05-25T11:45:00.000Z"
-        ]
-      }
+      "notifications": []
     }
   ],
   "types": [
@@ -352,6 +415,11 @@
       "id": 4,
       "name": "Завершение ICO",
       "code": "end"
+    },
+    {
+      "id": 5,
+      "name": "ICO",
+      "code": "ico"
     }
   ],
   "ico": [

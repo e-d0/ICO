@@ -227,18 +227,6 @@ export default {
      * */
     updatedIndex: function (dayIndex, index) {
       return Number(dayIndex.toString() + index.toString())
-    },
-    /**
-     * Останавливаем распознавание жестов pan, swipe
-     * */
-    stopSwipe () {
-      if (this.$refs.dragTarget) this.$refs.dragTarget.disable('pan', 'swipe')
-    },
-    /**
-     * Запускаем распознавание жестов pan, swipe
-     * */
-    startSwipe () {
-      if (this.$refs.dragTarget) this.$refs.dragTarget.enable('pan', 'swipe')
     }
   },
   created () {
@@ -246,8 +234,6 @@ export default {
      * Запускаем сетчик времени. Раз в минуту обновляет отступ линии времени.
      * */
     setInterval(() => this.timeOffset(), 60000)
-    EventBus.$on('item-dragstart', this.stopSwipe)
-    EventBus.$on('event-dragend', this.startSwipe)
   },
   mounted () {
     this.timeOffset()

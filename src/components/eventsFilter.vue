@@ -6,6 +6,7 @@
         <b-collapse id="formEventsFilter" visible>
           <ul class="choosing-form_list">
             <li v-for="(item,index) in types" :key="index">
+              <template v-if="item.code !== 'ico'">
               <label class="checkbox" :for="'name-'+index">
                 <input type="checkbox"
                        :value="item.code"
@@ -15,6 +16,7 @@
                 <span :class=[item.code]>{{item.name}}</span>
               </label>
               <span>{{itemCount(item)}}</span>
+              </template>
             </li>
           </ul>
         </b-collapse>
@@ -132,10 +134,13 @@ export default {
       if (events !== undefined) {
         let count = 0
         events.filter((event) => {
-          if (!event.tempType.match(type.code)) {
-            return
+          if (event.category.match(type.code)) {
+            count++
+          } else if (event.category === 'ico' && event.type.match(type.code)) {
+            count++
+          } else {
+
           }
-          count++
         })
         return count
       }

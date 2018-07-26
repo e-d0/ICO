@@ -18,8 +18,8 @@
         </div>
       </div>
 
-        <div :class="['mypopover_event',`mypopover_event--${clickedEvent.tempType}`]">
-          <span :class="['mypopover_event-type', {'starts': clickedEvent.isStart === true }, {'ends': clickedEvent.isStart === false}]">{{ getTypeNameByCode() }}</span>
+        <div :class="['mypopover_event',`mypopover_event--${clickedEvent.type}`]">
+          <span :class="['mypopover_event-type', {'starts': clickedEvent.type === 'start' }, {'ends': clickedEvent.type === 'end'}]">{{ getTypeNameByCode() }}</span>
         </div>
         <div class="mypopover_info">
           <div class="mypopover_info-time">
@@ -32,14 +32,6 @@
           </div>
         </div>
 
-      <!--<template v-if="alerts.length > 0">-->
-        <!--<div class="mypopover_remainder"  v-for="(item, index) in alerts" :key="index">-->
-            <!--<span >-->
-               <!--{{ $t('form.RemindTime', { time: convertToDiff(item) }  ) }}-->
-            <!--</span>-->
-            <!--<a @click="removeAlert(index)">{{ $t('form.Remove') }}</a>-->
-        <!--</div>-->
-      <!--</template>-->
       <div class="mypopover_remainder"  v-for="(item, index) in timeValue" :key="index">
         <span>{{ $t('form.Remind') }} </span>
         <div class="mypopover_remainder-select">
@@ -61,25 +53,6 @@
         <a :class="['remove']" @click="removeAlert(index)" >{{ $t('form.Remove') }}</a>
       </div>
 
-      <!--Селект с возможностью добавлять время алерта. Пока отключен за ненадобностью-->
-
-      <!--<div v-if="(notificForm || this.clickedItemAlerts() === undefined ) &&-->
-                  <!--(filteredTimeOptions.length > 0)"-->
-                  <!--class="mypopover_remainder">-->
-        <!--<span>{{ $t('form.Remind') }} </span>-->
-        <!--<div class="mypopover_remainder-select">-->
-          <!--<select v-model="timeValue">-->
-            <!--<template v-for="( val, index ) in filteredTimeOptions">-->
-
-                <!--<option :key="index" name="name[]" :value="val" >-->
-                  <!--<a>{{ val }} {{ $t('form.min') }}</a>-->
-                <!--</option>-->
-
-            <!--</template>-->
-          <!--</select>-->
-        <!--</div>-->
-        <!--<a :class="['add']" @click="addAlert(timeValue)" >{{ $t('form.Add') }}</a>-->
-      <!--</div>-->
       <div class="mypopover_add">
         <div class="col-sm-6 mypopover_add-remind" >
           <a :class="[{'disabled': filteredTimeOptions.length === 0 }]" @click="addAlertToTempStorage()">{{ $t('form.AddReminder') }}</a>
@@ -101,7 +74,7 @@
                     cols="30"
                     :value="comment"
                     @change="updateComment($event.target.value)"
-                    placeholder="Введите комментарий..."
+                    placeholder="Enter comment..."
                     rows="5"></textarea>
       </div>
 
@@ -147,17 +120,15 @@ export default {
      * Отфильтрованные значения времени алерта для выпадающего селекта
      * */
     filteredTimeOptions: {
-      cache: false,
       get: function () {
         let arr = [...this.timeOptions]
         if (this.alerts !== undefined && this.alerts.length) {
-          let alerts = this.alerts
           /**
          * Сверяем оповещения события с массивом опромежутков.
          * Если есть совпадения, то удаляем промежуток.
          * Таким образом в выборе появляются только уникальные значения.
          * */
-          for (let i = 0; i < alerts.length; i++) {
+          for (let i = 0; i < this.alerts.length; i++) {
             if (arr.includes(this.countDiffTime(i))) {
               let index = arr.indexOf(this.countDiffTime(i))
               if (index !== -1) arr.splice(index, 1)
@@ -174,7 +145,7 @@ export default {
      * */
     timeValue: function (newVal, oldVal) {
       newVal.forEach((item, index) => {
-        let eventStarts = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
+        let eventStarts = this.clickedEvent.date
         let startTime = this.$moment(eventStarts).subtract(item, 'minutes')
         this.alerts[index] = startTime.toISOString()
       })
@@ -185,8 +156,10 @@ export default {
      * При создании этого компонента заполняем переменную алертами из текущего event
      * */
     if (this.clickedItemAlerts() !== undefined) {
-      this.alerts = this.sortDates([...this.clickedItemAlerts()])
-      this.timeValue = this.alerts.map(item => this.convertToDiff(item))
+      this.alerts = this.sortDates(this.clickedItemAlerts())
+      this.alerts.forEach((item) => {
+        this.timeValue.push(this.convertToDiff(item))
+      })
     }
     /**
      * При создании этого компонента заполняем переменную комментариями из текущего event
@@ -201,19 +174,21 @@ export default {
       return this.timeValue.includes(val)
     },
     /**
-     * Проверка, откуда брать alert: из начала события или окончания
+     * Проверка, откуда брать alert: из начала события или оконанияч
      * */
     clickedItemAlerts () {
-      if (this.clickedEvent.alerts !== undefined) {
-        return this.clickedEvent.isStart ? this.clickedEvent.alerts.starts : this.clickedEvent.alerts.ends
+      if (this.clickedEvent.notifications !== undefined && this.clickedEvent.notifications.length) {
+        let arr = []
+        this.clickedEvent.notifications.forEach(item => arr.push(item.date))
+        return arr
       }
     },
     /**
      * Проверка, откуда брать comment: из начала события или окончания
      * */
     clickedItemComments () {
-      if (this.clickedEvent.comment !== undefined) {
-        return this.clickedEvent.isStart ? this.clickedEvent.comment.starts : this.clickedEvent.comment.ends
+      if (this.clickedEvent.note !== undefined) {
+        return this.clickedEvent.note.text
       }
     },
     /**
@@ -240,16 +215,15 @@ export default {
      * и получаем имя типа события по коду
      * */
     getTypeNameByCode () {
-      return this.$store.getters['event/getTypeNameByCode'](this.clickedEvent.tempType)
+      return this.$store.getters['event/getTypeNameByCode'](this.clickedEvent.type)
     },
     /**
      * Добавить оповещение
      * */
     addAlert (val) {
-      let eventStarts = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
+      let eventStarts = this.clickedEvent.date
       let startTime = this.$moment(eventStarts).subtract(val, 'minutes')
       this.alerts.push(startTime.toISOString())
-      // this.alerts = this.sortDates(this.alerts)
     },
     /**
      * Удалить оповещение
@@ -263,8 +237,8 @@ export default {
      * Посчитать разницу во времени между переданным объектом даты и началом\окончанием event в минутах
      * */
     convertToDiff (item) {
-      let alert = this.$moment(item)
-      let start = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
+      let alert = item
+      let start = this.clickedEvent.date
       let diff = countDiffBetweenDates(alert, start)
       /**
        * преобразуем разницу в минуты
@@ -276,7 +250,7 @@ export default {
      * */
     countDiffTime (index) {
       let alert = this.$moment(this.alerts[index])
-      let start = this.clickedEvent.isStart ? this.clickedEvent.starts : this.clickedEvent.ends
+      let start = this.clickedEvent.date
       let diff = countDiffBetweenDates(alert, start)
       /**
        * преобразуем разницу в минуты
@@ -294,13 +268,27 @@ export default {
        * Поэтому клонируем этот объект .
        * */
       let item = JSON.parse(JSON.stringify(this.clickedEvent))
-      if (this.clickedEvent.isStart === true) {
-        item.comment.starts = this.comment
-        item.alerts.starts = this.alerts
-      } else {
-        item.comment.ends = this.comment
-        item.alerts.ends = this.alerts
+      let arr = []
+      this.alerts.forEach((alert, index) => {
+        let alertObj = {
+          user_id: null,
+          event_id: this.clickedEvent.id,
+          id: index,
+          date: alert
+        }
+        arr.push(alertObj)
+      })
+      item.notifications = arr
+
+      /**
+       * Изменяем текст
+       * */
+      let noteObj = {
+        user_id: null,
+        event_id: this.clickedEvent.id,
+        text: this.comment
       }
+      item.note = noteObj
 
       console.log('comments or alerts changed', item)
 
@@ -324,7 +312,7 @@ export default {
      * По нажатию на кнопку сразу добавить оповещение
      * */
     addAlertToTempStorage () {
-      if (this.filteredTimeOptions.length > 0) {
+      if (this.filteredTimeOptions.length >= 1) {
         this.notificForm = true
         if (this.filteredTimeOptions[0] !== undefined) {
           this.timeValue.push(this.filteredTimeOptions[0])
@@ -344,13 +332,13 @@ export default {
      * Возвращает дату начала текущего event
      * */
     dateStart () {
-      return this.clickedEvent.isStart ? this.$moment(this.clickedEvent.starts) : this.$moment(this.clickedEvent.ends)
+      return this.$moment(this.clickedEvent.date)
     },
     /**
      * Показать времея до начала события от текущего момента
      * */
     timeToStart () {
-      return this.clickedEvent.isStart ? this.$moment(this.clickedEvent.starts).fromNow() : this.$moment(this.clickedEvent.ends).fromNow()
+      return this.$moment(this.clickedEvent.date).fromNow()
     },
     /**
      * Закрываем окно вызовом события и уникального Id. https://bootstrap-vue.js.org/docs/components/popover/

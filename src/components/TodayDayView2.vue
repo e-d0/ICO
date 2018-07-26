@@ -20,9 +20,9 @@
           <div class="ico-list_item-reminder">
             <a :id="eventID(event)"
                @click.prevent=""
-               :class="['item-reminder_btn','reminder', { 'alerts': event.alerts !== undefined && event.alerts.starts.length}]"
+               :class="['item-reminder_btn','reminder', { 'notifications': event.notifications !== undefined && event.notifications.length}]"
                href="#">
-              <template v-if="event.alerts !== undefined && event.alerts.starts.length">
+              <template v-if="event.notifications !== undefined && event.notifications.length">
                 {{ $t('calendar.ReminderAdded') }}
               </template>
               <template v-else>
@@ -33,11 +33,11 @@
             <a @click.prevent="" class="item-reminder_btn calendar" href="#">{{ $t('calendar.AddToCalendar') }}</a>
           </div>
           <div class="ico-list_item-data">
-            <span :class="['ico-list_item-event',`ico-list_item-event--${event.tempType}`]">{{ getTypeNameByCode(event.tempType) }}</span>
+            <span :class="['ico-list_item-event',`ico-list_item-event--${event.category === 'ico' ? event.type : event.category}`]">{{ getTypeNameByCode(event.category === 'ico' ? event.type : event.category) }}</span>
             <span class="ico-list_item-time-remain"
-                  v-html="event.isStart ?
-                $t('calendar.StartsIn', { time: moment(event.starts).fromNow() }  ) :
-                $t('calendar.EndsIn', { time: moment(event.ends).fromNow() }  )">
+                  v-html="event.type === 'start' ?
+                $t('calendar.StartsIn', { time: moment(event.date).fromNow() }  ) :
+                $t('calendar.EndsIn', { time: moment(event.date).fromNow() }  )">
           </span>
           </div>
           <popover :target="eventID(event)" :popoverShow="popoverShow" :clickedEvent="event" ></popover>
@@ -93,7 +93,7 @@ export default {
       let arr = []
 
       for (let i = 0; i < events.length; i++) {
-        let filter = this.actual ? events[i].isStart : !events[i].isStart
+        let filter = this.actual ? events[i].type === 'start' : events[i].type === 'end'
         if (filter) {
           arr.push(events[i])
         }
@@ -119,7 +119,7 @@ export default {
       this.actual = (val === 'true')
     },
     eventID (event) {
-      return `event-${event.id}-${event.isStart}`
+      return `event-${event.id}-${event.type === 'start'}`
     },
     /**
      * Вызываем геттер модуля events хранилища с параметрами
@@ -297,7 +297,7 @@ export default {
               color: #45af37!important;
             }
           }
-          &.reminder.alerts::before{
+          &.reminder.notifications::before{
             background-image: @img-calendar-approved;
           }
         }

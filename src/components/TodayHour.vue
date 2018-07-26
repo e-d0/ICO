@@ -12,7 +12,7 @@
                :style="{ zIndex: 1 }"
                :key="index"
                :item="item"
-               :type="item.type"
+               :type="(item.category === 'ico' ? item.type : item.category)"
                @item-dragstart="dragItem"
                :date="date"></event>
       </template>

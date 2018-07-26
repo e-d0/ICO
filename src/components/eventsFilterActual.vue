@@ -15,17 +15,17 @@
     <div v-if="filteredEvents" v-for="(event, index) in filteredEvents" :key="index" class="current-events_item">
       <div class="current-events_item-data">
         <span class="current-events_item-name" data-toggle="tooltip" data-placement="right" title="">{{event.name}}</span>
-        <span :class="['current-events_item-event',`current-events_item-event--${event.tempType}`]">{{ getTypeNameByCode(event.tempType) }}</span>
+        <span :class="['current-events_item-event',`current-events_item-event--${event.category === 'ico' ? event.type : event.category}`]">{{ getTypeNameByCode(event.category === 'ico' ? event.type : event.category) }}</span>
       </div>
       <div class="current-events_item-data">
         <span class="current-events_item-time" data-toggle="tooltip" data-placement="top" title="">
-          {{ moment(event.starts).format('HH:mm') }}
+          {{ moment(event.date).format('HH:mm') }}
         </span>
         <span v-if="actual === 'true'" class="current-events_item-time-remain" data-toggle="tooltip" data-placement="right" title="">
-          {{ $t('form.eventFilterActualStart', { time: moment(event.starts).fromNow() }  ) }}
+          {{ $t('form.eventFilterActualStart', { time: moment(event.date).fromNow() }  ) }}
         </span>
         <span v-else class="current-events_item-time-remain" data-toggle="tooltip" data-placement="right" title="">
-          {{ $t('form.eventFilterActualEnd', { time: moment(event.ends).fromNow() }  ) }}
+          {{ $t('form.eventFilterActualEnd', { time: moment(event.date).fromNow() }  ) }}
         </span>
       </div>
     </div>
@@ -57,9 +57,9 @@ export default {
 
       return this.sortedDates(arr.filter(event => {
         if (this.actual === 'true') {
-          if (this.moment(event.ends) > currTime) return event
+          if (this.moment(event.date) > currTime) return event
         } else {
-          if (this.moment(event.ends) < currTime) return event
+          if (this.moment(event.date) < currTime) return event
         }
       })
       )

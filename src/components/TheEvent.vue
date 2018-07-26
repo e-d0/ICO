@@ -1,5 +1,5 @@
 <template>
-  <div :class="['timeline_event', `timeline_event--${item.tempType}`]">
+  <div :class="['timeline_event', `timeline_event--${item.category === 'ico' ? item.type : item.category}`]">
 
     <div class="timeline_event-data">
       <span class="timeline_event-time"> {{returnDate(item)}}
@@ -10,7 +10,7 @@
       <span class="timeline_event-name timeline_event-name--calendar">{{item.name}}</span>
 
     </div>
-    <div :class="['timeline_event-type', {'starts': item.isStart === true }, {'ends': item.isStart === false}]">
+    <div :class="['timeline_event-type', {'starts': item.type === 'start' }, {'ends': item.type === 'end'}]">
       <template  v-if="index === null || index === undefined ">
         <span>{{ getTypeNameByCode() }}</span>
       </template>
@@ -48,21 +48,21 @@ export default {
      * Проверяем, отображаться ли иконке оповещения
      * */
     showAlertsIcon: function () {
-      if (this.item.alerts !== undefined) {
-        let alert = this.item.isStart ? this.item.alerts.starts : this.item.alerts.ends
+      if (this.item.notifications !== undefined) {
+        let alert = this.item.notifications
         return alert !== undefined &&
                alert.length > 0
       }
     },
     showCommentsIcon: function () {
-      if (this.item.comment !== undefined) {
-        let comment = this.item.isStart ? this.item.comment.starts : this.item.comment.ends
+      if (this.item.note.text !== undefined) {
+        let comment = this.item.note.text
         return comment !== undefined &&
                comment != null
       }
     },
     getTypeNameByCode () {
-      return this.$store.getters['event/getTypeNameByCode'](this.item.tempType)
+      return this.$store.getters['event/getTypeNameByCode'](this.item.type)
     },
     /**
      * Событие для родителя. Переключить следующий event

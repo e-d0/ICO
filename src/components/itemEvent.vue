@@ -23,7 +23,7 @@ export default {
   },
   computed: {
     eventID () {
-      return `event-${this.item.id}-${this.item.isStart ? 'starts' : 'ends'}`
+      return `event-${this.item.id}-${this.item.type}`
     }
   },
   methods: {

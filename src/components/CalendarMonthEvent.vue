@@ -10,10 +10,10 @@
 
     <li v-for="(event,count) in events[index]"
         :key="count"
-        :class="`calendar__day__event--${[event.tempType]}`"
+        :class="`calendar__day__event--${[event.type]}`"
         :id="generateId(event)">
       {{event.name}}
-      <popover :target="generateId(event)" :popoverShow="popoverShow" :clickedEvent="event" :isStart="event.isStart" ></popover>
+      <popover :target="generateId(event)" :popoverShow="popoverShow" :clickedEvent="event" :isStart="event.type === 'start'" ></popover>
     </li>
 
   </ul>
@@ -36,7 +36,7 @@ export default {
   },
   methods: {
     generateId (event) {
-      return `event-month-${event.id}-${event.isStart ? 'starts' : 'ends'}`
+      return `event-month-${event.id}-${event.type}`
     },
     isLastElem () {
       return this.events.length === this.index + 1

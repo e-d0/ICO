@@ -16,37 +16,6 @@ const state = {
   ICO: []
 }
 
-/**
- * Главная функция ,создающая события с служебными полями
- * @param {array} events
- * @return {array}
- * */
-let generatedEvents = (events) => {
-  let arr = []
-  let eventsArr = [...events]
-  /**
-   * фильтруем события и добавляем служебные поля.
-   * При отправке на сервер, служебыне поля будут удалены.
-   * */
-  for (let i = 0; i < eventsArr.length; i++) {
-    if (eventsArr[i].starts !== undefined) {
-      let elem = Object.assign({}, eventsArr[i])
-      elem.date = new Date(eventsArr[i].starts)
-      elem.isStart = true
-      elem.tempType = elem.type === 'ico' ? 'start' : elem.type
-      arr.push(elem)
-    }
-    if (eventsArr[i].ends !== undefined) {
-      let elem = Object.assign({}, eventsArr[i])
-      elem.date = new Date(eventsArr[i].ends)
-      elem.isStart = false
-      elem.tempType = elem.type === 'ico' ? 'end' : elem.type
-      arr.push(elem)
-    }
-  }
-  return arr
-}
-
 const getters = {
   ICO: state => state.ICO,
   events: state => state.events,
@@ -64,9 +33,15 @@ const getters = {
     /**
      * Фильр по времени и по типу
      * */
+
     return arr.filter(event => {
-      if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType) && moment(event.ends) > currTime) {
-        return state.filters['my_ico'] === false ? event : (event['user_ico'] === true ? event : false)
+      if (state.filters.types instanceof Array &&
+          state.filters.types.includes(event.category) && moment(event.date) > currTime) {
+        if (event.category === 'ico') {
+          return state.filters.types.includes(event.type) ? event : false
+        } else {
+          return event
+        }
       }
     }
     )
@@ -87,11 +62,13 @@ const getters = {
      * Фильр по времени и по типу
      * */
     return arr.filter(event => {
-      if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType) && moment(event.ends) < currTime) {
-        /**
-         * Проверка фильтра my_ico
-         * */
-        return state.filters['my_ico'] === false ? event : (event['user_ico'] === true ? event : false)
+      if (state.filters.types instanceof Array &&
+          state.filters.types.includes(event.category) && moment(event.date) > currTime) {
+        if (event.category === 'ico') {
+          return state.filters.types.includes(event.type) ? event : false
+        } else {
+          return event
+        }
       }
     }
     )
@@ -132,25 +109,23 @@ const getters = {
         if (
           state.filters.names &&
           state.filters.names.length > 0 &&
-          state.filters.types instanceof Array && state.filters.types.includes(event.tempType)
+          state.filters.types instanceof Array && state.filters.types.includes(event.category)
         ) {
           for (let item = 0; item < state.filters.names.length; item++) {
             if (state.filters.names[item].name === (event.name)) {
-              /**
-               * Проверка на фильтр my_ico
-               * */
-              return state.filters['my_ico'] === false ? event : (event['user_ico'] === true ? event : false)
+              return event
             }
           }
         } else {
           /**
            * фильтр по типу
            * */
-          if (state.filters.types instanceof Array && state.filters.types.includes(event.tempType)) {
-            /**
-             * Проверка на фильтр my_ico
-             * */
-            return state.filters['my_ico'] === false ? event : (event['user_ico'] === true ? event : false)
+          if (state.filters.types instanceof Array && state.filters.types.includes(event.category)) {
+            if (event.category === 'ico') {
+              return state.filters.types.includes(event.type) ? event : false
+            } else {
+              return event
+            }
           }
         }
       })
@@ -216,59 +191,7 @@ const getters = {
           }
         }
       }
-      // if (groupedEvents[i].length && groupedEvents[nextHour] !== undefined && groupedEvents[nextHour].length) {
-      //   if (groupedEvents[i].length > 0 && groupedEvents[nextHour] !== undefined && groupedEvents[nextHour].length) {
-      //     let hourEl = groupedEvents[i][groupedEvents[i].length - 1]
-      //     let k
-      //     for (k = 0; k < groupedEvents[nextHour].length; k++) {
-      //       /**
-      //        * Проверка на разницу в час элемент предыдущей группы и текущий проверяемый час
-      //        */
-      //         // let checksDiff = groupedEvents[nextHour][k] !== undefined ? moment(groupedEvents[nextHour][k].date).diff(moment(hourEl.date), 'minutes') < diff : false
-      //       let checksDiff = groupedEvents[nextHour][k] !== undefined ? moment(groupedEvents[nextHour][k].date).getMinutes() < diff : false
-      //       if (checksDiff) {
-      //         /**
-      //          * Добавить элемент из следующей в текущею группы
-      //          * */
-      //         // if (groupedEvents[i].length > 1) {
-      //         groupedEvents[i].push(groupedEvents[nextHour][k])
-      //         groupedEvents[nextHour].splice(k, 1)
-      //         // }
-      //       }
-      //     }
-      //   }
-      // }
-      // if (groupedEvents[i].length && groupedEvents[prevHour] !== undefined && groupedEvents[prevHour].length) {
-      //   if (groupedEvents[i].length > 0 && groupedEvents[prevHour] !== undefined && groupedEvents[prevHour].length) {
-      //     let hourEl = groupedEvents[i][0]
-      //     let k
-      //     for (k = groupedEvents[prevHour].length - 1; k >= 0; k--) {
-      //       /**
-      //        * Проверка на разницу в час элемент предыдущей группы и текущий проверяемый час
-      //        */
-      //       let checksDiff = groupedEvents[prevHour][k] !== undefined ? moment(hourEl.date).diff(moment(groupedEvents[prevHour][k].date), 'minutes') < diff : false
-      //       if (checksDiff) {
-      //         /**
-      //          * Добавить элемент из следующей в текущею группы
-      //          * */
-      //         // if (groupedEvents[i].length > 0) {
-      //           groupedEvents[i].push(groupedEvents[prevHour][k])
-      //           groupedEvents[prevHour].splice(k, 1)
-      //         // }
-      //       }
-      //     }
-      //   }
-      // }
     }
-    // console.log('GROUUUUUPPPP', groupedEvents)
-    // let dates = groupedEvents.map(item => {
-    //   let arr = []
-    //   for (let i = 0; i < item.length; i++) {
-    //     arr.push(moment(item[i].starts).format('DD HH mm'))
-    //   }
-    //   return arr
-    // })
-    // console.log('GROUUUUUPPPP', dates)
     return groupedEvents
   }
 }
@@ -340,16 +263,13 @@ const actions = {
     /**
      * приводим event в соответствие с сервером
      * */
-    delete payload.value.date
-    delete payload.value.isStart
-    delete payload.value.tempType
     axios.patch(context.rootGetters.api_url + `/events/${payload.value.id}`, payload.value).then((response) => {
       console.log(response)
       response['id'] = payload.id
       /**
        * Приводим к формату приложения дату, принятую с сервера
        * */
-      response.data['date'] = new Date(response.data.starts)
+      response.data['date'] = new Date(response.data.date)
       context.commit('createOrUpdateEvent', response.data)
     }).catch(handleXHRerrors)
   },
@@ -434,13 +354,6 @@ const mutations = {
   createOrUpdateEvent: (state, objEvent) => {
     console.log('createOrUpdateEvent objEvent', objEvent)
     if (state.events) {
-      let foundEvent = state.events.filter(event => event.id === objEvent.id)
-      if (foundEvent) {
-        // Deduplicate
-        for (let i in foundEvent) {
-          mutations.deleteEvent(state, foundEvent[i])
-        }
-      }
       if (typeof objEvent.id !== 'undefined') {
         mutations.updateEvent(state, objEvent)
       } else {
@@ -449,26 +362,19 @@ const mutations = {
     }
   },
   addEvent: (state, objEvent) => {
-    /**
-     * Создаем служебные поля для обновленных событий
-     * */
-    let serviceEvents = generatedEvents([objEvent])
-    state.events = [...state.events, ...serviceEvents]
+    state.events = [...state.events, ...objEvent]
   },
   updateEvent: (state, objEvent) => {
-    mutations.deleteEvent(state, objEvent.id)
-    /**
-     * Создаем служебные поля для обновленных событий
-     * */
-    let serviceEvents = generatedEvents([objEvent])
-    state.events = [...state.events, ...serviceEvents]
+    let indx = state.events.findIndex((item) => item.id === objEvent.id)
+    state.events.splice(indx, 1)
+    state.events[indx] = objEvent
   },
   deleteEvent: (state, objEvent) => {
     state.events = state.events.filter(event => event.id !== objEvent.id)
     console.log('filtered', state.events)
   },
   getEvents: (state, objEvents) => {
-    state.events = generatedEvents(objEvents)
+    state.events = objEvents
     console.log('write object event to State', objEvents)
   }
 }

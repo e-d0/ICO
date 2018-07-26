@@ -26,7 +26,8 @@
 <script>
 import tplHeader from './TheHeader'
 import tplFooter from './TheFooter'
-import { EventBus, countDiffBetweenDates } from './eventbus'
+import { EventBus } from './eventbus'
+// import { countDiffBetweenDates } from './eventbus'
 import eventsFilter from './eventsFilter'
 import CalendarBody from './CalendarBody'
 import CalendarDatePicker from './CalendarDatePicker'
@@ -53,43 +54,44 @@ export default {
      * */
     getEvents () {
       this.$store.dispatch('event/getEvents')
-    },
-    changeDate (e, item, date) {
-      console.log('item to cHANGE <<<<<<', item)
-      /**
-       * Находим индекс элемента в текущем массиве событий
-       * */
-      const updateIndex = this.events.findIndex(ele => ele.id === item.id)
-      /**
-       * Считаем разницу
-       * */
-      const diff = countDiffBetweenDates(this.events[updateIndex].starts, this.events[updateIndex].ends)
-      /**
-       * Формируем json объект для отправки на сервер. Все даты в ISO 8601. (https://en.wikipedia.org/wiki/ISO_8601)
-       * */
-      let body = {
-        'id': item.id,
-        'name': item.name,
-        'created_at': this.$moment(item.created_at).toISOString(),
-        'updated_at': this.$moment().toISOString(),
-        'starts': this.$moment(date.setMinutes(item.date.getMinutes())).toISOString(),
-        'ends': this.$moment(date.setMinutes(item.date.getMinutes())).add(diff).toISOString(),
-        'type': item.type
-      }
-      console.log('date changed', body)
-
-      return this.$store.dispatch({
-        type: 'event/changeEvent',
-        value: body
-      })
     }
+    // ,
+    // changeDate (e, item, date) {
+    //   console.log('item to cHANGE <<<<<<', item)
+    //   /**
+    //    * Находим индекс элемента в текущем массиве событий
+    //    * */
+    //   const updateIndex = this.events.findIndex(ele => ele.id === item.id)
+    //   /**
+    //    * Считаем разницу
+    //    * */
+    //   const diff = countDiffBetweenDates(this.events[updateIndex].starts, this.events[updateIndex].ends)
+    //   /**
+    //    * Формируем json объект для отправки на сервер. Все даты в ISO 8601. (https://en.wikipedia.org/wiki/ISO_8601)
+    //    * */
+    //   let body = {
+    //     'id': item.id,
+    //     'name': item.name,
+    //     'created_at': this.$moment(item.created_at).toISOString(),
+    //     'updated_at': this.$moment().toISOString(),
+    //     'starts': this.$moment(date.setMinutes(item.date.getMinutes())).toISOString(),
+    //     'ends': this.$moment(date.setMinutes(item.date.getMinutes())).add(diff).toISOString(),
+    //     'type': item.type
+    //   }
+    //   console.log('date changed', body)
+    //
+    //   return this.$store.dispatch({
+    //     type: 'event/changeEvent',
+    //     value: body
+    //   })
+    // }
   },
   created () {
     /**
      * Обработчик глобального события
      */
     EventBus.$on('update-events', this.getEvents)
-    EventBus.$on('event-dragend', this.changeDate)
+    // EventBus.$on('event-dragend', this.changeDate)
     this.getEvents()
   },
   mounted () {
