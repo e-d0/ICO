@@ -11,19 +11,7 @@ import 'v-calendar/lib/v-calendar.min.css'
 import BootstrapVue from 'bootstrap-vue'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import moment from 'moment-timezone'
-import VueTouch from 'vue-touch'
 import i18n from './locales'
-
-/**
- * Подключаем Hummer.js для vue. https://github.com/vuejs/vue-touch/tree/next
- * **/
-VueTouch.config.swipe = {
-  direction: 'horizontal'
-}
-VueTouch.config.pan = {
-  direction: 'horizontal'
-}
-Vue.use(VueTouch, {name: 'v-touch'})
 
 /**
 * //TODO Отключил предупреждение. Слишком уж консоль засоряет.

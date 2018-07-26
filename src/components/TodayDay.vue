@@ -15,7 +15,7 @@
 
         </div>
       </div>
-      <v-touch class="events"
+      <div class="events"
                id="events">
         <div class="events-group" v-if="date">
 
@@ -30,7 +30,7 @@
           </div>
 
         </div>
-      </v-touch >
+      </div >
     </div>
   </div>
 </template>
