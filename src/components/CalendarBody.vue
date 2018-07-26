@@ -56,6 +56,7 @@
 <script>
 import CalendarWeek from './CalendarWeek'
 import CalendarMonth from './CalendarMonth'
+import CalendarDays from './CalendarDays'
 import formAddICO from './formAddICO'
 import { EventBus } from './eventbus'
 import modal from './modalBody'
@@ -67,7 +68,7 @@ const storeEvent = Vuex.createNamespacedHelpers('event')
 
 export default {
   name: 'CalendarBody',
-  components: { CalendarWeek, CalendarMonth, popover, FormAddEvent, modal, formConfirm, formAddICO },
+  components: { CalendarDays, CalendarWeek, CalendarMonth, popover, FormAddEvent, modal, formConfirm, formAddICO },
   props: {
   },
   data () {
@@ -105,7 +106,7 @@ export default {
   methods: {
     currentTabComponent: function () {
       if (this.showWeek === true) {
-        return 'CalendarWeek'
+        return 'CalendarDays'
       } else {
         this.sideGradient = false
         return 'CalendarMonth'

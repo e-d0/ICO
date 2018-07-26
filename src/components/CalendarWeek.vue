@@ -1,13 +1,13 @@
 <template>
-      <calendar-day></calendar-day>
+      <calendar-days></calendar-days>
 </template>
 
 <script>
-import CalendarDay from './CalendarDay'
+import CalendarDays from './CalendarDays'
 
 export default {
   name: 'Week',
-  components: { CalendarDay },
+  components: { CalendarDays },
   props: {
   },
   data () {

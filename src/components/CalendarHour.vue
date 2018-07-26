@@ -1,9 +1,5 @@
 <template>
-  <div    @dragover.prevent=""
-          @dragenter.prevent="dragenter"
-          @drop="onDrop"
-          v-bind:class="['prevent-drag','timeline_event', {'multistack': isMulti }]"
-          :draggable="false">
+  <div   v-bind:class="['prevent-drag','timeline_event', {'multistack': isMulti }]">
     <span v-if="!checkForDateObj(hour)">{{ hour }}</span>
     <!--<span v-else>{{ hour }}</span>-->
 
@@ -14,7 +10,6 @@
                :item="allEvents[currentEvent.toString()]"
                :type="allEvents[currentEvent.toString()].type"
                :index="countEvents()"
-               @item-dragstart="dragItem"
                v-on:update:current="nextEvent()"
                :date="date"
                :multi="isMulti"></event>
@@ -113,33 +108,6 @@ export default {
     },
     dateFormat (date) {
       return this.$moment(date).format('H:mm')
-    },
-    /**
-     * Для драг дропа. Событие, при котором элемент проноситься юзером над данной клеткой часа
-     * */
-    dragenter (e) {
-      if (this.$el.contains(e.target)) {
-        this.$emit('highlight', this.index)
-
-        if (this.$el === e.target) {
-          EventBus.$emit('cell-dragenter', e, this.date, this.type, this.index)
-        }
-      }
-    },
-    /**
-     * Для драг дропа. Событие начало перетаскивания event`а юзером
-     * */
-    dragItem (e, item, date, type) {
-      this.$emit('highlight', this.index)
-      EventBus.$emit('item-dragstart', e, item, date, type)
-    },
-    /**
-     * Для драг дропа. Событие : юзер отпустил(дроп) итем в клетку часа.
-     * */
-    onDrop (e) {
-      this.$emit('highlight', -1)
-      EventBus.$emit('item-drop', e, this.date, this.type, this.index)
-      console.log('item dropped')
     }
   },
   computed: {
