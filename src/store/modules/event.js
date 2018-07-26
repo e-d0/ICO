@@ -33,14 +33,14 @@ let generatedEvents = (events) => {
       let elem = Object.assign({}, eventsArr[i])
       elem.date = new Date(eventsArr[i].starts)
       elem.isStart = true
-      elem.tempType = elem.type === 'ICO' ? 'start_ico' : elem.type
+      elem.tempType = elem.type === 'ico' ? 'start' : elem.type
       arr.push(elem)
     }
     if (eventsArr[i].ends !== undefined) {
       let elem = Object.assign({}, eventsArr[i])
       elem.date = new Date(eventsArr[i].ends)
       elem.isStart = false
-      elem.tempType = elem.type === 'ICO' ? 'ending_ico' : elem.type
+      elem.tempType = elem.type === 'ico' ? 'end' : elem.type
       arr.push(elem)
     }
   }

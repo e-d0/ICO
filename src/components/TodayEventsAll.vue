@@ -299,19 +299,19 @@ export default {
         white-space: nowrap;
         border-radius: 2px;
         margin-bottom: 2px;
-        &--pre_ico {
+        &--pre {
           background-color: @pre-ico;
         }
-        &--KYC {
+        &--kyc {
           background-color: @KYC;
         }
-        &--ending_ico {
+        &--end {
           background-color: @ending-ico;
         }
-        &--white_list {
+        &--whitelist {
           background-color: @white-list;
         }
-        &--start_ico {
+        &--start {
           background-color: @start-ico;
         }
       }

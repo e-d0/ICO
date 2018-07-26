@@ -412,7 +412,7 @@ export default {
     }
     &_event {
       padding: 10px 20px 10px 40px;
-      &--pre_ico {
+      &--pre {
         background-color: @pre-ico;
         span::before {
           content: "";
@@ -427,7 +427,7 @@ export default {
           background-size: contain;
         }
       }
-      &--start_ico {
+      &--start {
         background-color: @start-ico;
         span::before {
           content: "";
@@ -442,7 +442,7 @@ export default {
           background-size: contain;
         }
       }
-      &--ending_ico {
+      &--end {
         background-color: @ending-ico;
         span::before {
           content: "";
@@ -457,7 +457,7 @@ export default {
           background-size: contain;
         }
       }
-      &--white_list {
+      &--whitelist {
         background-color: @white-list;
         span::before {
           content: "";
@@ -472,7 +472,7 @@ export default {
           background-size: contain;
         }
       }
-      &--KYC {
+      &--kyc {
         background-color: @KYC;
         span::before {
           content: "";

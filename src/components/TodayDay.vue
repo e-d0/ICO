@@ -97,11 +97,9 @@ export default {
 
 <style scoped>
   .timeline_item {
-    cursor: -webkit-grab;
   }
 
   .grabbing.timeline_item{
-    cursor: grabbing;
   }
   #events{}
   .empty-slot{

@@ -482,7 +482,7 @@ export default {
       height: 100%;
       width: 100%;
       position: relative;
-      &--KYC {
+      &--kyc {
         position: relative;
         background-color: rgba(99, 203, 198, 0.75);
         border-top: 4px solid @KYC;

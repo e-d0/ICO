@@ -85,19 +85,19 @@ export default {
       &.calendar__day__event {
         white-space: nowrap;
         width: 100%;
-        &--pre_ico {
+        &--pre {
           background-color: @pre-ico;
         }
-        &--start_ico {
+        &--start {
           background-color: @start-ico;
         }
-        &--ending_ico {
+        &--end {
           background-color: @ending-ico;
         }
-        &--white_list {
+        &--whitelist {
           background-color: @white-list;
         }
-        &--KYC {
+        &--kyc {
           background-color: @KYC;
         }
       }

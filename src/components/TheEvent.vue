@@ -110,7 +110,7 @@ export default {
     &--item{
       cursor: pointer;
     }
-    &--KYC {
+    &--kyc {
       position: relative;
       background-color: rgba(99, 203, 198, 0.75);
       border-top: 4px solid @KYC;
@@ -138,7 +138,7 @@ export default {
       //  background-size: contain;
       //}
     }
-    &--white_list {
+    &--whitelist {
       position: relative;
       background-color: rgba(255, 129, 158, 0.75);
       border-top: 4px solid @white-list;
@@ -166,7 +166,7 @@ export default {
       //  background-size: contain;
       //}
     }
-    &--ending_ico {
+    &--end {
       position: relative;
       background-color: rgba(143, 114, 199, 0.75);
       border-top: 4px solid @ending-ico;
@@ -194,7 +194,7 @@ export default {
       //  background-size: contain;
       //}
     }
-    &--pre_ico {
+    &--pre {
       position: relative;
       background-color: rgba(247, 152, 27, 0.75);
       border-top: 4px solid @pre-ico ;
@@ -222,7 +222,7 @@ export default {
       //  background-size: contain;
       //}
     }
-    &--pre_ico {
+    &--pre {
       position: relative;
       background-color: rgba(247, 152, 27, 0.75);
       border-top: 4px solid @pre-ico ;
@@ -250,7 +250,7 @@ export default {
       //  background-size: contain;
       //}
     }
-    &--start_ico {
+    &--start {
       position: relative;
       background-color: rgba(69, 175, 54, 0.75);
       border-top: 4px solid @start-ico ;
