@@ -31,9 +31,9 @@
 
             <div class="radio-buttons">
 
-              <a href="#" @click.prevent="showOnlyMyICO(true)" :class="['switch_btn','btn_left', {active: filters['my_ico'] === true}]">{{ $t('calendar.myICO') }}</a>
+              <a href="#" @click.prevent="showOnlyMyICO(true)" :class="['switch_btn','btn_left', {active: onlyUserICO === true}]">{{ $t('calendar.myICO') }}</a>
 
-              <a href="#" @click.prevent="showOnlyMyICO(false)" :class="['switch_btn','switch','btn_right', {active: filters['my_ico'] === false }]" >{{ $t('calendar.allICO') }}</a>
+              <a href="#" @click.prevent="showOnlyMyICO(false)" :class="['switch_btn','switch','btn_right', {active: onlyUserICO === false }]" >{{ $t('calendar.allICO') }}</a>
 
             </div>
           </div>
@@ -103,11 +103,14 @@ export default {
   computed: {
     ...storeEvent.mapGetters({
       filters: 'filters'
+    }),
+    ...storeEvent.mapState({
+      onlyUserICO: 'onlyUserICO'
     })
   },
   methods: {
     showOnlyMyICO (val) {
-      this.$store.dispatch('event/setFilterMyICO', val)
+      this.$store.dispatch('event/setOnlyMyICO', val)
     },
     /**
      * Если первый день, возвращаем стартовый час

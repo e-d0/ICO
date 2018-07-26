@@ -2,12 +2,12 @@ import axios from 'axios'
 import moment from 'moment'
 
 const state = {
+  onlyUserICO: false,
   events: [],
   types: [],
   filters: {
     'types': [],
-    'names': [],
-    'my_ico': false
+    'names': []
   },
   dates: [],
   /**
@@ -304,9 +304,13 @@ const actions = {
     console.log('setFilters value at storage ', payload)
     context.commit('setFilters', payload)
   },
-  setFilterMyICO (context, payload) {
-    console.log('setFilterMyICO value at storage ', payload)
-    context.commit('setFilterMyICO', payload)
+  setOnlyMyICO (context, payload) {
+    console.log('setOnlyMyICO value at storage ', payload)
+    if (payload) {
+      context.dispatch('getOnlyUserEvents')
+    } else {
+      context.dispatch('getEvents')
+    }
   },
   /**
    * Получаем типы событий , используя промис
@@ -357,6 +361,14 @@ const actions = {
   getEvents (context, payload) {
     axios.get(context.rootGetters.api_url + '/events').then((oResponse) => {
       context.commit('getEvents', oResponse.data)
+      context.commit('setOnlyUserICO', false)
+      console.log('events get at action getEvents', oResponse.data)
+    }).catch(handleXHRerrors)
+  },
+  getOnlyUserEvents (context, payload) {
+    axios.get(context.rootGetters.api_url + '/events').then((oResponse) => {
+      context.commit('getEvents', oResponse.data)
+      context.commit('setOnlyUserICO', true)
       console.log('events get at action getEvents', oResponse.data)
     }).catch(handleXHRerrors)
   },
@@ -391,8 +403,9 @@ let handleXHRerrors = function (error) {
 }
 
 const mutations = {
-  setFilterMyICO (state, objValue) {
-    state.filters.my_ico = objValue
+  setOnlyUserICO: (state, obj) => {
+    state.onlyUserICO = obj
+    console.log('set state only userICO to', obj)
   },
   getICO: (state, objEvent) => {
     state.ICO = objEvent
