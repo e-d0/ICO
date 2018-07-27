@@ -131,6 +131,25 @@ const getters = {
       })
     }
   },
+  groupedByDayEvents: (dispatch, getters) => (day) => {
+    let events = getters.filteredEvents
+    if (!events) {
+      dispatch('getEvents').then((response) => {
+        return events.filter((item) => {
+          if (moment(item.date).isSame(moment(day), 'day')) {
+            return item
+          }
+        })
+      }
+      )
+    } else {
+      return events.filter((item) => {
+        if (moment(item.date).isSame(moment(day), 'day')) {
+          return item
+        }
+      })
+    }
+  },
   groupedByHoursWithEvents: (getters) => (eventsArr) => {
     let events = eventsArr !== undefined ? eventsArr : [...getters.filteredEvents]
     let groupedEvents = []

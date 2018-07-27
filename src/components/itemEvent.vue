@@ -19,7 +19,7 @@
           <span>{{ getTypeNameByCode() }}</span>
         </template>
       </div>
-      <div v-if="index && multi === true"
+      <div v-if="index"
            :class="['event_nav']"
            @click.stop.prevent="nextEvent()" >{{ index }}
       </div>
@@ -60,9 +60,7 @@ export default {
     timeOffset () {
       const intervals = [0, 15, 30, 45, 60]
       let dopOffset = 0
-      if (this.multi) {
-        dopOffset = this.$moment(this.item.date).hours() - this.$moment(this.date).hours()
-      }
+      dopOffset = (this.$moment(this.item.date).hours()) * (100 / 24)
 
       const startsDate = this.$moment(this.item.date).format('m')
       const start = Number.parseInt(startsDate)
@@ -74,14 +72,7 @@ export default {
           break
         }
       }
-      return ((100 / 60) * offsetTop) + (100 * dopOffset)
-    },
-    onClick (e) {
-      e.stopPropagation()
-      e.preventDefault()
-      /**
-       * При клике на event срабатыавет событие и отправляет id элемента
-       * */
+      return dopOffset + ((100 / 24 / 60) * offsetTop)
     },
     /**
      * Проверяем, отображаться ли иконке оповещения
@@ -107,7 +98,26 @@ export default {
      * Событие для родителя. Переключить следующий event
      * */
     nextEvent () {
-      this.$emit('update:current')
+      // this.$emit('update:current')
+      if (this.$el.classList.contains('last')) {
+        /**
+         * Выбрать 1й элемент overlaped
+         * */
+        console.log('DONE')
+        if (this.$el.previousSibling.classList.contains('overlapped')) {
+          console.log(this.$el)
+          this.$el.classList.toggle('active')
+          this.$el.previousSibling.classList.toggle('active')
+          console.log('NOPE')
+        }
+      }
+
+      if (this.$el.previousSibling.classList.contains('overlapped')) {
+        console.log(this.$el)
+        this.$el.classList.toggle('active')
+        this.$el.previousSibling.classList.toggle('active')
+        console.log('NOPE')
+      }
     },
     returnDate: function (el) {
       return this.$moment(el.date).format('HH:mm')
@@ -136,12 +146,21 @@ export default {
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  .event_nav{
+    display: none;
+  }
+  .operlapped.active {
+    &.event_nav{
+      display: inline-block;
+    }
+  }
   .timeline_event {
     display: flex;
     justify-content: space-between;
     align-items: center;
     align-content: stretch;
-    height: 100%;
+    height: 48px;
+    position: absolute;
     &:active,
     &:focus,
     &:hover {
@@ -164,19 +183,6 @@ export default {
         background-image: linear-gradient(180deg, rgba(89, 182, 178, 0.3) 0%, rgba(89, 182, 178, 0) 100%);
         z-index: 11;
       }
-      //.timeline_event-type::before{
-      //  content: "";
-      //  position: relative;
-      //  display: inline-block;
-      //  vertical-align: middle;
-      //  width: 16px;
-      //  height: 16px;
-      //  bottom: 1px;
-      //  background-image: @img-clock-KYC;
-      //  background-position: center;
-      //  background-repeat: no-repeat;
-      //  background-size: contain;
-      //}
     }
     &--whitelist {
       position: relative;
@@ -192,19 +198,6 @@ export default {
         background-image: linear-gradient(180deg, rgba(255, 129, 158, 0.3) 0%, rgba(255, 129, 158, 0) 100%);
         z-index: 11;
       }
-      //.timeline_event-type::before{
-      //  content: "";
-      //  position: relative;
-      //  display: inline-block;
-      //  vertical-align: middle;
-      //  width: 16px;
-      //  height: 16px;
-      //  bottom: 1px;
-      //  background-image: @img-clock-white-list;
-      //  background-position: center;
-      //  background-repeat: no-repeat;
-      //  background-size: contain;
-      //}
     }
     &--end {
       position: relative;
@@ -220,19 +213,6 @@ export default {
         background-image: linear-gradient(180deg, rgba(171, 149, 211, 0.3) 0%, rgba(171, 149, 212, 0) 100%);
         z-index: 11;
       }
-      //.timeline_event-type::before{
-      //  content: "";
-      //  position: relative;
-      //  display: inline-block;
-      //  vertical-align: middle;
-      //  width: 16px;
-      //  height: 16px;
-      //  bottom: 1px;
-      //  background-image: @img-clock-iso-end;
-      //  background-position: center;
-      //  background-repeat: no-repeat;
-      //  background-size: contain;
-      //}
     }
     &--pre {
       position: relative;
@@ -248,19 +228,6 @@ export default {
         background-image: linear-gradient(180deg, rgba(247, 152, 27, 0.3) 0%, rgba(247, 152, 27, 0) 100%);
         z-index: 11;
       }
-      //.timeline_event-type::before{
-      //  content: "";
-      //  position: relative;
-      //  display: inline-block;
-      //  vertical-align: middle;
-      //  width: 16px;
-      //  height: 16px;
-      //  bottom: 1px;
-      //  background-image: @img-clock-pre-iso;
-      //  background-position: center;
-      //  background-repeat: no-repeat;
-      //  background-size: contain;
-      //}
     }
     &--pre {
       position: relative;
@@ -276,19 +243,6 @@ export default {
         background-image: linear-gradient(180deg, rgba(247, 152, 27, 0.3) 0%, rgba(247, 152, 27, 0) 100%);
         z-index: 11;
       }
-      //.timeline_event-type::before{
-      //  content: "";
-      //  position: relative;
-      //  display: inline-block;
-      //  vertical-align: middle;
-      //  width: 16px;
-      //  height: 16px;
-      //  bottom: 1px;
-      //  background-image: @img-clock-pre-iso;
-      //  background-position: center;
-      //  background-repeat: no-repeat;
-      //  background-size: contain;
-      //}
     }
     &--start {
       position: relative;
@@ -304,21 +258,8 @@ export default {
         background-image: linear-gradient(180deg, rgba(69, 175, 54, 0.3) 0%, rgba(69, 175, 54, 0) 100%);
         z-index: 11;
       }
-      //.timeline_event-type::before{
-      //  content: "";
-      //  position: relative;
-      //  display: inline-block;
-      //  vertical-align: middle;
-      //  width: 16px;
-      //  height: 16px;
-      //  bottom: 1px;
-      //  background-image: @img-clock-iso-start;
-      //  background-position: center;
-      //  background-repeat: no-repeat;
-      //  background-size: contain;
-      //}
     }
-    &--ICO {
+    &--ico {
       position: relative;
       background-color: rgba(69, 175, 54, 0.75);
       border-top: 4px solid @start-ico ;
@@ -332,19 +273,6 @@ export default {
         background-image: linear-gradient(180deg, rgba(69, 175, 54, 0.3) 0%, rgba(69, 175, 54, 0) 100%);
         z-index: 11;
       }
-      //.timeline_event-type::before{
-      //  content: "";
-      //  position: relative;
-      //  display: inline-block;
-      //  vertical-align: middle;
-      //  width: 16px;
-      //  height: 16px;
-      //  bottom: 1px;
-      //  background-image: @img-clock-iso-start;
-      //  background-position: center;
-      //  background-repeat: no-repeat;
-      //  background-size: contain;
-      //}
     }
     &-data {
       display: flex;
@@ -399,6 +327,7 @@ export default {
         background-size: contain;
       }
       span {
+        display: none;
         color: #ffffff;
         font-family: @main-font;
         font-size: 12px;

@@ -3,17 +3,17 @@
     <span v-if="!checkForDateObj(hour)">{{ hour }}</span>
     <!--<span v-else>{{ hour }}</span>-->
 
-    <template v-if="checkCurrentEvent()">
+    <!--<template v-if="checkCurrentEvent()">-->
 
-      <event   :class="[{ 'last':isLastElem() }]"
-               :style="{ zIndex: 1+currentEvent.toString() }"
-               :item="allEvents[currentEvent.toString()]"
-               :type="allEvents[currentEvent.toString()].type"
-               :index="countEvents()"
-               v-on:update:current="nextEvent()"
-               :date="date"
-               :multi="isMulti"></event>
-      </template>
+      <!--<event   :class="[{ 'last':isLastElem() }]"-->
+               <!--:style="{ zIndex: 1+currentEvent.toString() }"-->
+               <!--:item="allEvents[currentEvent.toString()]"-->
+               <!--:type="allEvents[currentEvent.toString()].type"-->
+               <!--:index="countEvents()"-->
+               <!--v-on:update:current="nextEvent()"-->
+               <!--:date="date"-->
+               <!--:multi="isMulti"/>-->
+      <!--</template>-->
 
   </div>
 

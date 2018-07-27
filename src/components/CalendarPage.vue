@@ -12,9 +12,7 @@
                     </div>
                 </div>
               <div class="col-md-12 col-lg-9">
-                    <calendar-body v-if="filteredEvents"
-                                    :dates="dates"
-                                    :events="filteredEvents"></calendar-body>
+                    <calendar-body v-if="filteredEvents"/>
                 </div>
 
         </div>

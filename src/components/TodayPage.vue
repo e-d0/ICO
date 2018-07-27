@@ -588,6 +588,7 @@ export default {
       &-type {
         margin-right: 12px;
         span {
+          display: inline-block;
           color: #ffffff;
           font-family: @main-font;
           font-size: 12px;

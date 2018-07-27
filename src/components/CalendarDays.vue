@@ -27,8 +27,10 @@
 
     <template v-if="dates"
               v-for="(dayItem, dayInd) in dates">
+      <!--<ClendarDayItem :key="dayInd"-->
+                      <!--:day-ind="dayInd"-->
+                      <!--:day-item="dayItem"/>-->
       <ClendarDayItem :key="dayInd"
-                      :day-ind="dayInd"
                       :day-item="dayItem"/>
     </template>
     </div>
