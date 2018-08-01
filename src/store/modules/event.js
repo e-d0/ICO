@@ -279,9 +279,6 @@ const actions = {
   },
   changeEvent (context, payload) {
     console.log(payload)
-    /**
-     * приводим event в соответствие с сервером
-     * */
     axios.patch(context.rootGetters.api_url + `/events/${payload.value.id}`, payload.value).then((response) => {
       console.log(response)
       response['id'] = payload.id
@@ -385,8 +382,10 @@ const mutations = {
   },
   updateEvent: (state, objEvent) => {
     let indx = state.events.findIndex((item) => item.id === objEvent.id)
-    state.events.splice(indx, 1)
+    // state.events.splice(indx, 1)
     state.events[indx] = objEvent
+    let events = JSON.parse(JSON.stringify(state.events))
+    state.events = events
   },
   deleteEvent: (state, objEvent) => {
     state.events = state.events.filter(event => event.id !== objEvent.id)

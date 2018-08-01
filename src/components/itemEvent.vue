@@ -1,7 +1,9 @@
 <template>
   <div :class="['event', 'timeline_event', 'timeline_event--item']"
        :id="item ? eventID : null"
-       :style="{top:`${timeOffset()}%`}">
+       :style="{top:`${timeOffset()}`}"
+       :data-overlap-group="group"
+       :data-group-index="groupIndex">
 
     <div :class="['timeline_event', `timeline_event--${item.category === 'ico' ? item.type : item.category}`]">
 
@@ -15,13 +17,11 @@
 
       </div>
       <div :class="['timeline_event-type', {'starts': item.type === 'start' }, {'ends': item.type === 'end'}]">
-        <template  v-if="index === null || index === undefined ">
           <span>{{ getTypeNameByCode() }}</span>
-        </template>
       </div>
-      <div v-if="index"
+      <div v-if="groupIndex"
            :class="['event_nav']"
-           @click.stop.prevent="nextEvent()" >{{ index }}
+           @click.stop.prevent="nextEvent" >
       </div>
       <popover :target="eventID" :popoverShow="popoverShow" :clickedEvent="item"></popover>
 
@@ -35,7 +35,8 @@ export default {
   name: 'event',
   components: { popover },
   props: {
-    index: String,
+    group: String,
+    groupIndex: String,
     item: Object,
     date: Date,
     type: String,
@@ -43,7 +44,8 @@ export default {
   },
   data () {
     return {
-      popoverShow: false
+      popoverShow: false,
+      parentComponentHeight: null
     }
   },
   computed: {
@@ -51,13 +53,35 @@ export default {
       return `event-${this.item.id}-${this.item.type}`
     }
   },
+  watch: {
+  },
   methods: {
+    setupAttributes () {
+      if (document.readyState) {
+        let groupIndex = this.$el.dataset.groupIndex
+        let group = this.$el.dataset.overlapGroup
+        let elems = group !== undefined && (this.$el.parentElement !== undefined || this.$el.parentElement !== null) ? this.$el.parentElement.querySelectorAll(`[data-overlap-group="${group}"]`) : false
+        if (elems.length > 1) {
+          if (groupIndex === (1).toString()) {
+            this.$el.classList.add('active')
+            this.$el.querySelector('.event_nav').dataset.groupIndex = elems.length - 1
+          }
+          if (groupIndex === (elems.length).toString()) {
+            this.$el.classList.add('last')
+            this.$el.querySelector('.event_nav').dataset.groupIndex = elems.length - 1
+          }
+          if (groupIndex !== (elems.length).toString()) { this.$el.querySelector('.event_nav').dataset.groupIndex = elems.length - groupIndex }
+        }
+      }
+    },
     /**
      * Считаем отступ сверху в зависимости от
      * времени начала события в соответствии с заданным
      * интервалом
      * */
     timeOffset () {
+      let parentElementHeight = this.parentComponentHeight
+      let onePercentOfParent = parentElementHeight / 100
       const intervals = [0, 15, 30, 45, 60]
       let dopOffset = 0
       dopOffset = (this.$moment(this.item.date).hours()) * (100 / 24)
@@ -72,7 +96,7 @@ export default {
           break
         }
       }
-      return dopOffset + ((100 / 24 / 60) * offsetTop)
+      return (dopOffset + ((100 / 24 / 60) * offsetTop)) * onePercentOfParent + 'px'
     },
     /**
      * Проверяем, отображаться ли иконке оповещения
@@ -97,55 +121,35 @@ export default {
     /**
      * Событие для родителя. Переключить следующий event
      * */
-    nextEvent () {
-      // this.$emit('update:current')
-      if (this.$el.classList.contains('last')) {
-        /**
-         * Выбрать 1й элемент overlaped
-         * */
-        console.log('DONE')
-        if (this.$el.previousSibling.classList.contains('overlapped')) {
-          console.log(this.$el)
-          this.$el.classList.toggle('active')
-          this.$el.previousSibling.classList.toggle('active')
-          console.log('NOPE')
-        }
-      }
-
-      if (this.$el.previousSibling.classList.contains('overlapped')) {
-        console.log(this.$el)
-        this.$el.classList.toggle('active')
-        this.$el.previousSibling.classList.toggle('active')
-        console.log('NOPE')
-      }
+    nextEvent (e) {
+      this.$emit('show:next:event', e)
     },
     returnDate: function (el) {
       return this.$moment(el.date).format('HH:mm')
     },
     onClose () {
       this.popoverShow = false
-    },
-    onShow () {
-      /* This is called just before the popover is shown */
-      /* Reset our popover "form" variables */
-    },
-    onShown () {
-      /* Called just after the popover has been shown */
-      /* Transfer focus to the first input */
-    },
-    onHidden () {
-      /* Called just after the popover has finished hiding */
-      /* Bring focus back to the button */
     }
   },
   created () {
     this.timeOffset()
+  },
+  mounted () {
+    /**
+     * Получаем высоту родительского элемента
+     * */
+    this.setupAttributes()
+    this.parentComponentHeight = this.$el.parentElement.clientHeight
+    this.$store.watch((state) => state.event.dates, () => this.setupAttributes())
   }
 }
 </script>
 
 <style lang="less" scoped>
   @import "../assets/less/vars";
+  .calendar__week .timeline_event-type span{
+    display: none;
+  }
   .event_nav{
     display: none;
   }

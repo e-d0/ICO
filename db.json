@@ -190,17 +190,19 @@
     {
       "name": "test55499",
       "type": "end",
-      "date": "2018-07-28T13:20:00.000Z",
+      "date": "2018-08-01T13:20:00.000Z",
       "category": "ico",
       "created_at": "2018-04-19T20:21:00.000Z",
       "updated_at": "2018-05-26T00:44:25.068Z",
       "id": 999,
       "note": {
-        "event_id": "",
-        "user_id": "",
-        "text": "Some string"
+        "user_id": null,
+        "event_id": 999,
+        "text": null
       },
-      "notifications": []
+      "notifications": [],
+      "group": 2,
+      "groupIndex": 1
     },
     {
       "name": "teset66",
@@ -234,63 +236,101 @@
     },
     {
       "name": "teste4346",
-      "date": "2018-07-28T08:44:00.000Z",
+      "date": "2018-08-01T08:44:00.000Z",
       "type": "start",
       "category": "pre",
       "created_at": "2018-04-19T20:44:00.000Z",
       "updated_at": "2018-05-26T00:44:37.835Z",
       "id": 11,
       "note": {
-        "event_id": "",
-        "user_id": "",
+        "user_id": null,
+        "event_id": 11,
         "text": "Some string"
       },
-      "notifications": []
+      "notifications": [
+        {
+          "user_id": null,
+          "event_id": 11,
+          "id": 0,
+          "date": "2018-07-28T08:29:00.000Z"
+        }
+      ]
     },
     {
       "name": "teste4346",
       "type": "end",
-      "date": "2018-07-29T10:44:00.000Z",
+      "date": "2018-08-01T13:44:00.000Z",
       "category": "pre",
       "created_at": "2018-04-19T20:44:00.000Z",
       "updated_at": "2018-05-26T00:44:37.835Z",
       "id": 1111,
       "note": {
-        "event_id": "",
-        "user_id": "",
+        "user_id": null,
+        "event_id": 1111,
         "text": "Some string"
       },
-      "notifications": []
+      "notifications": [
+        {
+          "user_id": null,
+          "event_id": 1111,
+          "id": 0,
+          "date": "2018-08-01T13:29:00.000Z"
+        }
+      ],
+      "group": 2,
+      "groupIndex": 2
     },
     {
       "name": "rewr3443",
-      "date": "2018-07-28T13:46:00.000Z",
+      "date": "2018-08-01T13:46:00.000Z",
       "type": "start",
       "category": "kyc",
       "created_at": "2018-04-19T20:47:00.000Z",
       "updated_at": "2018-05-26T00:43:46.455Z",
       "id": 12,
       "note": {
-        "event_id": "",
-        "user_id": "",
-        "text": "Some string"
+        "user_id": null,
+        "event_id": 12,
+        "text": null
       },
-      "notifications": []
+      "notifications": [
+        {
+          "user_id": null,
+          "event_id": 12,
+          "id": 0,
+          "date": "2018-08-01T13:16:00.000Z"
+        }
+      ],
+      "group": 2,
+      "groupIndex": 3
     },
     {
       "name": "rewr3443",
       "type": "end",
-      "date": "2018-07-28T16:46:00.000Z",
+      "date": "2018-08-01T16:46:00.000Z",
       "category": "kyc",
       "created_at": "2018-04-19T20:47:00.000Z",
       "updated_at": "2018-05-26T00:43:46.455Z",
       "id": 1212,
       "note": {
-        "event_id": "",
-        "user_id": "",
-        "text": "Some string"
+        "user_id": null,
+        "event_id": 1212,
+        "text": null
       },
-      "notifications": []
+      "notifications": [
+        {
+          "user_id": null,
+          "event_id": 1212,
+          "id": 0,
+          "date": "2018-08-01T16:31:00.000Z"
+        },
+        {
+          "user_id": null,
+          "event_id": 1212,
+          "id": 1,
+          "date": "2018-08-01T16:16:00.000Z"
+        }
+      ]
     },
     {
       "name": "12345567",
