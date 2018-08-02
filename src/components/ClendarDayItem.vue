@@ -69,21 +69,13 @@ export default {
     }
   },
   watch: {
-    // filteredEvents: function (newVal, oldVal) {
-    //   this.eventsStorage = newVal
-    // }
   },
   mounted () {
-    /**
-     * Группировка при создании компонента
-     * */
-    // this.setupGroupingOverlapped()
-    /**
-     * При изменении дат из фильтра, запускаем группировку событий
-     * */
-    // this.$store.watch((state) => state.event.events, () => this.groupedEvents)
   },
   methods: {
+    /**
+     * Добавляет индексы к событиям, если события пересекаются.
+     * */
     groupedByHoursWithEvents (events) {
       let group = 1
       let groupIndex = 1
@@ -100,10 +92,6 @@ export default {
         /**
          * Проверка на разницу в час элемент следующей группы и текущий проверяемый час
         */
-
-        // var duration = moment.duration(event.date.diff(nextEvent.date)).asMinutes()
-
-        // duration = duration.asMinutes()
         let check = nextEvent !== undefined &&
                     moment.duration(moment(nextEvent.date).diff(moment(event.date))).asMinutes() <= diff
         if (check) {
@@ -118,17 +106,12 @@ export default {
           nextEvent['group'] = group
           groupIndex++
           nextEvent['groupIndex'] = groupIndex
-          // console.log('CHECK YES', groupIndex)
         } else {
-          // console.log('CHECK FALSE')
           groupIndex = 1
           group++
         }
       }
       return events
-    },
-    onLoadEvent (e) {
-      if (e.previousSibling !== undefined && this.isOverlapping(e, e.previousSibling)) console.log('YES')
     },
     /**
      * Проверяем входящий формат времени: объект или строка.
@@ -136,45 +119,6 @@ export default {
     checkForDateObj (hour) {
       return typeof hour !== 'string'
     },
-    /**
-     * Подключаем группировку по дата атрибуту DOM нод событий при пересечении элементов в верстке.
-     * */
-    async setupGroupingOverlapped () {
-      let elems = document.readyState ? document.querySelectorAll('.events-group__events') : false
-      /**
-       * Получаем все группы событий( в нашем случае 1 группа = 1 день)
-       * */
-      for (const item of elems) {
-        await this.grouperFunc(item)
-      }
-    },
-    // grouperFunc (item) {
-    //   console.log('start')
-    //   let count = item.children.length
-    //   let j = 0
-    //   while (j < count) {
-    //     let el = item.children[j]
-    //     let nextEl = item.children[j + 1]
-    //     if (nextEl !== undefined && this.isOverlapping(el, nextEl)) {
-    //       if (el.dataset.overlapGroup === undefined) {
-    //         /**
-    //            * Присваимваем группу и активный класс
-    //            * */
-    //         console.log()
-    //         el.classList.toggle('active')
-    //         el.dataset.overlapGroup = j
-    //         el.querySelector('.event_nav').dataset.overlapGroupIndex = 0
-    //         // nextEl.dataset.overlapGroup = j
-    //         // nextEl.querySelector('.event_nav').dataset.overlapGroupIndex = 1
-    //       } else {
-    //         // nextEl.dataset.overlapGroup = el.dataset.overlapGroup
-    //         // nextEl.querySelector('.event_nav').dataset.overlapGroupIndex = parseInt(el.querySelector('.event_nav').dataset.overlapGroupIndex) + 1
-    //         nextEl.classList.toggle('last')
-    //       }
-    //     }
-    //     j++
-    //   }
-    // },
     nextEvent (e) {
       let elem = e.target.closest('.event')
       if (
@@ -191,32 +135,6 @@ export default {
             break
           }
         }
-      }
-    },
-    /**
-     * Функция проверяет, пересекаются ли дом элементы в верстке
-     * */
-    isOverlapping (e1, e2) {
-      if (e1.length && e1.length > 1) {
-        e1 = e1[0]
-      }
-      if (e2.length && e2.length > 1) {
-        e2 = e2[0]
-      }
-      let rect1 = e1 instanceof Element ? e1.getBoundingClientRect() : false
-      let rect2 = e2 instanceof Element ? e2.getBoundingClientRect() : false
-
-      let overlap = null
-      if (rect1 && rect2) {
-        overlap = !(
-          rect1.right < rect2.left ||
-          rect1.left > rect2.right ||
-          rect1.bottom < rect2.top ||
-          rect1.top > rect2.bottom
-        )
-        return overlap
-      } else {
-        return overlap
       }
     },
     /**
@@ -246,14 +164,13 @@ export default {
 </script>
 <style lang="less" scoped>
   /deep/ .event[data-overlap-group]{
-    visibility: hidden;
-    opacity: 0;
-    transform: scaleY(0);
-    transition: scaleY 0.25s ease-in-out, opacity 0.25s ease-in-out;
+    transition: z-index 0.25s ease-in-out;
+    pointer-events: none;
+    opacity: .3;
     &.active{
-      visibility: visible;
-      transform: scaleY(1);
+      pointer-events: all;
       opacity: 1;
+      z-index: 33;
       .event_nav{
         display: inline-block;
         &::before{content: attr(data-group-index);}

@@ -56,12 +56,16 @@ export default {
   watch: {
   },
   methods: {
+    /**
+     * Вычисляет индексы сгруппированных событий и добавляет классы к событиям
+     * */
     setupAttributes () {
       if (document.readyState) {
         let groupIndex = this.$el.dataset.groupIndex
         let group = this.$el.dataset.overlapGroup
-        let elems = group !== undefined && (this.$el.parentElement !== undefined || this.$el.parentElement !== null) ? this.$el.parentElement.querySelectorAll(`[data-overlap-group="${group}"]`) : false
-        if (elems.length > 1) {
+        let elems = this.$el.parentElement ? this.$el.parentElement.querySelectorAll(`[data-overlap-group="${group}"]`) : false
+
+        if (elems !== undefined && elems.length > 1) {
           if (groupIndex === (1).toString()) {
             this.$el.classList.add('active')
             this.$el.querySelector('.event_nav').dataset.groupIndex = elems.length - 1
@@ -138,8 +142,8 @@ export default {
     /**
      * Получаем высоту родительского элемента
      * */
-    this.setupAttributes()
     this.parentComponentHeight = this.$el.parentElement.clientHeight
+    this.setupAttributes()
     this.$store.watch((state) => state.event.dates, () => this.setupAttributes())
   }
 }
