@@ -510,6 +510,15 @@ export default {
           }
         }
       }
+      &_item:nth-child(1) {
+        a {
+          &:hover {
+            &:after {
+              background: none;
+            }
+          }
+        }
+      }
     }
   }
 

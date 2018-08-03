@@ -157,6 +157,9 @@ export default {
         return 'https://icopapa.com/shared/as3ld22'
       }
     },
+    /**
+     * Копирование объекта портфолио
+     * */
     stringifiedPortfolio: function () {
       if (this.portfolio) {
         return JSON.parse(JSON.stringify(this.portfolio))

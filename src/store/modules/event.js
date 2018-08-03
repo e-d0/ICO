@@ -149,69 +149,6 @@ const getters = {
         }
       })
     }
-  },
-  groupedByHoursWithEvents: (getters) => (eventsArr) => {
-    let events = eventsArr !== undefined ? eventsArr : [...getters.filteredEvents]
-    let groupedEvents = []
-    /**
-     * Для каждого часа в массиве часов
-     * */
-    for (let i = 0; i < 24; i++) {
-      let group = []
-      for (let e = events.length - 1; e >= 0; e--) {
-        /**
-         * получаем час обрабатываемого события
-         * */
-        let hour = moment(events[e].date).hours()
-        /**
-         * Если час события в заданном промежутке, то добавь в группу
-         * */
-        if (i === hour) {
-          group.push(events[e])
-          // console.log('added', events[e])
-          events.splice(e, 1)
-        }
-      }
-      groupedEvents[i] = group
-    }
-    for (let i = 0; i < 24; i++) {
-      /**
-       * индекс предыдущего часа в массиве часов
-       * */
-      // let prevHour = i === 0 ? 0 : i - 1
-      /**
-       * индекс следующего события
-       * */
-      let nextHour = i === 23 ? 23 : i + 1
-      /**
-       * Разгица в минутах, при которой группируются события
-       * */
-      let diff = 45
-      /**
-       * Если разница между текущим и следующим меньше diff минут,то сгруппируй
-       * */
-      if (groupedEvents[i].length && groupedEvents[nextHour] !== undefined && groupedEvents[nextHour].length) {
-        let k
-        for (k = 0; k < groupedEvents[nextHour].length; k++) {
-          /**
-           * Проверка на разницу в час элемент предыдущей группы и текущий проверяемый час
-           */
-          let check1 = groupedEvents[i].length && moment(groupedEvents[i][groupedEvents[i].length - 1].date).minutes() >= 60 - diff
-          let check2 = groupedEvents[nextHour][k] !== undefined && moment(groupedEvents[nextHour][k].date).minutes() <= diff
-          if (check1 && check2) {
-            /**
-             * Добавить элемент из следующей в текущею группы
-             * */
-            // if (groupedEvents[i].length > 1) {
-            groupedEvents[nextHour].unshift(groupedEvents[i][groupedEvents[i].length - 1])
-            groupedEvents[i].splice(groupedEvents[i].length - 1, 1)
-            k = 0
-            // }
-          }
-        }
-      }
-    }
-    return groupedEvents
   }
 }
 
