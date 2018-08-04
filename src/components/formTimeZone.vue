@@ -18,21 +18,7 @@
 
         <div @click="popoverShow = false" class="btn close">
         </div>
-          <div class="select">
-            <select  v-model="selectedTimezone">
-                      <option class="language_list-item"
-                              v-for="(item, index) in timezones"
-                              :key="index"
-                              v-bind:value="item"
-                             >
-                        {{ item }}
-                      </option>
-                      <option class="language_list-item"
-                              value="default"
-                      >{{ $t('form.default') }}</option>
-            </select>
-          </div>
-
+            <TheCustomSelectSmall :selected="selectedTimezone" :options="timezones" @updateOption="selectedTimezone = $event"/>
           <div>
             <a href="#" @click.prevent="submit" size="sm" class="btn submit" variant="primary">{{ $t('form.Save')}}</a>
           </div>
@@ -43,9 +29,12 @@
 
 <script>
 import Vuex from 'vuex'
+import TheCustomSelectSmall from './TheCustomSelectSmall'
+
 const storeLocale = Vuex.createNamespacedHelpers('locale')
 export default {
   name: 'formTimeZone',
+  components: {TheCustomSelectSmall},
   data () {
     return {
       popoverShow: false,
@@ -57,7 +46,7 @@ export default {
       this.popoverShow = false
     },
     submit () {
-      if (this.selectedTimezone !== 'default') {
+      if (this.selectedTimezone !== 'Default') {
         this.$store.dispatch('locale/setTimezone', this.selectedTimezone)
         this.popoverShow = false
       } else {
@@ -161,7 +150,7 @@ export default {
     .btn.close{
       position: absolute;
       right: 0px;
-      top: 6px;
+      top: 10px;
       width: 8px;
       height: 8px;
       background-color: transparent;
