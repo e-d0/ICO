@@ -31,7 +31,7 @@ export default {
     return {
       selectedOption: {},
       showMenu: false,
-      placeholderText: 'Select an item'
+      placeholderText: 'Select timezone'
     }
   },
   props: {
