@@ -1,5 +1,5 @@
 <template>
-    <div class="btn-group">
+    <div class="btn-group" >
         <li @click="toggleMenu()" class="dropdown-toggle" v-if="selectedOption !== undefined">
             {{ selectedOption }}
           <span :class="['caret', {'opened': showMenu }]"></span>
@@ -10,7 +10,7 @@
             <span :class="['caret', {'opened': showMenu }]"></span>
         </li>
 
-        <ul class="dropdown-menu" v-if="showMenu" >
+        <ul class="dropdown-menu" v-if="showMenu" v-click-outside="hideMenu">
             <li class="language_list-item"
                     value="default"
             ><a href="javascript:void(0)" @click="updateOption('Default')">
@@ -41,6 +41,47 @@ export default {
     selected: {},
     placeholder: [String]
   },
+  /**
+   * Добавляем директиву для отслеживания кликов вне элемента
+   * */
+  directives: {
+    'click-outside': {
+      bind: function (el, binding, vNode) {
+        /**
+         * Передаваемое выражение должно быть функцией
+         * */
+        if (typeof binding.value !== 'function') {
+          const compName = vNode.context.name
+          let warn = `[Vue-click-outside:] provided expression '${binding.expression}' is not a function, but has to be`
+          if (compName) { warn += `Found in component '${compName}'` }
+
+          console.warn(warn)
+        }
+        /**
+         * Добавляем обработчик и кэшируем в обхекте элемента
+         * */
+        const bubble = binding.modifiers.bubble
+        const handler = (e) => {
+          if (bubble || (!el.contains(e.target) && el !== e.target)) {
+            binding.value(e)
+          }
+        }
+        el.__vueClickOutside__ = handler
+        /**
+         * Добавляем Event Listeners
+         * */
+        document.addEventListener('click', handler)
+      },
+
+      unbind: function (el, binding) {
+        /**
+         * Убираем Event Listeners
+         * */
+        document.removeEventListener('click', el.__vueClickOutside__)
+        el.__vueClickOutside__ = null
+      }
+    }
+  },
   mounted () {
     this.selectedOption = this.selected
     if (this.placeholder) {
@@ -48,11 +89,23 @@ export default {
     }
   },
   methods: {
+    /**
+     * Скрыть выпадающий список
+     * */
+    hideMenu () {
+      this.showMenu = false
+    },
+    /**
+     * Передаем выбранное значение родителю
+     * */
     updateOption (option) {
       this.selectedOption = option
       this.showMenu = false
       this.$emit('updateOption', this.selectedOption)
     },
+    /**
+     * Скрыть\показать выпадающий список
+     * */
     toggleMenu () {
       this.showMenu = !this.showMenu
     }
