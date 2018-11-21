@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "concurrently --kill-others \"npm run start:server\" \"npm run dev:wp\" ",
     "dev:wp": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev:gendb": "node gen-fake-data.js",
     "start": "npm run dev",
-    "start:server": "json-server --watch db.json",
+    "start:server": "json-server --watch generated_data.json",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "npm run unit",
     "lint": "eslint --ext .js,.vue src test/unit",

@@ -3,8 +3,7 @@
     <div class="row">
       <div class="col-3 d-flex">
         <div class="ico-item_logo ico-item_gradient" :style="{'backgroundImage': ico.gradient}">
-          <div class="ico-item_logo_image" :style="{'background': `url(${ico.logo}) no-repeat, ${ico.bg}`,
-                                                            'backgroundPosition': 'center center',
+          <div class="ico-item_logo_image" :style="{'background': `url(${ico.logo}) no-repeat center, ${ico.bg}`,
                                                             'backgroundSize': 'auto'}">
           </div>
         </div>
